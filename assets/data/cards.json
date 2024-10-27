@@ -1,0 +1,12 @@
+[
+  {
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 0,
+    "health": 1,
+    "id": 1,
+    "name": "Snowflipper Penguin",
+    "races": ["BEAST"],
+    "type": "MINION"
+  }
+]
