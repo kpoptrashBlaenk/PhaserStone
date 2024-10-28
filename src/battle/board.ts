@@ -1,6 +1,6 @@
 import { CardAssetKeys } from '../assets/asset-keys'
 import { FONT_KEYS } from '../assets/font-keys'
-import { Card, Hand } from '../types/typedef'
+import { Card } from '../types/typedef'
 
 const POSITIONS = Object.freeze({
   board: {
@@ -33,23 +33,13 @@ export class Board {
   private enemyHeroContainer: Phaser.GameObjects.Container
   private playerHandContainer: Phaser.GameObjects.Container
   private enemyHandContainer: Phaser.GameObjects.Container
-  private playerHand: Hand
+  private playerHand: Card[]
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene
     this.create()
 
     this.playerHand = []
-  }
-
-  public addCardToPlayerHand(card: Card | undefined): void {
-    if (card) {
-      // Numeric Hand
-      this.playerHand.push(card)
-
-      // Visual Hand
-      this.createCardInHand(card.assetKey)
-    }
   }
 
   private create(): void {
@@ -162,5 +152,15 @@ export class Board {
 
   private endTurn(): void {
     console.log('Turn ended')
+  }
+
+  public addCardToPlayerHand(card: Card | undefined): void {
+    if (card) {
+      // Numeric Hand
+      this.playerHand.push(card)
+
+      // Visual Hand
+      this.createCardInHand(card.assetKey)
+    }
   }
 }

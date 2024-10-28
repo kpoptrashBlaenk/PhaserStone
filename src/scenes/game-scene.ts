@@ -2,8 +2,8 @@ import Phaser from 'phaser'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Board } from '../battle/board'
-import { Deck } from '../types/typedef'
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
+import { Deck } from '../cards/deck'
 
 export class GameScene extends BaseScene {
   private board: Board
@@ -19,7 +19,7 @@ export class GameScene extends BaseScene {
     this.board = new Board(this)
 
     // Player Deck
-    this.playerDeck = this.cache.json.get(DATA_ASSET_KEYS.CARDS)
+    this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS))
 
     this.playerTurnStart()
   }
@@ -29,10 +29,11 @@ export class GameScene extends BaseScene {
   }
 
   private drawCard(): void {
-    if (this.playerDeck.length > 0) {
-      this.board.addCardToPlayerHand(this.playerDeck.shift())
+    const card = this.playerDeck.draw()
+    if (card) {
+      this.board.addCardToPlayerHand(card)
     } else {
-        console.log('fatigue')
+      console.log('fatigue')
     }
   }
 }

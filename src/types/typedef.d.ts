@@ -27,6 +27,3 @@ export type Card = {
   races: RaceKeys[]
   type: TypeKeys
 }
-
-export type Deck = Card[]
-export type Hand = Card[]
