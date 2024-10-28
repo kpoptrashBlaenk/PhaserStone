@@ -1,3 +1,4 @@
+import { CardAssetKeys } from '../assets/asset-keys'
 import { FONT_KEYS } from '../assets/font-keys'
 import { Card, Hand } from '../types/typedef'
 
@@ -47,14 +48,7 @@ export class Board {
       this.playerHand.push(card)
 
       // Visual Hand
-      const cardImage = this.scene.add.image(0, 0, card.assetKey).setScale(0.18).setOrigin(0)
-
-      const scaledWidth = cardImage.width * cardImage.scaleX
-      const scaledHeight = cardImage.height * cardImage.scaleY
-      cardImage.setX(POSITIONS.hand.padding + this.playerHandContainer.width / 2 - scaledWidth / 2)
-      cardImage.setY(POSITIONS.hand.padding / 2 + this.playerHandContainer.height / 2 - scaledHeight / 2)
-
-      this.playerHandContainer.add(cardImage)
+      this.createCardInHand(card.assetKey)
     }
   }
 
@@ -87,6 +81,17 @@ export class Board {
       this.scene.scale.height - POSITIONS.hand.height - POSITIONS.hand.padding + POSITIONS.hand.padding,
       handWidth
     )
+  }
+
+  private createCardInHand(assetKey: CardAssetKeys) {
+    const cardImage = this.scene.add.image(0, 0, assetKey).setScale(0.18).setOrigin(0)
+
+    const scaledWidth = cardImage.width * cardImage.scaleX
+    const scaledHeight = cardImage.height * cardImage.scaleY
+    cardImage.setX(POSITIONS.hand.padding + this.playerHandContainer.width / 2 - scaledWidth / 2)
+    cardImage.setY(POSITIONS.hand.padding / 2 + this.playerHandContainer.height / 2 - scaledHeight / 2)
+
+    this.playerHandContainer.add(cardImage)
   }
 
   private createBoard(y: number, height: number): Phaser.GameObjects.Container {
