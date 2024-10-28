@@ -22,6 +22,8 @@ export type Card = {
   cost: number
   health: number
   id: number
+  mechanics: string[]
+  name: string
   races: RaceKeys[]
   type: TypeKeys
 }
