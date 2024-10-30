@@ -21,7 +21,23 @@ export class Card {
     this.card = cardData
   }
 
-  public get assetKey() {
+  public get assetKey(): CardAssetKeys {
     return this.card.assetKey
+  }
+
+  public get attack(): number {
+    return this.card.attack
+  }
+
+  public get cost(): number {
+    return this.card.cost
+  }
+
+  public get health(): number {
+    return this.card.health
+  }
+
+  public get name(): string {
+    return this.card.name
   }
 }
