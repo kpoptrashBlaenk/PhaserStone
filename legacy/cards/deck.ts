@@ -1,10 +1,10 @@
-import { Card } from '../types/typedef'
+import { Card } from '../../src/types/typedef'
 
 export class Deck {
   private cards: Card[]
 
   constructor(allCards: Card[]) {
-    this.cards = this.createRandomDeck(allCards, 30)
+    this.cards = this.createRandomDeck(allCards, 10)
     this.shuffle()
   }
 

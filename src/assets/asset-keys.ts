@@ -1,4 +1,5 @@
 export const CARD_ASSETS_KEYS = Object.freeze({
+  TEMPLATE: 'TEMPLATE',
   SNOWFLIPPER_PENGUIN: 'SNOWFLIPPER_PENGUIN',
   ABUSIVE_SERGEANT: 'ABUSIVE_SERGEANT',
   ARMOR_VENDOR: 'ARMOR_VENDOR',
@@ -15,4 +16,8 @@ export type CardAssetKeys = keyof typeof CARD_ASSETS_KEYS
 
 export const DATA_ASSET_KEYS = Object.freeze({
   CARDS: 'CARDS',
+})
+
+export const UI_ASSET_KEYS = Object.freeze({
+  BOARD: 'BOARD'
 })

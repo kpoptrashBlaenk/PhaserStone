@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import { SCENE_KEYS } from './scenes/scene-keys'
-import { GameScene } from './scenes/game-scene'
+import { BattleScene } from './scenes/battle-scene'
 import { PreloadScene } from './scenes/preload-scene'
 
 // Launch game instance
@@ -17,6 +17,6 @@ const game = new Phaser.Game({
 })
 
 game.scene.add(SCENE_KEYS.PRELOAD_SCENE, PreloadScene)
-game.scene.add(SCENE_KEYS.GAME_SCENE, GameScene)
+game.scene.add(SCENE_KEYS.BATTLE_SCENE, BattleScene)
 
 game.scene.start(SCENE_KEYS.PRELOAD_SCENE)

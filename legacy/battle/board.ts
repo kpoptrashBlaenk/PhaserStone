@@ -1,6 +1,6 @@
-import { CardAssetKeys } from '../assets/asset-keys'
-import { FONT_KEYS } from '../assets/font-keys'
-import { Card } from '../types/typedef'
+import { CardAssetKeys } from '../../src/assets/asset-keys'
+import { FONT_KEYS } from '../../src/assets/font-keys'
+import { Card } from '../../src/types/typedef'
 
 const POSITIONS = Object.freeze({
   board: {
@@ -33,13 +33,10 @@ export class Board {
   private enemyHeroContainer: Phaser.GameObjects.Container
   private playerHandContainer: Phaser.GameObjects.Container
   private enemyHandContainer: Phaser.GameObjects.Container
-  private playerHand: Card[]
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene
     this.create()
-
-    this.playerHand = []
   }
 
   private create(): void {
@@ -71,17 +68,6 @@ export class Board {
       this.scene.scale.height - POSITIONS.hand.height - POSITIONS.hand.padding + POSITIONS.hand.padding,
       handWidth
     )
-  }
-
-  private createCardInHand(assetKey: CardAssetKeys) {
-    const cardImage = this.scene.add.image(0, 0, assetKey).setScale(0.18).setOrigin(0)
-
-    const scaledWidth = cardImage.width * cardImage.scaleX
-    const scaledHeight = cardImage.height * cardImage.scaleY
-    cardImage.setX(POSITIONS.hand.padding + this.playerHandContainer.width / 2 - scaledWidth / 2)
-    cardImage.setY(POSITIONS.hand.padding / 2 + this.playerHandContainer.height / 2 - scaledHeight / 2)
-
-    this.playerHandContainer.add(cardImage)
   }
 
   private createBoard(y: number, height: number): Phaser.GameObjects.Container {
@@ -154,13 +140,11 @@ export class Board {
     console.log('Turn ended')
   }
 
-  public addCardToPlayerHand(card: Card | undefined): void {
-    if (card) {
-      // Numeric Hand
-      this.playerHand.push(card)
+  public get playerHandContainerGet(): Phaser.GameObjects.Container {
+    return this.playerHandContainer
+  }
 
-      // Visual Hand
-      this.createCardInHand(card.assetKey)
-    }
+  public get enemyHandContainerGet(): Phaser.GameObjects.Container {
+    return this.enemyHandContainer
   }
 }

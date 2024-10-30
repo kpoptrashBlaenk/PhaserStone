@@ -1,6 +1,6 @@
 [
   {
-    "assetKey": "SNOWFLIPPER_PENGUIN",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 0,
@@ -11,7 +11,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "ABUSIVE_SERGEANT",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
@@ -23,7 +23,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "ARMOR_VENDOR",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
@@ -35,7 +35,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "BEAMING_SIDEKICK",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
@@ -47,7 +47,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "ELVEN_ARCHER",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
@@ -59,7 +59,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "FIRE_FLY",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
@@ -83,7 +83,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "MURLOC_TIDECALLER",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
@@ -95,7 +95,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "MURMY",
+    "assetKey": "TEMPLATE",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
@@ -107,7 +107,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "SOUTHSEA_DECKHAND",
+    "assetKey": "TEMPLATE",
     "attack": 2,
     "cardClass": "NEUTRAL",
     "cost": 1,
