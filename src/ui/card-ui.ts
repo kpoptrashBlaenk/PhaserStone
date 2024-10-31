@@ -1,5 +1,6 @@
 import { FONT_KEYS } from '../assets/font-keys'
 import { Card } from '../gameObjects/card'
+import { Coordinate } from '../types/typedef'
 import { PreviewUI } from './preview-ui'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
@@ -26,6 +27,8 @@ export class CardUI {
   // TODO: private cardEffectsText: Phaser.GameObjects.Text
   private scene: Phaser.Scene
   private previewUI: PreviewUI
+  private pointerCheckpoint: Coordinate
+  private cardContainerCheckpoint: Coordinate
 
   constructor(scene: Phaser.Scene, card: Card) {
     this.scene = scene
@@ -34,7 +37,7 @@ export class CardUI {
     this.createCardObject(card)
   }
 
-  // Has Preview, Scale and Hover
+  // Has Preview, Scale, Hover and Drag
   public forHand(previewUI: PreviewUI): void {
     this.previewUI = previewUI
 
@@ -46,13 +49,8 @@ export class CardUI {
 
     this.cardImage.setInteractive()
 
-    this.cardImage.on('pointerover', () => {
-      previewUI.changeCardContainer(this.card)
-    })
-
-    this.cardImage.on('pointerout', () => {
-      previewUI.hideCardContainer()
-    })
+    this.addHover()
+    this.addDrag()
   }
 
   public forPreview(): void {
@@ -77,6 +75,42 @@ export class CardUI {
 
   public hidePreviewCardObject(): void {
     this.cardContainer.setAlpha(0)
+  }
+
+  private addHover(): void {
+    this.cardImage.on('pointerover', () => {
+      this.previewUI.changeCardContainer(this.card)
+    })
+
+    this.cardImage.on('pointerout', () => {
+      this.previewUI.hideCardContainer()
+    })
+  }
+
+  private addDrag(): void {
+    this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      this.cardContainer.setData('draggingFromHand', true).setDepth(1)
+      this.pointerCheckpoint = {
+        x: pointer.x,
+        y: pointer.y,
+      }
+      this.cardContainerCheckpoint = {
+        x: this.cardContainer.x,
+        y: this.cardContainer.y,
+      }
+    })
+
+    this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+      if (this.cardContainer.getData('draggingFromHand')) {
+        this.cardContainer.x = this.cardContainerCheckpoint.x + (pointer.x - this.pointerCheckpoint.x)
+        this.cardContainer.y = this.cardContainerCheckpoint.y + (pointer.y - this.pointerCheckpoint.y)
+      }
+    })
+
+    this.cardImage.on('pointerup', () => {
+      this.cardContainer.setData('draggingFromHand', false).setDepth(0)
+      // Check if card is on board or not
+    })
   }
 
   private createCardObject(card: Card): void {
