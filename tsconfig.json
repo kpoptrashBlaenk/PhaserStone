@@ -7,13 +7,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "moduleResolution": "node",  // Ensure module resolution is set to node
+    "moduleResolution": "node", // Ensure module resolution is set to node
     "strictPropertyInitialization": false
   },
-  "include": [
-    "public/**/*.ts",
-    "src/**/*.ts"  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["public/**/*.ts", "src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

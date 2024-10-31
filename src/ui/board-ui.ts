@@ -1,14 +1,17 @@
 import { BoardBackground } from './board-background'
 import { HandUI } from './hand-ui'
+import { PreviewUI } from './preview-ui'
 
 export class BoardUI {
-  private scene: Phaser.Scene
   public handUI: HandUI
+  private scene: Phaser.Scene
+  private previewUI: PreviewUI
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene
 
     this.createBoardBackground()
+    this.createPreviewUI() // Needs to come before createHandUI()
     this.createHandUI()
   }
 
@@ -17,6 +20,10 @@ export class BoardUI {
   }
 
   private createHandUI(): void {
-    this.handUI = new HandUI(this.scene)
+    this.handUI = new HandUI(this.scene, this.previewUI)
+  }
+
+  private createPreviewUI(): void {
+    this.previewUI = new PreviewUI(this.scene)
   }
 }

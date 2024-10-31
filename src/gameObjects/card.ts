@@ -1,5 +1,5 @@
 import { CardAssetKeys } from '../assets/asset-keys'
-import { ClassKeys, RaceKeys, TypeKeys } from '../types/typedef'
+import { ClassKeys, RaceKeys, TypeKeys } from './card-keys'
 
 export type CardData = {
   assetKey: CardAssetKeys
@@ -8,9 +8,9 @@ export type CardData = {
   cost: number
   health: number
   id: number
-  mechanics: string[]
+  mechanics?: string[]
   name: string
-  races: RaceKeys[]
+  races?: RaceKeys[]
   type: TypeKeys
 }
 
