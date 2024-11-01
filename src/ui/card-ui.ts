@@ -109,7 +109,7 @@ export class CardUI {
 
     this.cardImage.on('pointerup', () => {
       this.cardContainer.setData('draggingFromHand', false).setDepth(0)
-      // Check if card is on board or not
+      this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
     })
   }
 
