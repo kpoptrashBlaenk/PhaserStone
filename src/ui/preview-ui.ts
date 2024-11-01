@@ -1,11 +1,11 @@
 import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
 import { Card } from '../gameObjects/card'
 import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card-keys'
-import { CardUI } from './card-ui'
+import { PreviewCardUI } from './card/preview-card-ui'
 
 export class PreviewUI {
   private card: Card
-  private cardUI: CardUI
+  private cardUI: PreviewCardUI
   private scene: Phaser.Scene
 
   constructor(scene: Phaser.Scene) {
@@ -23,8 +23,7 @@ export class PreviewUI {
     }
     this.card = new Card(cardData)
 
-    this.cardUI = new CardUI(this.scene, this.card)
-    this.cardUI.forPreview()
+    this.cardUI = new PreviewCardUI(this.scene, this.card)
   }
 
   public changeCardContainer(card: Card) {

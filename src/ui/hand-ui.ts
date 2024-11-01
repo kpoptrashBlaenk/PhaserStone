@@ -1,5 +1,5 @@
 import { Card } from '../gameObjects/card'
-import { CardUI } from './card-ui'
+import { HandCardUI } from './card/hand-card'
 import { PreviewUI } from './preview-ui'
 
 export class HandUI {
@@ -15,8 +15,7 @@ export class HandUI {
   }
 
   public drawCard(card: Card) {
-    const cardContainer = new CardUI(this.scene, card)
-    cardContainer.forHand(this.previewUI)
+    const cardContainer = new HandCardUI(this.scene, card, this.previewUI)
     this.handContainer.add(cardContainer.cardContainer)
     this.resizeHandContainer()
   }
