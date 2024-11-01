@@ -41,7 +41,7 @@ export class CardUI {
   public forHand(previewUI: PreviewUI): void {
     this.previewUI = previewUI
 
-    this.cardContainer.setScale(0.18)
+    this.cardContainer.setScale(0.36)
     this.cardContainer.setSize(
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY
@@ -55,7 +55,7 @@ export class CardUI {
 
   public forPreview(): void {
     const padding = 20
-    this.cardContainer.setScale(0.5)
+    this.cardContainer.setScale(1)
     this.cardContainer.setPosition(
       this.scene.scale.width - this.cardContainer.width * this.cardContainer.scaleX - padding,
       padding * 2

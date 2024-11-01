@@ -27,6 +27,7 @@ export class HandUI {
 
   private resizeHandContainer() {
     // Also reposition it
+    const padding = 10
     let newWidth = 0
     let newHeight = 0
     let index = 0
@@ -34,7 +35,7 @@ export class HandUI {
     this.handContainer.iterate((child: Phaser.GameObjects.Container) => {
       child.setX(child.width * index)
       newWidth += child.width
-      newHeight = child.height + 35 // Adjusted because black border
+      newHeight = child.height + padding
       index++
     })
 
