@@ -1,6 +1,7 @@
 import { FONT_KEYS } from '../assets/font-keys'
 import { Card } from '../gameObjects/card'
 import { Coordinate } from '../types/typedef'
+import { PLAYER_BOARD_BOUNDS } from './board-ui'
 import { PreviewUI } from './preview-ui'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
@@ -107,9 +108,19 @@ export class CardUI {
       }
     })
 
-    this.cardImage.on('pointerup', () => {
+    this.cardImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
       this.cardContainer.setData('draggingFromHand', false).setDepth(0)
-      this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
+      // Check if card is placed on board
+      if (
+        pointer.x >= PLAYER_BOARD_BOUNDS.startX &&
+        pointer.x <= PLAYER_BOARD_BOUNDS.endX &&
+        pointer.y >= PLAYER_BOARD_BOUNDS.startY &&
+        pointer.y <= PLAYER_BOARD_BOUNDS.endY
+      ) {
+        // Play card
+      } else {
+        this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
+      }
     })
   }
 
