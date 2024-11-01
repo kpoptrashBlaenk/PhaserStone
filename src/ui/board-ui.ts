@@ -6,7 +6,7 @@ export const PLAYER_BOARD_BOUNDS = Object.freeze({
   startX: 449,
   endX: 1599,
   startY: 487,
-  endY: 687,
+  endY: 637,
 })
 
 export class BoardUI {
