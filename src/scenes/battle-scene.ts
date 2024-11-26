@@ -4,11 +4,13 @@ import { BoardUI } from '../ui/board-ui'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Hand } from '../gameObjects/hand'
+import { PlayerBoard } from '../gameObjects/player-board'
 
 export class BattleScene extends BaseScene {
   private boardUI: BoardUI
   private playerDeck: Deck
   private playerHand: Hand
+  private playerBoard: PlayerBoard
 
   constructor() {
     super({
@@ -20,9 +22,14 @@ export class BattleScene extends BaseScene {
     // Create UIs
     this.boardUI = new BoardUI(this) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
 
-    // create decks
+    // Create decks
     this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS)) // All Cards that exist currently
+
+    // Create Hand
     this.playerHand = new Hand()
+
+    // Create Board
+    this.playerBoard = new PlayerBoard()
 
     this.playerTurnStart()
   }
@@ -31,6 +38,8 @@ export class BattleScene extends BaseScene {
     this.drawCard()
     this.drawCard()
     this.drawCard()
+
+    this.playCard()
   }
 
   private drawCard(): void {
@@ -41,5 +50,10 @@ export class BattleScene extends BaseScene {
     } else {
       console.log('Fatigue')
     }
+  }
+
+  private playCard(): void {
+    this.playerBoard.playMinion(this.playerHand.playCard(0))
+    console.log(this.playerBoard.minionsOnBoard)
   }
 }
