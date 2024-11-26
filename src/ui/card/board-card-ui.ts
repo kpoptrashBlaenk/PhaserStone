@@ -1,5 +1,5 @@
 import { Card } from '../../gameObjects/card'
-import { PreviewUI } from '../preview-ui'
+import { PreviewUI } from '../preview/preview-ui'
 import { CardUI } from './card-ui'
 
 export class BoardCardUI extends CardUI {

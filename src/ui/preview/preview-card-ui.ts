@@ -1,5 +1,5 @@
 import { Card } from '../../gameObjects/card'
-import { CardUI } from './card-ui'
+import { CardUI } from '../card/card-ui'
 
 const CARD_NAME_PADDING_X = 10
 

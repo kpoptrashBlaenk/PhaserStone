@@ -2,7 +2,7 @@ import { Card } from '../../gameObjects/card'
 import { Coordinate } from '../../types/typedef'
 import { PLAYER_BOARD_BOUNDS } from '../board-ui-controller'
 import { CardUI } from './card-ui'
-import { PreviewUI } from '../preview-ui'
+import { PreviewUI } from '../preview/preview-ui'
 
 export class PlayerHandCardUI extends CardUI {
   private previewUI: PreviewUI

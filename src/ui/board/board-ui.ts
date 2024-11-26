@@ -1,6 +1,6 @@
 import { Card } from '../../gameObjects/card'
 import { BoardCardUI } from '../card/board-card-ui'
-import { PreviewUI } from '../preview-ui'
+import { PreviewUI } from '../preview/preview-ui'
 
 export class BoardUI {
   protected scene: Phaser.Scene

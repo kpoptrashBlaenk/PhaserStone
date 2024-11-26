@@ -1,4 +1,4 @@
-import { PreviewUI } from '../preview-ui'
+import { PreviewUI } from '../preview/preview-ui'
 import { BoardUI } from './board-ui'
 
 const BOARD_PADDING_Y = -40

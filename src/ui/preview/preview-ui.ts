@@ -1,7 +1,7 @@
-import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
-import { Card } from '../gameObjects/card'
-import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card-keys'
-import { PreviewCardUI } from './card/preview-card-ui'
+import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
+import { Card } from '../../gameObjects/card'
+import { CLASS_KEYS, TYPE_KEYS } from '../../gameObjects/card-keys'
+import { PreviewCardUI } from './preview-card-ui'
 
 export class PreviewUI {
   private card: Card

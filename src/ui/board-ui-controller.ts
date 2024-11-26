@@ -3,7 +3,7 @@ import { BoardBackground } from './board-background'
 import { PlayerHandUI } from './hand/player-hand-ui'
 import { OpponentHandUI } from './hand/opponent-hand-ui'
 import { BoardUI } from './board/board-ui'
-import { PreviewUI } from './preview-ui'
+import { PreviewUI } from './preview/preview-ui'
 import { PlayerBoardUI } from './board/player-board-ui'
 import { OpponentBoardUI } from './board/opponent-board-ui'
 

@@ -1,6 +1,6 @@
 import { Card } from '../../gameObjects/card'
 import { PlayerHandCardUI } from '../card/player-hand-card-ui'
-import { PreviewUI } from '../preview-ui'
+import { PreviewUI } from '../preview/preview-ui'
 import { BaseHandUI } from './hand-ui'
 
 export class PlayerHandUI extends BaseHandUI {
