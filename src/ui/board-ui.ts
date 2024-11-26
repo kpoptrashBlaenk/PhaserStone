@@ -32,5 +32,6 @@ export class BoardUI {
 
   private createPreviewUI(): void {
     this.previewUI = new PreviewUI(this.scene)
+    this.previewUI.hideCardContainer()
   }
 }

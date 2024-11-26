@@ -18,7 +18,7 @@ export class BattleScene extends BaseScene {
 
   create() {
     // Create UIs
-    this.boardUI = new BoardUI(this)
+    this.boardUI = new BoardUI(this) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
 
     // create decks
     this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS)) // All Cards that exist currently

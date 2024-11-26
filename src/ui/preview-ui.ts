@@ -21,7 +21,7 @@ export class PreviewUI {
       name: 'Preview',
       type: TYPE_KEYS.MINION,
     }
-    this.card = new Card(cardData)
+    this.card = new Card(cardData) // No null cases allowed, so init with an empty card that hides immediately
 
     this.cardUI = new PreviewCardUI(this.scene, this.card)
   }
