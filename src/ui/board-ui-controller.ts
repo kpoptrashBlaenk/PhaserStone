@@ -2,8 +2,10 @@ import { Card } from '../gameObjects/card'
 import { BoardBackground } from './board-background'
 import { PlayerHandUI } from './hand/player-hand-ui'
 import { OpponentHandUI } from './hand/opponent-hand-ui'
-import { PlayerBoardUI } from './player-board-ui'
+import { BoardUI } from './board/board-ui'
 import { PreviewUI } from './preview-ui'
+import { PlayerBoardUI } from './board/player-board-ui'
+import { OpponentBoardUI } from './board/opponent-board-ui'
 
 export const PLAYER_BOARD_BOUNDS = Object.freeze({
   startX: 449,
@@ -12,10 +14,11 @@ export const PLAYER_BOARD_BOUNDS = Object.freeze({
   endY: 637,
 })
 
-export class BoardUI {
+export class BoardUIController {
   public playerHandUI: PlayerHandUI
   public opponentHandUI: OpponentHandUI
-  public playerBoardUI: PlayerBoardUI
+  public playerBoardUI: BoardUI
+  public opponentBoardUI: BoardUI
   private scene: Phaser.Scene
   private previewUI: PreviewUI
   private onPlayCallback: (card: Card) => void
@@ -27,7 +30,7 @@ export class BoardUI {
     this.createBoardBackground()
     this.createPreviewUI() // Needs to come before createHandUI()
     this.createHandUI()
-    this.createPlayerBoardUI()
+    this.createBoardUI()
   }
 
   private createBoardBackground(): void {
@@ -44,7 +47,8 @@ export class BoardUI {
     this.opponentHandUI = new OpponentHandUI(this.scene, this.onPlayCallback)
   }
 
-  private createPlayerBoardUI(): void {
+  private createBoardUI(): void {
     this.playerBoardUI = new PlayerBoardUI(this.scene, this.previewUI)
+    this.opponentBoardUI = new OpponentBoardUI(this.scene, this.previewUI)
   }
 }

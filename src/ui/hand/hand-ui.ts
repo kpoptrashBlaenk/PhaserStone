@@ -1,5 +1,5 @@
 import { Card } from '../../gameObjects/card'
-import { PlayerHandCardUI } from '../card/player-hand-card-ui'
+import { OpponentHandCardUI } from '../card/opponent-hand-card-ui'
 
 export class BaseHandUI {
   protected scene: Phaser.Scene
@@ -15,7 +15,7 @@ export class BaseHandUI {
 
   public getCardContainer(card: Card): Phaser.GameObjects.Container | null {
     for (const cardContainer of this.handContainer.getAll()) {
-      const handCardUI = cardContainer.getData('handCardUI') as PlayerHandCardUI
+      const handCardUI = cardContainer.getData('handCardUI') as OpponentHandCardUI
       if (handCardUI && handCardUI.thisCard === card) {
         return cardContainer as Phaser.GameObjects.Container // Promise this is a Container
       }

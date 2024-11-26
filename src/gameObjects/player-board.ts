@@ -1,6 +1,6 @@
 import { Card } from './card'
 
-export class PlayerBoard {
+export class Board {
   private boardCards: Card[]
 
   constructor() {

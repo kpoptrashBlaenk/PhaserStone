@@ -1,6 +1,6 @@
 import { Card } from '../../gameObjects/card'
 import { Coordinate } from '../../types/typedef'
-import { PLAYER_BOARD_BOUNDS } from '../board-ui'
+import { PLAYER_BOARD_BOUNDS } from '../board-ui-controller'
 import { CardUI } from './card-ui'
 import { PreviewUI } from '../preview-ui'
 
@@ -16,10 +16,6 @@ export class PlayerHandCardUI extends CardUI {
     this.previewUI = previewUI
     this.onPlayCallback = onPlayCallback
     this.forHand()
-  }
-
-  public get thisCard(): Card {
-    return this.card
   }
 
   private forHand(): void {

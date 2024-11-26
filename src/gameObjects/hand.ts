@@ -7,6 +7,10 @@ export class Hand {
     this.handCards = []
   }
 
+  public get hand(): Card[] {
+    return this.handCards
+  }
+
   public drawCard(card: Card): void {
     this.handCards.push(card)
   }

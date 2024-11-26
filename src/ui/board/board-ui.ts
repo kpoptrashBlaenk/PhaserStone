@@ -1,11 +1,11 @@
-import { Card } from '../gameObjects/card'
-import { BoardCardUI } from './card/board-card-ui'
-import { PreviewUI } from './preview-ui'
+import { Card } from '../../gameObjects/card'
+import { BoardCardUI } from '../card/board-card-ui'
+import { PreviewUI } from '../preview-ui'
 
-export class PlayerBoardUI {
-  private scene: Phaser.Scene
+export class BoardUI {
+  protected scene: Phaser.Scene
+  protected boardContainer: Phaser.GameObjects.Container
   private previewUI: PreviewUI
-  private boardContainer: Phaser.GameObjects.Container
 
   constructor(scene: Phaser.Scene, previewUI: PreviewUI) {
     this.scene = scene
@@ -52,9 +52,10 @@ export class PlayerBoardUI {
 
     this.boardContainer.width = newWidth
     this.boardContainer.height = newHeight
-    this.boardContainer.setPosition(
-      this.scene.scale.width / 2 - this.boardContainer.width / 2,
-      this.scene.scale.height / 2 - padding
-    )
+    this.setPosition()
+  }
+
+  protected setPosition(): void {
+    console.log('Placeholder method for setting position')
   }
 }

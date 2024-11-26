@@ -1,20 +1,20 @@
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { Deck } from '../gameObjects/deck'
-import { BoardUI } from '../ui/board-ui'
+import { BoardUIController } from '../ui/board-ui-controller'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Hand } from '../gameObjects/hand'
-import { PlayerBoard } from '../gameObjects/player-board'
+import { Board } from '../gameObjects/player-board'
 import { Card } from '../gameObjects/card'
 
 export class BattleScene extends BaseScene {
-  private boardUI: BoardUI
+  private boardUI: BoardUIController
   private playerDeck: Deck
   private opponentDeck: Deck
   private playerHand: Hand
   private opponentHand: Hand
-  private playerBoard: PlayerBoard
-  private opponentBoard: PlayerBoard
+  private playerBoard: Board
+  private opponentBoard: Board
 
   constructor() {
     super({
@@ -24,8 +24,8 @@ export class BattleScene extends BaseScene {
 
   create() {
     // Create UIs
-    const playCardCallback = this.playCard.bind(this) // Bind this Scene to the callback to keep context
-    this.boardUI = new BoardUI(this, playCardCallback) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
+    const playCardCallback = this.playerPlayCard.bind(this) // Bind this Scene to the callback to keep context
+    this.boardUI = new BoardUIController(this, playCardCallback) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
 
     // Create decks
     this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS)) // All Cards that exist currently
@@ -36,8 +36,8 @@ export class BattleScene extends BaseScene {
     this.opponentHand = new Hand()
 
     // Create Board
-    this.playerBoard = new PlayerBoard()
-    this.opponentBoard = new PlayerBoard()
+    this.playerBoard = new Board()
+    this.opponentBoard = new Board()
 
     this.playerTurnStart()
     this.opponentTurnStart()
@@ -53,6 +53,10 @@ export class BattleScene extends BaseScene {
     this.opponentDrawCard()
     this.opponentDrawCard()
     this.opponentDrawCard()
+
+    this.opponentPlayCard(this.opponentHand.hand[0])
+    this.opponentPlayCard(this.opponentHand.hand[0])
+    this.opponentPlayCard(this.opponentHand.hand[0])
   }
 
   private playerDrawCard(): void {
@@ -75,7 +79,7 @@ export class BattleScene extends BaseScene {
     }
   }
 
-  private playCard(card: Card): void {
+  private playerPlayCard(card: Card): void {
     const cardUI = this.boardUI.playerHandUI.getCardContainer(card)
 
     if (cardUI) {
@@ -83,6 +87,18 @@ export class BattleScene extends BaseScene {
       this.boardUI.playerHandUI.playCard(cardUI)
       this.playerBoard.playMinion(card)
       this.boardUI.playerBoardUI.playCard(card)
+    }
+  }
+
+  private opponentPlayCard(card: Card): void {
+    const cardUI = this.boardUI.opponentHandUI.getCardContainer(card)
+    console.log(card)
+
+    if (cardUI) {
+      this.opponentHand.playCard(card)
+      this.boardUI.opponentHandUI.playCard(cardUI)
+      this.opponentBoard.playMinion(card)
+      this.boardUI.opponentBoardUI.playCard(card)
     }
   }
 }

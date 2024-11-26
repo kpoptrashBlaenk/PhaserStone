@@ -32,6 +32,10 @@ export class CardUI {
     this.createCardObject(card)
   }
 
+  public get thisCard(): Card {
+    return this.card
+  }
+
   private createCardObject(card: Card): void {
     this.cardImage = this.scene.add.image(0, 0, card.assetKey).setOrigin(0)
     this.cardContainer = this.scene.add
