@@ -14,6 +14,24 @@ const CARD_NAME_FONT_STYLE = Object.freeze({
   fontSize: '26px',
 })
 
+const CARD_COST_PADDING = {
+  x: 25,
+  y: 30,
+}
+const CARD_ATTACK_PADDING = {
+  x: 25,
+  y: -58,
+}
+const CARD_HEALTH_PADDING = {
+  x: -50,
+  y: -58,
+}
+
+const CARD_NAME_PADDING = {
+  x: 0,
+  y: 200,
+}
+
 export class CardUI {
   public cardContainer: Phaser.GameObjects.Container
   protected scene: Phaser.Scene
@@ -43,25 +61,30 @@ export class CardUI {
       .setSize(this.cardImage.width, this.cardImage.height)
 
     this.cardCostText = this.scene.add.text(
-      this.cardImage.x + 25,
-      this.cardImage.y + 30,
+      this.cardImage.x + CARD_COST_PADDING.x,
+      this.cardImage.y + CARD_COST_PADDING.y,
       String(card.cost),
       CARD_NUMBER_FONT_STYLE
     )
     this.cardAttackText = this.scene.add.text(
-      this.cardImage.x + 28,
-      this.cardImage.y + this.cardImage.height - 58,
+      this.cardImage.x + CARD_ATTACK_PADDING.x,
+      this.cardImage.y + this.cardImage.height + CARD_ATTACK_PADDING.y,
       String(card.attack),
       CARD_NUMBER_FONT_STYLE
     )
     this.cardHealthText = this.scene.add.text(
-      this.cardImage.x + this.cardImage.width - 50,
-      this.cardImage.y + this.cardImage.height - 58,
+      this.cardImage.x + this.cardImage.width + CARD_HEALTH_PADDING.x,
+      this.cardImage.y + this.cardImage.height + CARD_HEALTH_PADDING.y,
       String(card.health),
       CARD_NUMBER_FONT_STYLE
     )
-    this.cardNameText = this.scene.add.text(0, this.cardImage.y + 200, card.name, CARD_NAME_FONT_STYLE)
-    this.cardNameText.setX(this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2) // + 10 because not centered, idk why
+    this.cardNameText = this.scene.add.text(
+      0,
+      this.cardImage.y + CARD_NAME_PADDING.y,
+      card.name,
+      CARD_NAME_FONT_STYLE
+    )
+    this.cardNameText.setX(this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2)
 
     this.cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
   }

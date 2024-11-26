@@ -1,6 +1,8 @@
 import { PreviewUI } from '../preview-ui'
 import { BoardUI } from './board-ui'
 
+const BOARD_PADDING_Y = -40
+
 export class OpponentBoardUI extends BoardUI {
   constructor(scene: Phaser.Scene, previewUI: PreviewUI) {
     super(scene, previewUI)
@@ -9,7 +11,7 @@ export class OpponentBoardUI extends BoardUI {
   protected setPosition(): void {
     this.boardContainer.setPosition(
       this.scene.scale.width / 2 - this.boardContainer.width / 2,
-      this.scene.scale.height / 2 - this.boardContainer.height - 40
+      this.scene.scale.height / 2 - this.boardContainer.height + BOARD_PADDING_Y
     )
   }
 }

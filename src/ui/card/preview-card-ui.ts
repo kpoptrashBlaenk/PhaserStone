@@ -1,6 +1,8 @@
 import { Card } from '../../gameObjects/card'
 import { CardUI } from './card-ui'
 
+const CARD_NAME_PADDING_X = 10
+
 export class PreviewCardUI extends CardUI {
   constructor(scene: Phaser.Scene, card: Card) {
     super(scene, card)
@@ -24,7 +26,9 @@ export class PreviewCardUI extends CardUI {
     this.cardAttackText.setText(String(card.attack))
     this.cardHealthText.setText(String(card.health))
     this.cardNameText.setText(card.name)
-    this.cardNameText.setX(this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + 10)
+    this.cardNameText.setX(
+      this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + CARD_NAME_PADDING_X
+    )
     this.cardContainer.setAlpha(1)
   }
 

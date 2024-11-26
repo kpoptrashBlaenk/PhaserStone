@@ -4,7 +4,7 @@ import { BoardUIController } from '../ui/board-ui-controller'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Hand } from '../gameObjects/hand'
-import { Board } from '../gameObjects/player-board'
+import { Board } from '../gameObjects/board'
 import { Card } from '../gameObjects/card'
 
 export class BattleScene extends BaseScene {
@@ -39,23 +39,15 @@ export class BattleScene extends BaseScene {
     this.playerBoard = new Board()
     this.opponentBoard = new Board()
 
-    this.playerTurnStart()
     this.opponentTurnStart()
   }
 
   private playerTurnStart(): void {
     this.playerDrawCard()
-    this.playerDrawCard()
-    this.playerDrawCard()
   }
 
   private opponentTurnStart(): void {
     this.opponentDrawCard()
-    this.opponentDrawCard()
-    this.opponentDrawCard()
-
-    this.opponentPlayCard(this.opponentHand.hand[0])
-    this.opponentPlayCard(this.opponentHand.hand[0])
     this.opponentPlayCard(this.opponentHand.hand[0])
   }
 
@@ -92,7 +84,6 @@ export class BattleScene extends BaseScene {
 
   private opponentPlayCard(card: Card): void {
     const cardUI = this.boardUI.opponentHandUI.getCardContainer(card)
-    console.log(card)
 
     if (cardUI) {
       this.opponentHand.playCard(card)
