@@ -5,6 +5,7 @@ import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Hand } from '../gameObjects/hand'
 import { PlayerBoard } from '../gameObjects/player-board'
+import { Card } from '../gameObjects/card'
 
 export class BattleScene extends BaseScene {
   private boardUI: BoardUI
@@ -20,7 +21,8 @@ export class BattleScene extends BaseScene {
 
   create() {
     // Create UIs
-    this.boardUI = new BoardUI(this) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
+    const playCardCallback = this.playCard.bind(this) // Bind this Scene to the callback to keep context
+    this.boardUI = new BoardUI(this, playCardCallback) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
 
     // Create decks
     this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS)) // All Cards that exist currently
@@ -38,8 +40,6 @@ export class BattleScene extends BaseScene {
     this.drawCard()
     this.drawCard()
     this.drawCard()
-
-    this.playCard()
   }
 
   private drawCard(): void {
@@ -52,8 +52,14 @@ export class BattleScene extends BaseScene {
     }
   }
 
-  private playCard(): void {
-    this.playerBoard.playMinion(this.playerHand.playCard(0))
-    console.log(this.playerBoard.minionsOnBoard)
+  private playCard(card: Card): void {
+    const cardUI = this.boardUI.handUI.getCardContainer(card)
+
+    if (cardUI) {
+      this.playerHand.playCard(card)
+      this.boardUI.handUI.playCard(cardUI)
+      this.playerBoard.playMinion(card)
+      this.boardUI.playerBoardUI.playCard(card)
+    }
   }
 }

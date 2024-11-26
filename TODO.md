@@ -1,7 +1,20 @@
 # Board
+
 - [x] Minions on board logic
-- [ ] Minions on board UI
-- [ ] Card disappears from hand and stays on board
-- [ ] Resize board
- 
+- [x] Minions on board UI
+- [x] Card disappears from hand and stays on board
+- [x] Resize board
+
+# Enemy
+
+- [ ] Enemy Deck
+- [ ] Enemy Hand
+- [ ] Enemy Board
+
+# Board
+
+- [ ] Minion On Click
+- [ ] Attack Animation
+- [ ] Attack Logic
+
 # Fix Cards in Hand bugging

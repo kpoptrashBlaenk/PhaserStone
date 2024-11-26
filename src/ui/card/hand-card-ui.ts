@@ -8,16 +8,21 @@ export class HandCardUI extends CardUI {
   private previewUI: PreviewUI
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
+  private onPlayCallback: (card: Card) => void
 
-  constructor(scene: Phaser.Scene, card: Card, previewUI: PreviewUI) {
+  constructor(scene: Phaser.Scene, card: Card, previewUI: PreviewUI, onPlayCallback: (card: Card) => void) {
     super(scene, card)
 
-    this.forHand(previewUI)
+    this.previewUI = previewUI
+    this.onPlayCallback = onPlayCallback
+    this.forHand()
   }
 
-  private forHand(previewUI: PreviewUI): void {
-    this.previewUI = previewUI
+  public get thisCard(): Card {
+    return this.card
+  }
 
+  private forHand(): void {
     this.cardContainer.setScale(0.36)
     this.cardContainer.setSize(
       this.cardContainer.width * this.cardContainer.scaleX,
@@ -69,10 +74,14 @@ export class HandCardUI extends CardUI {
         pointer.y >= PLAYER_BOARD_BOUNDS.startY &&
         pointer.y <= PLAYER_BOARD_BOUNDS.endY
       ) {
-        // Play card
+        // Play Card
+        this.onPlayCallback(this.card)
       } else {
+        // Return to Hand
         this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
       }
+
+      this.previewUI.hideCardContainer()
     })
   }
 }
