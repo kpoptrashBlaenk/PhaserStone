@@ -4,9 +4,9 @@ import { CLASS_KEYS, TYPE_KEYS } from '../../gameObjects/card-keys'
 import { PreviewCardUI } from './preview-card-ui'
 
 export class PreviewUI {
-  private card: Card
-  private cardUI: PreviewCardUI
-  private scene: Phaser.Scene
+  protected card: Card
+  protected cardUI: PreviewCardUI
+  protected scene: Phaser.Scene
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene
@@ -22,8 +22,6 @@ export class PreviewUI {
       type: TYPE_KEYS.MINION,
     }
     this.card = new Card(cardData) // No null cases allowed, so init with an empty card that hides immediately
-
-    this.cardUI = new PreviewCardUI(this.scene, this.card)
   }
 
   public changeCardContainer(card: Card) {

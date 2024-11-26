@@ -1,13 +1,13 @@
 import { Card } from '../../gameObjects/card'
 import { BoardCardUI } from '../card/board-card-ui'
-import { PreviewUI } from '../preview/preview-ui'
+import { PlayerPreviewUI } from '../preview/player-preview-ui'
 
 export class BoardUI {
   protected scene: Phaser.Scene
   protected boardContainer: Phaser.GameObjects.Container
-  private previewUI: PreviewUI
+  private previewUI: PlayerPreviewUI
 
-  constructor(scene: Phaser.Scene, previewUI: PreviewUI) {
+  constructor(scene: Phaser.Scene, previewUI: PlayerPreviewUI) {
     this.scene = scene
     this.previewUI = previewUI
 

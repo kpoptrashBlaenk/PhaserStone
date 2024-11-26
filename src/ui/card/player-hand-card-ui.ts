@@ -2,15 +2,15 @@ import { Card } from '../../gameObjects/card'
 import { Coordinate } from '../../types/typedef'
 import { PLAYER_BOARD_BOUNDS } from '../board-ui-controller'
 import { CardUI } from './card-ui'
-import { PreviewUI } from '../preview/preview-ui'
+import { PlayerPreviewUI } from '../preview/player-preview-ui'
 
 export class PlayerHandCardUI extends CardUI {
-  private previewUI: PreviewUI
+  private previewUI: PlayerPreviewUI
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
   private onPlayCallback: (card: Card) => void
 
-  constructor(scene: Phaser.Scene, card: Card, previewUI: PreviewUI, onPlayCallback: (card: Card) => void) {
+  constructor(scene: Phaser.Scene, card: Card, previewUI: PlayerPreviewUI, onPlayCallback: (card: Card) => void) {
     super(scene, card)
 
     this.previewUI = previewUI

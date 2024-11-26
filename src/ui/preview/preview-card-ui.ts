@@ -8,15 +8,15 @@ export class PreviewCardUI extends CardUI {
     super(scene, card)
 
     this.forPreview()
+    this.setPosition()
+  }
+
+  protected setPosition(): void {
+    console.log('This method is a placeholder for setting the position of the preview cards')
   }
 
   private forPreview(): void {
-    const padding = 20
     this.cardContainer.setScale(1)
-    this.cardContainer.setPosition(
-      this.scene.scale.width - this.cardContainer.width * this.cardContainer.scaleX - padding,
-      padding * 2
-    )
     this.cardContainer.setAlpha(0)
   }
 

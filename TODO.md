@@ -10,8 +10,8 @@
 - [x] Enemy Deck
 - [x] Enemy Hand
 - [x] Enemy Board
-- [ ] Enemy Play Card
-- [ ] Enemy Preview On Play Card
+- [x] Enemy Play Card
+- [x] Enemy Preview On Play Card
 
 # Board
 

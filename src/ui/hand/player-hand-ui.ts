@@ -1,12 +1,12 @@
 import { Card } from '../../gameObjects/card'
 import { PlayerHandCardUI } from '../card/player-hand-card-ui'
-import { PreviewUI } from '../preview/preview-ui'
+import { PlayerPreviewUI } from '../preview/player-preview-ui'
 import { BaseHandUI } from './hand-ui'
 
 export class PlayerHandUI extends BaseHandUI {
-  private previewUI: PreviewUI
+  private previewUI: PlayerPreviewUI
 
-  constructor(scene: Phaser.Scene, previewUI: PreviewUI, onPlayCallback: (card: Card) => void) {
+  constructor(scene: Phaser.Scene, previewUI: PlayerPreviewUI, onPlayCallback: (card: Card) => void) {
     super(scene, onPlayCallback)
 
     this.previewUI = previewUI

@@ -1,10 +1,10 @@
-import { PreviewUI } from '../preview/preview-ui'
+import { PlayerPreviewUI } from '../preview/player-preview-ui'
 import { BoardUI } from './board-ui'
 
 const BOARD_PADDING_Y = -10
 
 export class PlayerBoardUI extends BoardUI {
-  constructor(scene: Phaser.Scene, previewUI: PreviewUI) {
+  constructor(scene: Phaser.Scene, previewUI: PlayerPreviewUI) {
     super(scene, previewUI)
   }
 

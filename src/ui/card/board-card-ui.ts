@@ -1,11 +1,11 @@
 import { Card } from '../../gameObjects/card'
-import { PreviewUI } from '../preview/preview-ui'
+import { PlayerPreviewUI } from '../preview/player-preview-ui'
 import { CardUI } from './card-ui'
 
 export class BoardCardUI extends CardUI {
-  private previewUI: PreviewUI
+  private previewUI: PlayerPreviewUI
 
-  constructor(scene: Phaser.Scene, card: Card, previewUI: PreviewUI) {
+  constructor(scene: Phaser.Scene, card: Card, previewUI: PlayerPreviewUI) {
     super(scene, card)
 
     this.forBoard(previewUI)
@@ -15,7 +15,7 @@ export class BoardCardUI extends CardUI {
     return this.card
   }
 
-  private forBoard(previewUI: PreviewUI): void {
+  private forBoard(previewUI: PlayerPreviewUI): void {
     this.previewUI = previewUI
 
     this.cardContainer.setScale(0.36)

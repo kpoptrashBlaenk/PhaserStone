@@ -3,9 +3,10 @@ import { BoardBackground } from './board-background'
 import { PlayerHandUI } from './hand/player-hand-ui'
 import { OpponentHandUI } from './hand/opponent-hand-ui'
 import { BoardUI } from './board/board-ui'
-import { PreviewUI } from './preview/preview-ui'
+import { PlayerPreviewUI } from './preview/player-preview-ui'
 import { PlayerBoardUI } from './board/player-board-ui'
 import { OpponentBoardUI } from './board/opponent-board-ui'
+import { OpponentPreviewUI } from './preview/opponent-preview-ui'
 
 export const PLAYER_BOARD_BOUNDS = Object.freeze({
   startX: 449,
@@ -20,7 +21,8 @@ export class BoardUIController {
   public playerBoardUI: BoardUI
   public opponentBoardUI: BoardUI
   private scene: Phaser.Scene
-  private previewUI: PreviewUI
+  private playerPreviewUI: PlayerPreviewUI
+  private opponentPreviewUI: OpponentPreviewUI
   private onPlayCallback: (card: Card) => void
 
   constructor(scene: Phaser.Scene, onPlayCallback: (card: Card) => void) {
@@ -38,17 +40,20 @@ export class BoardUIController {
   }
 
   private createPreviewUI(): void {
-    this.previewUI = new PreviewUI(this.scene)
-    this.previewUI.hideCardContainer()
+    this.playerPreviewUI = new PlayerPreviewUI(this.scene)
+    this.playerPreviewUI.hideCardContainer()
+
+    this.opponentPreviewUI = new OpponentPreviewUI(this.scene)
+    // this.opponentPreviewUI.hideCardContainer()
   }
 
   private createHandUI(): void {
-    this.playerHandUI = new PlayerHandUI(this.scene, this.previewUI, this.onPlayCallback)
+    this.playerHandUI = new PlayerHandUI(this.scene, this.playerPreviewUI, this.onPlayCallback)
     this.opponentHandUI = new OpponentHandUI(this.scene, this.onPlayCallback)
   }
 
   private createBoardUI(): void {
-    this.playerBoardUI = new PlayerBoardUI(this.scene, this.previewUI)
-    this.opponentBoardUI = new OpponentBoardUI(this.scene, this.previewUI)
+    this.playerBoardUI = new PlayerBoardUI(this.scene, this.playerPreviewUI)
+    this.opponentBoardUI = new OpponentBoardUI(this.scene, this.playerPreviewUI)
   }
 }
