@@ -32,6 +32,17 @@ export class BoardUI {
     this.resizeBoardContainer()
   }
 
+  protected setPosition(): void {
+    console.log('Placeholder method for setting position')
+  }
+
+  protected calculatePosition(paddingY: number): { x: number; y: number } {
+    return {
+      x: this.scene.scale.width / 2 - this.boardContainer.width / 2,
+      y: this.scene.scale.height / 2 + paddingY,
+    }
+  }
+
   private createBoardContainer(): void {
     this.boardContainer = this.scene.add.container()
   }
@@ -53,9 +64,5 @@ export class BoardUI {
     this.boardContainer.width = newWidth
     this.boardContainer.height = newHeight
     this.setPosition()
-  }
-
-  protected setPosition(): void {
-    console.log('Placeholder method for setting position')
   }
 }

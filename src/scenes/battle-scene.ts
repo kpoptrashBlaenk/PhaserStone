@@ -40,10 +40,12 @@ export class BattleScene extends BaseScene {
     this.opponentBoard = new Board()
 
     this.opponentTurnStart()
+    this.playerTurnStart()
   }
 
   private playerTurnStart(): void {
     this.playerDrawCard()
+    this.playerPlayCard(this.playerHand.hand[0])
   }
 
   private opponentTurnStart(): void {

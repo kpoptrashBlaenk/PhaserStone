@@ -1,7 +1,6 @@
 import { PlayerPreviewUI } from '../preview/player-preview-ui'
+import { BOARD_PADDING } from './board-constants'
 import { BoardUI } from './board-ui'
-
-const BOARD_PADDING_Y = -40
 
 export class OpponentBoardUI extends BoardUI {
   constructor(scene: Phaser.Scene, previewUI: PlayerPreviewUI) {
@@ -9,9 +8,7 @@ export class OpponentBoardUI extends BoardUI {
   }
 
   protected setPosition(): void {
-    this.boardContainer.setPosition(
-      this.scene.scale.width / 2 - this.boardContainer.width / 2,
-      this.scene.scale.height / 2 - this.boardContainer.height + BOARD_PADDING_Y
-    )
+    const { x, y } = this.calculatePosition(BOARD_PADDING.OPPONENT - this.boardContainer.height)
+    this.boardContainer.setPosition(x, y)
   }
 }
