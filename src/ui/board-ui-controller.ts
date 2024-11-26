@@ -7,6 +7,7 @@ import { PlayerPreviewUI } from './preview/player-preview-ui'
 import { PlayerBoardUI } from './board/player-board-ui'
 import { OpponentBoardUI } from './board/opponent-board-ui'
 import { OpponentPreviewUI } from './preview/opponent-preview-ui'
+import { TARGETS_KEYS } from '../event-keys'
 
 export const PLAYER_BOARD_BOUNDS = Object.freeze({
   startX: 449,
@@ -24,9 +25,15 @@ export class BoardUIController {
   private playerPreviewUI: PlayerPreviewUI
   private opponentPreviewUI: OpponentPreviewUI
   private onPlayCallback: (card: Card) => void
+  private emitter: Phaser.Events.EventEmitter
 
-  constructor(scene: Phaser.Scene, onPlayCallback: (card: Card) => void) {
+  constructor(
+    scene: Phaser.Scene,
+    onPlayCallback: (card: Card) => void,
+    emitter: Phaser.Events.EventEmitter
+  ) {
     this.scene = scene
+    this.emitter = emitter
     this.onPlayCallback = onPlayCallback
 
     this.createBoardBackground()
@@ -48,8 +55,8 @@ export class BoardUIController {
   }
 
   private createHandUI(): void {
-    this.playerHandUI = new PlayerHandUI(this.scene, this.playerPreviewUI, this.onPlayCallback)
-    this.opponentHandUI = new OpponentHandUI(this.scene, this.onPlayCallback)
+    this.playerHandUI = new PlayerHandUI(this.scene, this.playerPreviewUI, this.onPlayCallback, TARGETS_KEYS.PLAYER, this.scene.events)
+    this.opponentHandUI = new OpponentHandUI(this.scene, this.onPlayCallback, TARGETS_KEYS.OPPONENT, this.scene.events)
   }
 
   private createBoardUI(): void {

@@ -1,3 +1,4 @@
+import { EVENTS_KEYS, TargetKeys } from '../../event-keys'
 import { Card } from '../../gameObjects/card'
 import { OpponentHandCardUI } from '../card/opponent-hand-card-ui'
 
@@ -5,12 +6,22 @@ export class BaseHandUI {
   protected scene: Phaser.Scene
   protected handContainer: Phaser.GameObjects.Container
   protected onPlayCallback: (card: Card) => void
+  private owner: TargetKeys
+  private emitter: Phaser.Events.EventEmitter
 
-  constructor(scene: Phaser.Scene, onPlayCallback: (card: Card) => void) {
+  constructor(
+    scene: Phaser.Scene,
+    onPlayCallback: (card: Card) => void,
+    owner: TargetKeys,
+    emitter: Phaser.Events.EventEmitter
+  ) {
     this.scene = scene
     this.onPlayCallback = onPlayCallback
+    this.owner = owner
+    this.emitter = emitter
 
     this.createHandContainer()
+    this.setEvents()
   }
 
   public getCardContainer(card: Card): Phaser.GameObjects.Container | null {
@@ -27,6 +38,10 @@ export class BaseHandUI {
   public playCard(card: Phaser.GameObjects.Container): void {
     this.handContainer.remove(card, true)
     this.resizeHandContainer()
+  }
+
+  public drawCard(card: Card): void {
+    console.log('This method is a placeholder for card draw')
   }
 
   protected resizeHandContainer(): void {
@@ -50,6 +65,14 @@ export class BaseHandUI {
 
   protected setPosition(): void {
     console.log('Placeholder method for setting position')
+  }
+
+  private setEvents(): void {
+    this.emitter.on(EVENTS_KEYS.ADD_CARD_TO_HAND, ({ player, card }: { player: TargetKeys; card: Card }) => {
+      if (this.owner === player) {
+        this.drawCard(card)
+      }
+    })
   }
 
   private createHandContainer(): void {

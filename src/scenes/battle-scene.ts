@@ -6,6 +6,7 @@ import { SCENE_KEYS } from './scene-keys'
 import { Hand } from '../gameObjects/hand'
 import { Board } from '../gameObjects/board'
 import { Card } from '../gameObjects/card'
+import { EVENTS_KEYS, TARGETS_KEYS } from '../event-keys'
 
 export class BattleScene extends BaseScene {
   private boardUI: BoardUIController
@@ -25,15 +26,19 @@ export class BattleScene extends BaseScene {
   create() {
     // Create UIs
     const playCardCallback = this.playerPlayCard.bind(this) // Bind this Scene to the callback to keep context
-    this.boardUI = new BoardUIController(this, playCardCallback) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
+    this.boardUI = new BoardUIController(this, playCardCallback, this.events) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
 
     // Create decks
-    this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS)) // All Cards that exist currently
-    this.opponentDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS))
+    this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGETS_KEYS.PLAYER, this.events) // All Cards that exist currently
+    this.opponentDeck = new Deck(
+      this.cache.json.get(DATA_ASSET_KEYS.CARDS),
+      TARGETS_KEYS.OPPONENT,
+      this.events
+    )
 
     // Create Hand
-    this.playerHand = new Hand()
-    this.opponentHand = new Hand()
+    this.playerHand = new Hand(TARGETS_KEYS.PLAYER, this.events)
+    this.opponentHand = new Hand(TARGETS_KEYS.OPPONENT, this.events)
 
     // Create Board
     this.playerBoard = new Board()
@@ -44,14 +49,10 @@ export class BattleScene extends BaseScene {
   }
 
   private playerTurnStart(): void {
-    this.playerDrawCard()
-    this.playerPlayCard(this.playerHand.hand[0])
+    this.events.emit(EVENTS_KEYS.DRAW_FROM_DECK, { player: TARGETS_KEYS.PLAYER })
   }
 
-  private opponentTurnStart(): void {
-    this.opponentDrawCard()
-    this.opponentPlayCard(this.opponentHand.hand[0])
-  }
+  private opponentTurnStart(): void {}
 
   private playerDrawCard(): void {
     const card = this.playerDeck.drawCard() // Draw from Deck

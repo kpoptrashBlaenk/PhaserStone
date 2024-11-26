@@ -1,15 +1,36 @@
+import { EVENTS_KEYS, TargetKeys } from '../event-keys'
 import { Card, CardData } from './card'
 
 export class Deck {
   private deck: Card[]
+  private owner: TargetKeys
+  private emitter: Phaser.Events.EventEmitter
 
-  constructor(allCards: CardData[]) {
+  constructor(allCards: CardData[], owner: TargetKeys, emitter: Phaser.Events.EventEmitter) {
+    this.owner = owner
+    this.emitter = emitter
+
     this.deck = this.createRandomDeck(allCards, 10)
     this.shuffle()
+
+    this.setEvents()
   }
 
   public drawCard(): Card | undefined {
     return this.deck.shift()
+  }
+
+  private setEvents(): void {
+    this.emitter.on(EVENTS_KEYS.DRAW_FROM_DECK, ({ player }: { player: TargetKeys }) => {
+      const cardDrawn = this.drawCard()
+      if (cardDrawn) {
+        if (this.owner === player) {
+          this.emitter.emit(EVENTS_KEYS.ADD_CARD_TO_HAND, { player: player, card: cardDrawn })
+        }
+      } else {
+        console.log('Fatigue')
+      }
+    })
   }
 
   private createRandomDeck(allCards: CardData[], count: number): Card[] {

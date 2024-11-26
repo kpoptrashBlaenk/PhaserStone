@@ -1,3 +1,4 @@
+import { TargetKeys } from '../../event-keys'
 import { Card } from '../../gameObjects/card'
 import { PlayerHandCardUI } from '../card/player-hand-card-ui'
 import { PlayerPreviewUI } from '../preview/player-preview-ui'
@@ -6,8 +7,14 @@ import { BaseHandUI } from './hand-ui'
 export class PlayerHandUI extends BaseHandUI {
   private previewUI: PlayerPreviewUI
 
-  constructor(scene: Phaser.Scene, previewUI: PlayerPreviewUI, onPlayCallback: (card: Card) => void) {
-    super(scene, onPlayCallback)
+  constructor(
+    scene: Phaser.Scene,
+    previewUI: PlayerPreviewUI,
+    onPlayCallback: (card: Card) => void,
+    owner: TargetKeys,
+    emitter: Phaser.Events.EventEmitter
+  ) {
+    super(scene, onPlayCallback, owner, emitter)
 
     this.previewUI = previewUI
   }
