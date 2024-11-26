@@ -7,7 +7,7 @@
 
 # Enemy
 
-- [ ] Enemy Deck
+- [x] Enemy Deck
 - [ ] Enemy Hand
 - [ ] Enemy Board
 

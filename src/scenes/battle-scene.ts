@@ -10,6 +10,7 @@ import { Card } from '../gameObjects/card'
 export class BattleScene extends BaseScene {
   private boardUI: BoardUI
   private playerDeck: Deck
+  private opponentDeck: Deck
   private playerHand: Hand
   private playerBoard: PlayerBoard
 
@@ -26,6 +27,7 @@ export class BattleScene extends BaseScene {
 
     // Create decks
     this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS)) // All Cards that exist currently
+    this.opponentDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS))
 
     // Create Hand
     this.playerHand = new Hand()
