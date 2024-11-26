@@ -4,7 +4,7 @@ import { PLAYER_BOARD_BOUNDS } from '../board-ui'
 import { CardUI } from './card-ui'
 import { PreviewUI } from '../preview-ui'
 
-export class HandCardUI extends CardUI {
+export class PlayerHandCardUI extends CardUI {
   private previewUI: PreviewUI
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate

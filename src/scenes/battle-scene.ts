@@ -12,7 +12,9 @@ export class BattleScene extends BaseScene {
   private playerDeck: Deck
   private opponentDeck: Deck
   private playerHand: Hand
+  private opponentHand: Hand
   private playerBoard: PlayerBoard
+  private opponentBoard: PlayerBoard
 
   constructor() {
     super({
@@ -31,35 +33,54 @@ export class BattleScene extends BaseScene {
 
     // Create Hand
     this.playerHand = new Hand()
+    this.opponentHand = new Hand()
 
     // Create Board
     this.playerBoard = new PlayerBoard()
+    this.opponentBoard = new PlayerBoard()
 
     this.playerTurnStart()
+    this.opponentTurnStart()
   }
 
   private playerTurnStart(): void {
-    this.drawCard()
-    this.drawCard()
-    this.drawCard()
+    this.playerDrawCard()
+    this.playerDrawCard()
+    this.playerDrawCard()
   }
 
-  private drawCard(): void {
+  private opponentTurnStart(): void {
+    this.opponentDrawCard()
+    this.opponentDrawCard()
+    this.opponentDrawCard()
+  }
+
+  private playerDrawCard(): void {
     const card = this.playerDeck.drawCard() // Draw from Deck
     if (card) {
       this.playerHand.drawCard(card) // Add Card to Hand
-      this.boardUI.handUI.drawCard(card) // Add Card UI to Hand
+      this.boardUI.playerHandUI.drawCard(card) // Add Card UI to Hand
+    } else {
+      console.log('Fatigue')
+    }
+  }
+
+  private opponentDrawCard(): void {
+    const card = this.opponentDeck.drawCard() // Draw from Deck
+    if (card) {
+      this.opponentHand.drawCard(card) // Add Card to Hand
+      this.boardUI.opponentHandUI.drawCard(card) // Add Card UI to Hand
     } else {
       console.log('Fatigue')
     }
   }
 
   private playCard(card: Card): void {
-    const cardUI = this.boardUI.handUI.getCardContainer(card)
+    const cardUI = this.boardUI.playerHandUI.getCardContainer(card)
 
     if (cardUI) {
       this.playerHand.playCard(card)
-      this.boardUI.handUI.playCard(cardUI)
+      this.boardUI.playerHandUI.playCard(cardUI)
       this.playerBoard.playMinion(card)
       this.boardUI.playerBoardUI.playCard(card)
     }

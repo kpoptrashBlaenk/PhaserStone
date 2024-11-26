@@ -57,7 +57,7 @@ export class CardUI {
       CARD_NUMBER_FONT_STYLE
     )
     this.cardNameText = this.scene.add.text(0, this.cardImage.y + 200, card.name, CARD_NAME_FONT_STYLE)
-    this.cardNameText.setX(this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + 10) // + 10 because not centered, idk why
+    this.cardNameText.setX(this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2) // + 10 because not centered, idk why
 
     this.cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
   }

@@ -1,6 +1,7 @@
 import { Card } from '../gameObjects/card'
 import { BoardBackground } from './board-background'
-import { HandUI } from './hand-ui'
+import { PlayerHandUI } from './hand/player-hand-ui'
+import { OpponentHandUI } from './hand/opponent-hand-ui'
 import { PlayerBoardUI } from './player-board-ui'
 import { PreviewUI } from './preview-ui'
 
@@ -12,7 +13,8 @@ export const PLAYER_BOARD_BOUNDS = Object.freeze({
 })
 
 export class BoardUI {
-  public handUI: HandUI
+  public playerHandUI: PlayerHandUI
+  public opponentHandUI: OpponentHandUI
   public playerBoardUI: PlayerBoardUI
   private scene: Phaser.Scene
   private previewUI: PreviewUI
@@ -38,7 +40,8 @@ export class BoardUI {
   }
 
   private createHandUI(): void {
-    this.handUI = new HandUI(this.scene, this.previewUI, this.onPlayCallback)
+    this.playerHandUI = new PlayerHandUI(this.scene, this.previewUI, this.onPlayCallback)
+    this.opponentHandUI = new OpponentHandUI(this.scene, this.onPlayCallback)
   }
 
   private createPlayerBoardUI(): void {

@@ -18,6 +18,7 @@ export class PreloadScene extends BaseScene {
 
     // Card Assets
     this.load.image(CARD_ASSETS_KEYS.TEMPLATE, `${cardAssetsPath}/card-template.png`)
+    this.load.image(CARD_ASSETS_KEYS.CARD_BACK, `${cardAssetsPath}/card-back.webp`)
 
     // JSON Data
     this.load.json(DATA_ASSET_KEYS.CARDS, 'assets/data/cards.json')
