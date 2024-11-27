@@ -1,8 +1,6 @@
 import { Card } from '../gameObjects/card'
 import { BoardBackground } from './board-background'
 import { BoardUI } from './board/board-ui'
-import { PlayerBoardUI } from './board/player-board-ui'
-import { OpponentBoardUI } from './board/opponent-board-ui'
 import { TARGETS_KEYS } from '../event-keys'
 import { PreviewUI } from './preview/preview-ui'
 import { HandUI } from './hand/hand-ui'
@@ -67,7 +65,7 @@ export class BoardUIController {
   }
 
   private createBoardUI(): void {
-    this.playerBoardUI = new PlayerBoardUI(this.scene, this.playerPreviewUI)
-    this.opponentBoardUI = new OpponentBoardUI(this.scene, this.playerPreviewUI)
+    this.playerBoardUI = new BoardUI(this.scene, this.playerPreviewUI, TARGETS_KEYS.PLAYER, this.emitter)
+    this.opponentBoardUI = new BoardUI(this.scene, this.playerPreviewUI, TARGETS_KEYS.OPPONENT, this.emitter)
   }
 }

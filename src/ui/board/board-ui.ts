@@ -1,13 +1,28 @@
+import { TargetKeys, TARGETS_KEYS } from '../../event-keys'
 import { Card } from '../../gameObjects/card'
 import { BoardCardUI } from '../card/board-card-ui'
-import { PlayerPreviewUI } from '../preview/player-preview-ui'
+import { PreviewUI } from '../preview/preview-ui'
+
+export const BOARD_PADDING = {
+  PLAYER: -10,
+  OPPONENT: -40,
+}
 
 export class BoardUI {
   protected scene: Phaser.Scene
   protected boardContainer: Phaser.GameObjects.Container
-  private previewUI: PlayerPreviewUI
+  private previewUI: PreviewUI
+  private owner: TargetKeys
+  private emitter: Phaser.Events.EventEmitter
 
-  constructor(scene: Phaser.Scene, previewUI: PlayerPreviewUI) {
+  constructor(
+    scene: Phaser.Scene,
+    previewUI: PreviewUI,
+    owner: TargetKeys,
+    emitter: Phaser.Events.EventEmitter
+  ) {
+    this.owner = owner
+    this.emitter = emitter
     this.scene = scene
     this.previewUI = previewUI
 
@@ -33,7 +48,13 @@ export class BoardUI {
   }
 
   protected setPosition(): void {
-    console.log('Placeholder method for setting position')
+    if (this.owner === TARGETS_KEYS.PLAYER) {
+      const { x, y } = this.calculatePosition(BOARD_PADDING.PLAYER)
+      this.boardContainer.setPosition(x, y)
+    } else {
+      const { x, y } = this.calculatePosition(BOARD_PADDING.OPPONENT - this.boardContainer.height)
+      this.boardContainer.setPosition(x, y)
+    }
   }
 
   protected calculatePosition(paddingY: number): { x: number; y: number } {
