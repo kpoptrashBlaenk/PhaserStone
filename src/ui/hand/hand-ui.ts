@@ -1,7 +1,8 @@
-import { EVENTS_KEYS, TargetKeys, TARGETS_KEYS } from '../../event-keys'
+import { EVENTS_KEYS, TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
 import { Card } from '../../gameObjects/card'
 import { HandCardUI } from '../card/hand-card-ui'
 import { PreviewUI } from '../preview/preview-ui'
+import { onAddCardToHand } from '../../utils/event-listeners'
 
 export class HandUI {
   protected scene: Phaser.Scene
@@ -89,8 +90,9 @@ export class HandUI {
   }
 
   private setEvents(): void {
-    this.emitter.on(EVENTS_KEYS.ADD_CARD_TO_HAND, ({ player, card }: { player: TargetKeys; card: Card }) => {
+    onAddCardToHand(this.emitter, ({ player, card }) => {
       if (this.owner === player) {
+        console.log(card)
         this.drawCard(card)
       }
     })

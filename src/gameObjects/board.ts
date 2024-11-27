@@ -1,4 +1,4 @@
-import { TargetKeys } from '../event-keys'
+import { TargetKeys } from '../utils/event-keys'
 import { Card } from './card'
 
 export class Board {

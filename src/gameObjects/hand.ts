@@ -1,4 +1,5 @@
-import { EVENTS_KEYS, TargetKeys } from '../event-keys'
+import { TargetKeys } from '../utils/event-keys'
+import { onAddCardToHand } from '../utils/event-listeners'
 import { Card } from './card'
 
 export class Hand {
@@ -27,7 +28,7 @@ export class Hand {
   }
 
   private setEvents(): void {
-    this.emitter.on(EVENTS_KEYS.ADD_CARD_TO_HAND, ({ player, card }: { player: TargetKeys; card: Card }) => {
+    onAddCardToHand(this.emitter, ({ player, card }) => {
       if (this.owner === player) {
         this.drawCard(card)
       }

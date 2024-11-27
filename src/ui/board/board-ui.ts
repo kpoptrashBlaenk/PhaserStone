@@ -1,4 +1,4 @@
-import { TargetKeys, TARGETS_KEYS } from '../../event-keys'
+import { TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
 import { Card } from '../../gameObjects/card'
 import { BoardCardUI } from '../card/board-card-ui'
 import { PreviewUI } from '../preview/preview-ui'

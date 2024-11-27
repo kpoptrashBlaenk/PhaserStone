@@ -1,7 +1,7 @@
 import { Card } from '../gameObjects/card'
 import { BoardBackground } from './board-background'
 import { BoardUI } from './board/board-ui'
-import { TARGETS_KEYS } from '../event-keys'
+import { TARGETS_KEYS } from '../utils/event-keys'
 import { PreviewUI } from './preview/preview-ui'
 import { HandUI } from './hand/hand-ui'
 

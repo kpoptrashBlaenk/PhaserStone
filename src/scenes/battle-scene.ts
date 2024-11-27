@@ -6,7 +6,8 @@ import { SCENE_KEYS } from './scene-keys'
 import { Hand } from '../gameObjects/hand'
 import { Board } from '../gameObjects/board'
 import { Card } from '../gameObjects/card'
-import { EVENTS_KEYS, TARGETS_KEYS } from '../event-keys'
+import { TARGETS_KEYS } from '../utils/event-keys'
+import { emitDrawFromDeck } from '../utils/event-emitters'
 
 export class BattleScene extends BaseScene {
   private boardUI: BoardUIController
@@ -49,29 +50,11 @@ export class BattleScene extends BaseScene {
   }
 
   private playerTurnStart(): void {
-    this.events.emit(EVENTS_KEYS.DRAW_FROM_DECK, { player: TARGETS_KEYS.PLAYER })
+    emitDrawFromDeck(this.events, TARGETS_KEYS.PLAYER)
   }
 
-  private opponentTurnStart(): void {}
-
-  private playerDrawCard(): void {
-    const card = this.playerDeck.drawCard() // Draw from Deck
-    if (card) {
-      this.playerHand.drawCard(card) // Add Card to Hand
-      this.boardUI.playerHandUI.drawCard(card) // Add Card UI to Hand
-    } else {
-      console.log('Fatigue')
-    }
-  }
-
-  private opponentDrawCard(): void {
-    const card = this.opponentDeck.drawCard() // Draw from Deck
-    if (card) {
-      this.opponentHand.drawCard(card) // Add Card to Hand
-      this.boardUI.opponentHandUI.drawCard(card) // Add Card UI to Hand
-    } else {
-      console.log('Fatigue')
-    }
+  private opponentTurnStart(): void {
+    emitDrawFromDeck(this.events, TARGETS_KEYS.OPPONENT)
   }
 
   private playerPlayCard(card: Card): void {

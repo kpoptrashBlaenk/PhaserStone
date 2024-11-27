@@ -1,4 +1,6 @@
-import { EVENTS_KEYS, TargetKeys } from '../event-keys'
+import { TargetKeys } from '../utils/event-keys'
+import { emitAddCardToHand } from '../utils/event-emitters'
+import { onDrawFromDeck } from '../utils/event-listeners'
 import { Card, CardData } from './card'
 
 export class Deck {
@@ -21,11 +23,11 @@ export class Deck {
   }
 
   private setEvents(): void {
-    this.emitter.on(EVENTS_KEYS.DRAW_FROM_DECK, ({ player }: { player: TargetKeys }) => {
+    onDrawFromDeck(this.emitter, ({ player }) => {
       const cardDrawn = this.drawCard()
       if (cardDrawn) {
         if (this.owner === player) {
-          this.emitter.emit(EVENTS_KEYS.ADD_CARD_TO_HAND, { player: player, card: cardDrawn })
+          emitAddCardToHand(this.emitter, player, cardDrawn)
         }
       } else {
         console.log('Fatigue')
