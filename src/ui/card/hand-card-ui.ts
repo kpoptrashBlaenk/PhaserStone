@@ -2,33 +2,65 @@ import { Card } from '../../gameObjects/card'
 import { Coordinate } from '../../types/typedef'
 import { PLAYER_BOARD_BOUNDS } from '../board-ui-controller'
 import { CardUI } from './card-ui'
-import { PlayerPreviewUI } from '../preview/player-preview-ui'
+import { PreviewUI } from '../preview/preview-ui'
+import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
+import { TargetKeys, TARGETS_KEYS } from '../../event-keys'
 
-export class PlayerHandCardUI extends CardUI {
-  private previewUI: PlayerPreviewUI
+export class HandCardUI extends CardUI {
+  private previewUI: PreviewUI
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
   private onPlayCallback: (card: Card) => void
+  private owner: TargetKeys
+  private emitter: Phaser.Events.EventEmitter
 
-  constructor(scene: Phaser.Scene, card: Card, previewUI: PlayerPreviewUI, onPlayCallback: (card: Card) => void) {
+  constructor(
+    scene: Phaser.Scene,
+    card: Card,
+    previewUI: PreviewUI,
+    onPlayCallback: (card: Card) => void,
+    owner: TargetKeys,
+    emitter: Phaser.Events.EventEmitter
+  ) {
     super(scene, card)
 
+    this.owner = owner
+    this.emitter = emitter
     this.previewUI = previewUI
     this.onPlayCallback = onPlayCallback
-    this.forHand()
+
+    this.handSize()
+
+    if (this.owner === TARGETS_KEYS.PLAYER) {
+      this.forPlayer()
+    } else {
+      this.forOpponent()
+    }
   }
 
-  private forHand(): void {
+  private handSize(): void {
     this.cardContainer.setScale(0.36)
     this.cardContainer.setSize(
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY
     )
 
+    this.forPlayer()
+  }
+
+  private forPlayer(): void {
     this.cardImage.setInteractive()
 
     this.addHover()
     this.addDrag()
+  }
+
+  private forOpponent(): void {
+    this.cardImage.setTexture(CARD_ASSETS_KEYS.CARD_BACK)
+    this.cardCostText.setAlpha(0)
+    this.cardAttackText.setAlpha(0)
+    this.cardHealthText.setAlpha(0)
+    this.cardNameText.setAlpha(0)
   }
 
   private addHover(): void {

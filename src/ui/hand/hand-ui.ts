@@ -1,21 +1,25 @@
-import { EVENTS_KEYS, TargetKeys } from '../../event-keys'
+import { EVENTS_KEYS, TargetKeys, TARGETS_KEYS } from '../../event-keys'
 import { Card } from '../../gameObjects/card'
-import { OpponentHandCardUI } from '../card/opponent-hand-card-ui'
+import { HandCardUI } from '../card/hand-card-ui'
+import { PreviewUI } from '../preview/preview-ui'
 
-export class BaseHandUI {
+export class HandUI {
   protected scene: Phaser.Scene
   protected handContainer: Phaser.GameObjects.Container
   protected onPlayCallback: (card: Card) => void
   private owner: TargetKeys
   private emitter: Phaser.Events.EventEmitter
+  private previewUI: PreviewUI
 
   constructor(
     scene: Phaser.Scene,
+    previewUI: PreviewUI,
     onPlayCallback: (card: Card) => void,
     owner: TargetKeys,
     emitter: Phaser.Events.EventEmitter
   ) {
     this.scene = scene
+    this.previewUI = previewUI
     this.onPlayCallback = onPlayCallback
     this.owner = owner
     this.emitter = emitter
@@ -26,7 +30,7 @@ export class BaseHandUI {
 
   public getCardContainer(card: Card): Phaser.GameObjects.Container | null {
     for (const cardContainer of this.handContainer.getAll()) {
-      const handCardUI = cardContainer.getData('handCardUI') as OpponentHandCardUI
+      const handCardUI = cardContainer.getData('handCardUI') as HandCardUI
       if (handCardUI && handCardUI.thisCard === card) {
         return cardContainer as Phaser.GameObjects.Container // Promise this is a Container
       }
@@ -41,7 +45,17 @@ export class BaseHandUI {
   }
 
   public drawCard(card: Card): void {
-    console.log('This method is a placeholder for card draw')
+    const cardContainer = new HandCardUI(
+      this.scene,
+      card,
+      this.previewUI,
+      this.onPlayCallback,
+      this.owner,
+      this.emitter
+    )
+    this.handContainer.add(cardContainer.cardContainer)
+    cardContainer.cardContainer.setData('handCardUI', cardContainer)
+    this.resizeHandContainer()
   }
 
   protected resizeHandContainer(): void {
@@ -64,7 +78,14 @@ export class BaseHandUI {
   }
 
   protected setPosition(): void {
-    console.log('Placeholder method for setting position')
+    if (this.owner === TARGETS_KEYS.PLAYER) {
+      this.handContainer.setPosition(
+        this.scene.scale.width / 2 - this.handContainer.width / 2,
+        this.scene.scale.height - this.handContainer.height
+      )
+    } else {
+      this.handContainer.setPosition(this.scene.scale.width / 2 - this.handContainer.width / 2, 0)
+    }
   }
 
   private setEvents(): void {
