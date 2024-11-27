@@ -5,9 +5,8 @@ import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Hand } from '../gameObjects/hand'
 import { Board } from '../gameObjects/board'
-import { Card } from '../gameObjects/card'
-import { TARGETS_KEYS } from '../utils/event-keys'
-import { emitDrawFromDeck } from '../utils/event-emitters'
+import { EVENTS_KEYS, TargetKeys, TARGETS_KEYS } from '../utils/event-keys'
+import { emitDrawFromDeck, emitCardPlayedOnBoard } from '../utils/event-emitters'
 
 export class BattleScene extends BaseScene {
   private boardUI: BoardUIController
@@ -17,6 +16,7 @@ export class BattleScene extends BaseScene {
   private opponentHand: Hand
   private playerBoard: Board
   private opponentBoard: Board
+  private currentTurn: TargetKeys
 
   constructor() {
     super({
@@ -44,15 +44,30 @@ export class BattleScene extends BaseScene {
     this.playerBoard = new Board(TARGETS_KEYS.PLAYER, this.events)
     this.opponentBoard = new Board(TARGETS_KEYS.PLAYER, this.events)
 
-    this.opponentTurnStart()
-    this.playerTurnStart()
-  }
+    // End Turn Button
+    this.boardUI.endTurnButton.on('pointerup', () => {
+      this.currentTurn === TARGETS_KEYS.PLAYER
+        ? this.turnStart(TARGETS_KEYS.OPPONENT)
+        : this.turnStart(TARGETS_KEYS.PLAYER)
+    })
 
-  private playerTurnStart(): void {
+    // Start Game
     emitDrawFromDeck(this.events, TARGETS_KEYS.PLAYER)
+    emitDrawFromDeck(this.events, TARGETS_KEYS.PLAYER)
+    emitDrawFromDeck(this.events, TARGETS_KEYS.PLAYER)
+    emitDrawFromDeck(this.events, TARGETS_KEYS.OPPONENT)
+    emitDrawFromDeck(this.events, TARGETS_KEYS.OPPONENT)
+    emitDrawFromDeck(this.events, TARGETS_KEYS.OPPONENT)
+
+    this.turnStart(TARGETS_KEYS.OPPONENT)
+    emitCardPlayedOnBoard(this.events, TARGETS_KEYS.OPPONENT, this.opponentHand.hand[0])
   }
 
-  private opponentTurnStart(): void {
-    // emitDrawFromDeck(this.events, TARGETS_KEYS.OPPONENT)
+  /**
+   * Start the turn of this player
+   */
+  private turnStart(player: TargetKeys): void {
+    this.currentTurn = player
+    emitDrawFromDeck(this.events, player)
   }
 }

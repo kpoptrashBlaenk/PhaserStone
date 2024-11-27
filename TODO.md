@@ -20,6 +20,7 @@
 - [x] Use emit for all events
 - [x] Make all public methods that don't need to get accessed outside anymore to private
 - [x] Make JSDocs for methods to explain use
+- [ ] Make all the event listeners in battle scene to choose when to do what
 
 # Board
 

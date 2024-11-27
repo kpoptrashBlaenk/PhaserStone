@@ -17,15 +17,13 @@ export class BoardUIController {
   public opponentHandUI: HandUI
   public playerBoardUI: BoardUI
   public opponentBoardUI: BoardUI
+  public endTurnButton: Phaser.GameObjects.Rectangle
   private scene: Phaser.Scene
   private playerPreviewUI: PreviewUI
   private opponentPreviewUI: PreviewUI
   private emitter: Phaser.Events.EventEmitter
 
-  constructor(
-    scene: Phaser.Scene,
-    emitter: Phaser.Events.EventEmitter
-  ) {
+  constructor(scene: Phaser.Scene, emitter: Phaser.Events.EventEmitter) {
     this.scene = scene
     this.emitter = emitter
 
@@ -33,6 +31,7 @@ export class BoardUIController {
     this.createPreviewUI() // Needs to come before createHandUI()
     this.createHandUI()
     this.createBoardUI()
+    this.createEndTurnButton()
   }
 
   /**
@@ -54,12 +53,7 @@ export class BoardUIController {
    * Create HandUIs
    */
   private createHandUI(): void {
-    this.playerHandUI = new HandUI(
-      this.scene,
-      this.playerPreviewUI,
-      TARGETS_KEYS.PLAYER,
-      this.scene.events
-    )
+    this.playerHandUI = new HandUI(this.scene, this.playerPreviewUI, TARGETS_KEYS.PLAYER, this.scene.events)
     this.opponentHandUI = new HandUI(
       this.scene,
       this.playerPreviewUI,
@@ -74,5 +68,14 @@ export class BoardUIController {
   private createBoardUI(): void {
     this.playerBoardUI = new BoardUI(this.scene, this.playerPreviewUI, TARGETS_KEYS.PLAYER, this.emitter)
     this.opponentBoardUI = new BoardUI(this.scene, this.playerPreviewUI, TARGETS_KEYS.OPPONENT, this.emitter)
+  }
+
+  /**
+   * Create BoardUIs
+   */
+  private createEndTurnButton(): void {
+    this.endTurnButton = this.scene.add
+      .rectangle(1600, this.scene.scale.height / 2 - 100 / 2, 200, 100, 0xff0000)
+      .setInteractive()
   }
 }

@@ -15,6 +15,10 @@ export class Hand {
     this.setEvents()
   }
 
+  public get hand(): Card[] {
+    return this.handCards
+  }
+
   /**
    * Listeners: AddCardToHand, CardPlayedOnBoard
    */
