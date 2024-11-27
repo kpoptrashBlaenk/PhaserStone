@@ -41,8 +41,8 @@ export class BattleScene extends BaseScene {
     this.opponentHand = new Hand(TARGETS_KEYS.OPPONENT, this.events)
 
     // Create Board
-    this.playerBoard = new Board()
-    this.opponentBoard = new Board()
+    this.playerBoard = new Board(TARGETS_KEYS.PLAYER, this.events)
+    this.opponentBoard = new Board(TARGETS_KEYS.PLAYER, this.events)
 
     this.opponentTurnStart()
     this.playerTurnStart()
