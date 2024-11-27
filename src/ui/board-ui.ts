@@ -1,8 +1,8 @@
-import { TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
-import { Card } from '../../gameObjects/card'
-import { BoardCardUI } from '../card/board-card-ui'
-import { PreviewUI } from '../preview/preview-ui'
-import { onCardPlayedOnBoard } from '../../utils/event-listeners'
+import { TargetKeys, TARGETS_KEYS } from '../utils/event-keys'
+import { Card } from '../gameObjects/card'
+import { BoardCardUI } from './card/board-card-ui'
+import { PreviewUI } from './preview/preview-ui'
+import { onCardPlayedOnBoard } from '../utils/event-listeners'
 
 export const BOARD_PADDING = {
   PLAYER: -10,

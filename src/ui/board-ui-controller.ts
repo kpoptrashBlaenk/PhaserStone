@@ -1,9 +1,9 @@
 import { Card } from '../gameObjects/card'
 import { BoardBackground } from './board-background'
-import { BoardUI } from './board/board-ui'
+import { BoardUI } from './board-ui'
 import { TARGETS_KEYS } from '../utils/event-keys'
 import { PreviewUI } from './preview/preview-ui'
-import { HandUI } from './hand/hand-ui'
+import { HandUI } from './hand-ui'
 
 export const PLAYER_BOARD_BOUNDS = Object.freeze({
   startX: 449,

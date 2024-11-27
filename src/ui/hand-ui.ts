@@ -1,8 +1,8 @@
-import { TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
-import { Card } from '../../gameObjects/card'
-import { HandCardUI } from '../card/hand-card-ui'
-import { PreviewUI } from '../preview/preview-ui'
-import { onAddCardToHand, onCardPlayedOnBoard } from '../../utils/event-listeners'
+import { TargetKeys, TARGETS_KEYS } from '../utils/event-keys'
+import { Card } from '../gameObjects/card'
+import { HandCardUI } from './card/hand-card-ui'
+import { PreviewUI } from './preview/preview-ui'
+import { onAddCardToHand, onCardPlayedOnBoard } from '../utils/event-listeners'
 
 export class HandUI {
   private scene: Phaser.Scene
