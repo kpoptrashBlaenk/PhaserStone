@@ -5,12 +5,12 @@ import { CardUI } from './card-ui'
 import { PreviewUI } from '../preview/preview-ui'
 import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
 import { TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
+import { emitCardPlayedOnBoard } from '../../utils/event-emitters'
 
 export class HandCardUI extends CardUI {
   private previewUI: PreviewUI
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
-  private onPlayCallback: (card: Card) => void
   private owner: TargetKeys
   private emitter: Phaser.Events.EventEmitter
 
@@ -18,7 +18,6 @@ export class HandCardUI extends CardUI {
     scene: Phaser.Scene,
     card: Card,
     previewUI: PreviewUI,
-    onPlayCallback: (card: Card) => void,
     owner: TargetKeys,
     emitter: Phaser.Events.EventEmitter
   ) {
@@ -27,7 +26,6 @@ export class HandCardUI extends CardUI {
     this.owner = owner
     this.emitter = emitter
     this.previewUI = previewUI
-    this.onPlayCallback = onPlayCallback
 
     this.handSize()
 
@@ -44,8 +42,6 @@ export class HandCardUI extends CardUI {
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY
     )
-
-    this.forPlayer()
   }
 
   private forPlayer(): void {
@@ -103,7 +99,7 @@ export class HandCardUI extends CardUI {
         pointer.y <= PLAYER_BOARD_BOUNDS.endY
       ) {
         // Play Card
-        this.onPlayCallback(this.card)
+        emitCardPlayedOnBoard(this.emitter, this.owner, this.card)
       } else {
         // Return to Hand
         this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)

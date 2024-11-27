@@ -2,6 +2,7 @@ import { TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
 import { Card } from '../../gameObjects/card'
 import { BoardCardUI } from '../card/board-card-ui'
 import { PreviewUI } from '../preview/preview-ui'
+import { onCardPlayedOnBoard } from '../../utils/event-listeners'
 
 export const BOARD_PADDING = {
   PLAYER: -10,
@@ -27,6 +28,15 @@ export class BoardUI {
     this.previewUI = previewUI
 
     this.createBoardContainer()
+    this.setEvents()
+  }
+
+  private setEvents(): void {
+    onCardPlayedOnBoard(this.emitter, ({ player, card }) => {
+      if (player === this.owner) {
+        this.playCard(card)
+      }
+    })
   }
 
   public getCardContainer(card: Card): Phaser.GameObjects.Container | null {

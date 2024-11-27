@@ -1,4 +1,5 @@
 import { TargetKeys } from '../utils/event-keys'
+import { onCardPlayedOnBoard } from '../utils/event-listeners'
 import { Card } from './card'
 
 export class Board {
@@ -11,6 +12,8 @@ export class Board {
     this.emitter = emitter
 
     this.boardCards = []
+
+    this.setEvents()
   }
 
   public get minionsOnBoard(): Card[] {
@@ -19,5 +22,13 @@ export class Board {
 
   public playMinion(card: Card): void {
     this.boardCards.push(card)
+  }
+
+  private setEvents(): void {
+    onCardPlayedOnBoard(this.emitter, ({ player, card }) => {
+      if (player === this.owner) {
+        this.playMinion(card)
+      }
+    })
   }
 }

@@ -1,8 +1,8 @@
-import { EVENTS_KEYS, TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
+import { TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
 import { Card } from '../../gameObjects/card'
 import { HandCardUI } from '../card/hand-card-ui'
 import { PreviewUI } from '../preview/preview-ui'
-import { onAddCardToHand } from '../../utils/event-listeners'
+import { onAddCardToHand, onCardPlayedOnBoard } from '../../utils/event-listeners'
 
 export class HandUI {
   protected scene: Phaser.Scene
@@ -15,13 +15,11 @@ export class HandUI {
   constructor(
     scene: Phaser.Scene,
     previewUI: PreviewUI,
-    onPlayCallback: (card: Card) => void,
     owner: TargetKeys,
     emitter: Phaser.Events.EventEmitter
   ) {
     this.scene = scene
     this.previewUI = previewUI
-    this.onPlayCallback = onPlayCallback
     this.owner = owner
     this.emitter = emitter
 
@@ -50,7 +48,6 @@ export class HandUI {
       this.scene,
       card,
       this.previewUI,
-      this.onPlayCallback,
       this.owner,
       this.emitter
     )
@@ -92,8 +89,16 @@ export class HandUI {
   private setEvents(): void {
     onAddCardToHand(this.emitter, ({ player, card }) => {
       if (this.owner === player) {
-        console.log(card)
         this.drawCard(card)
+      }
+    })
+
+    onCardPlayedOnBoard(this.emitter, ({ player, card }) => {
+      if (this.owner === player) {
+        const playedCard = this.getCardContainer(card)
+        if (playedCard) {
+          this.playCard(playedCard)
+        }
       }
     })
   }

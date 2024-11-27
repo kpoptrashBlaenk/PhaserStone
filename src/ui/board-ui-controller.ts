@@ -20,17 +20,14 @@ export class BoardUIController {
   private scene: Phaser.Scene
   private playerPreviewUI: PreviewUI
   private opponentPreviewUI: PreviewUI
-  private onPlayCallback: (card: Card) => void
   private emitter: Phaser.Events.EventEmitter
 
   constructor(
     scene: Phaser.Scene,
-    onPlayCallback: (card: Card) => void,
     emitter: Phaser.Events.EventEmitter
   ) {
     this.scene = scene
     this.emitter = emitter
-    this.onPlayCallback = onPlayCallback
 
     this.createBoardBackground()
     this.createPreviewUI() // Needs to come before createHandUI()
@@ -51,14 +48,12 @@ export class BoardUIController {
     this.playerHandUI = new HandUI(
       this.scene,
       this.playerPreviewUI,
-      this.onPlayCallback,
       TARGETS_KEYS.PLAYER,
       this.scene.events
     )
     this.opponentHandUI = new HandUI(
       this.scene,
       this.playerPreviewUI,
-      this.onPlayCallback,
       TARGETS_KEYS.OPPONENT,
       this.scene.events
     )

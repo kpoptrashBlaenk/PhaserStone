@@ -18,3 +18,12 @@ export function onAddCardToHand(
     callback({ player, card })
   })
 }
+
+export function onCardPlayedOnBoard(
+  emitter: Phaser.Events.EventEmitter,
+  callback: ({ player, card }: { player: TargetKeys; card: Card }) => void
+): void {
+  emitter.on(EVENTS_KEYS.CARD_PLAYED_ON_BOARD, ({ player, card }: { player: TargetKeys; card: Card }) => {
+    callback({ player, card })
+  })
+}

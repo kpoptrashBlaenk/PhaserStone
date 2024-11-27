@@ -26,8 +26,7 @@ export class BattleScene extends BaseScene {
 
   create() {
     // Create UIs
-    const playCardCallback = this.playerPlayCard.bind(this) // Bind this Scene to the callback to keep context
-    this.boardUI = new BoardUIController(this, playCardCallback, this.events) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
+    this.boardUI = new BoardUIController(this, this.events) // BoardUI handles all UIs found on board (Board, Hand, Hero, Deck...)
 
     // Create decks
     this.playerDeck = new Deck(this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGETS_KEYS.PLAYER, this.events) // All Cards that exist currently
@@ -54,28 +53,6 @@ export class BattleScene extends BaseScene {
   }
 
   private opponentTurnStart(): void {
-    emitDrawFromDeck(this.events, TARGETS_KEYS.OPPONENT)
-  }
-
-  private playerPlayCard(card: Card): void {
-    const cardUI = this.boardUI.playerHandUI.getCardContainer(card)
-
-    if (cardUI) {
-      this.playerHand.playCard(card)
-      this.boardUI.playerHandUI.playCard(cardUI)
-      this.playerBoard.playMinion(card)
-      this.boardUI.playerBoardUI.playCard(card)
-    }
-  }
-
-  private opponentPlayCard(card: Card): void {
-    const cardUI = this.boardUI.opponentHandUI.getCardContainer(card)
-
-    if (cardUI) {
-      this.opponentHand.playCard(card)
-      this.boardUI.opponentHandUI.playCard(cardUI)
-      this.opponentBoard.playMinion(card)
-      this.boardUI.opponentBoardUI.playCard(card)
-    }
+    // emitDrawFromDeck(this.events, TARGETS_KEYS.OPPONENT)
   }
 }
