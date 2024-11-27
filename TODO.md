@@ -16,7 +16,7 @@
 # Refactor
 
 - [x] Remove all class extensions and differ by owner
-- [ ] Make file for all event functions to keep consistency
+- [x] Make file for all event functions to keep consistency
 - [ ] Use emit for all events
 - [ ] Make all public methods that don't need to get accessed outside anymore to private
 - [ ] Make JSDocs for methods to explain use
