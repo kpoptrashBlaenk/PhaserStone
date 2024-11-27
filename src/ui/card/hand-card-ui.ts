@@ -36,14 +36,9 @@ export class HandCardUI extends CardUI {
     }
   }
 
-  private handSize(): void {
-    this.cardContainer.setScale(0.36)
-    this.cardContainer.setSize(
-      this.cardContainer.width * this.cardContainer.scaleX,
-      this.cardContainer.height * this.cardContainer.scaleY
-    )
-  }
-
+  /**
+   * Add Hover and Drag
+   */
   private forPlayer(): void {
     this.cardImage.setInteractive()
 
@@ -51,6 +46,9 @@ export class HandCardUI extends CardUI {
     this.addDrag()
   }
 
+  /**
+   * Show only CardBack
+   */
   private forOpponent(): void {
     this.cardImage.setTexture(CARD_ASSETS_KEYS.CARD_BACK)
     this.cardCostText.setAlpha(0)
@@ -59,6 +57,20 @@ export class HandCardUI extends CardUI {
     this.cardNameText.setAlpha(0)
   }
 
+  /**
+   * Resize Card to fit in hand
+   */
+  private handSize(): void {
+    this.cardContainer.setScale(0.36)
+    this.cardContainer.setSize(
+      this.cardContainer.width * this.cardContainer.scaleX,
+      this.cardContainer.height * this.cardContainer.scaleY
+    )
+  }
+
+  /**
+   * Add PreviewUI to hover and hide it on unhover
+   */
   private addHover(): void {
     this.cardImage.on('pointerover', () => {
       this.previewUI.changeCardContainer(this.card)
@@ -69,6 +81,13 @@ export class HandCardUI extends CardUI {
     })
   }
 
+  /**
+   * Pointerdown: Set draggingFromHand data to true
+   * 
+   * Pointermove: Make card follow mouse
+   * 
+   * Pointerup: If card on board, play it, if not return to hand
+   */
   private addDrag(): void {
     this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       this.cardContainer.setData('draggingFromHand', true).setDepth(1)

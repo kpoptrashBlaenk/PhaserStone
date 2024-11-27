@@ -11,10 +11,11 @@ export class BoardCardUI extends CardUI {
     this.forBoard(previewUI)
   }
 
-  public get thisCard(): Card {
-    return this.card
-  }
-
+  /**
+   * Set size for Board Card
+   * 
+   * Add Hover
+   */
   private forBoard(previewUI: PreviewUI): void {
     this.previewUI = previewUI
 
@@ -29,6 +30,9 @@ export class BoardCardUI extends CardUI {
     this.addHover()
   }
 
+  /**
+   * PreviewUI on hover and hide on unhover
+   */
   private addHover(): void {
     this.cardImage.on('pointerover', () => {
       this.previewUI.changeCardContainer(this.card)

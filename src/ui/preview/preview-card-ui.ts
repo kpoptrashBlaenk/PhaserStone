@@ -18,22 +18,9 @@ export class PreviewCardUI extends CardUI {
     this.setPosition()
   }
 
-  private setPosition(): void {
-    if (this.owner === TARGETS_KEYS.PLAYER) {
-      this.cardContainer.setPosition(
-        this.scene.scale.width - this.cardContainer.width * this.cardContainer.scaleX - PREVIEW_CARD_PADDING,
-        PREVIEW_CARD_PADDING * 2
-      )
-    } else {
-      this.cardContainer.setPosition(PREVIEW_CARD_PADDING, PREVIEW_CARD_PADDING * 2)
-    }
-  }
-
-  private forPreview(): void {
-    this.cardContainer.setScale(1)
-    this.cardContainer.setAlpha(0)
-  }
-
+  /**
+   * Modify Card Objects
+   */
   public modifyPreviewCardObjects(card: Card): void {
     this.cardImage.setTexture(card.assetKey)
     this.cardCostText.setText(String(card.cost))
@@ -46,7 +33,32 @@ export class PreviewCardUI extends CardUI {
     this.cardContainer.setAlpha(1)
   }
 
+  /**
+   * Hide Preview
+   */
   public hidePreviewCardObject(): void {
+    this.cardContainer.setAlpha(0)
+  }
+
+  /**
+   * Set position, normal preview -> right, opponent play preview -> left
+   */
+  private setPosition(): void {
+    if (this.owner === TARGETS_KEYS.PLAYER) {
+      this.cardContainer.setPosition(
+        this.scene.scale.width - this.cardContainer.width * this.cardContainer.scaleX - PREVIEW_CARD_PADDING,
+        PREVIEW_CARD_PADDING * 2
+      )
+    } else {
+      this.cardContainer.setPosition(PREVIEW_CARD_PADDING, PREVIEW_CARD_PADDING * 2)
+    }
+  }
+
+  /**
+   * Scale and set Alpha to override CardUI
+   */
+  private forPreview(): void {
+    this.cardContainer.setScale(1)
     this.cardContainer.setAlpha(0)
   }
 }

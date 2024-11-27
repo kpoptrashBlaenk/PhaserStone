@@ -35,15 +35,24 @@ export class BoardUIController {
     this.createBoardUI()
   }
 
+  /**
+   * Create Background
+   */
   private createBoardBackground(): void {
     new BoardBackground(this.scene)
   }
 
+  /**
+   * Create PreviewUI for when opponent plays and for default
+   */
   private createPreviewUI(): void {
     this.playerPreviewUI = new PreviewUI(this.scene, TARGETS_KEYS.PLAYER, this.scene.events)
     this.opponentPreviewUI = new PreviewUI(this.scene, TARGETS_KEYS.OPPONENT, this.scene.events)
   }
 
+  /**
+   * Create HandUIs
+   */
   private createHandUI(): void {
     this.playerHandUI = new HandUI(
       this.scene,
@@ -59,6 +68,9 @@ export class BoardUIController {
     )
   }
 
+  /**
+   * Create BoardUIs
+   */
   private createBoardUI(): void {
     this.playerBoardUI = new BoardUI(this.scene, this.playerPreviewUI, TARGETS_KEYS.PLAYER, this.emitter)
     this.opponentBoardUI = new BoardUI(this.scene, this.playerPreviewUI, TARGETS_KEYS.OPPONENT, this.emitter)

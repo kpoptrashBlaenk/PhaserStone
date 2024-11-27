@@ -18,10 +18,11 @@ export class Deck {
     this.setEvents()
   }
 
-  public drawCard(): Card | undefined {
-    return this.deck.shift()
-  }
-
+  /**
+   * Listeners: DrawFromDeck
+   *
+   * Emitters: AddCardToHand
+   */
   private setEvents(): void {
     onDrawFromDeck(this.emitter, ({ player }) => {
       const cardDrawn = this.drawCard()
@@ -35,6 +36,9 @@ export class Deck {
     })
   }
 
+  /**
+   * Create Random Deck
+   */
   private createRandomDeck(allCards: CardData[], count: number): Card[] {
     const deck = []
     const availableCards = [...allCards]
@@ -47,10 +51,20 @@ export class Deck {
     return deck
   }
 
+  /**
+   * Shuffle Deck
+   */
   private shuffle(): void {
     for (let i = this.deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]]
     }
+  }
+
+  /**
+   * Remove and return top card
+   */
+  private drawCard(): Card | undefined {
+    return this.deck.shift()
   }
 }

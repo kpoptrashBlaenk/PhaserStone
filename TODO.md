@@ -18,13 +18,11 @@
 - [x] Remove all class extensions and differ by owner
 - [x] Make file for all event functions to keep consistency
 - [x] Use emit for all events
-- [ ] Make all public methods that don't need to get accessed outside anymore to private
-- [ ] Make JSDocs for methods to explain use
+- [x] Make all public methods that don't need to get accessed outside anymore to private
+- [x] Make JSDocs for methods to explain use
 
 # Board
 
 - [ ] Minion On Click
 - [ ] Attack Animation
 - [ ] Attack Logic
-
-# Fix Cards in Hand bugging

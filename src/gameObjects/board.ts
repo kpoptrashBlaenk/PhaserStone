@@ -16,19 +16,21 @@ export class Board {
     this.setEvents()
   }
 
-  public get minionsOnBoard(): Card[] {
-    return this.boardCards
-  }
-
-  public playMinion(card: Card): void {
-    this.boardCards.push(card)
-  }
-
+  /**
+   * Listeners: CardPlayedOnBoard
+   */
   private setEvents(): void {
     onCardPlayedOnBoard(this.emitter, ({ player, card }) => {
       if (player === this.owner) {
-        this.playMinion(card)
+        this.playCard(card)
       }
     })
+  }
+
+  /**
+   * Add Card to Board
+   */
+  private playCard(card: Card): void {
+    this.boardCards.push(card)
   }
 }

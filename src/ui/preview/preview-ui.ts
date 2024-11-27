@@ -5,9 +5,9 @@ import { CLASS_KEYS, TYPE_KEYS } from '../../gameObjects/card-keys'
 import { PreviewCardUI } from './preview-card-ui'
 
 export class PreviewUI {
-  protected card: Card
-  protected cardUI: PreviewCardUI
-  protected scene: Phaser.Scene
+  private card: Card
+  private cardUI: PreviewCardUI
+  private scene: Phaser.Scene
   private owner: TargetKeys
   private emitter: Phaser.Events.EventEmitter
 
@@ -31,11 +31,17 @@ export class PreviewUI {
     this.cardUI = new PreviewCardUI(this.scene, this.card, this.owner, this.emitter)
   }
 
+  /**
+   * Change the card in PreviewUI
+   */
   public changeCardContainer(card: Card) {
     this.card = card
     this.cardUI.modifyPreviewCardObjects(this.card)
   }
 
+  /**
+   * Hide PreviewUI
+   */
   public hideCardContainer(): void {
     this.cardUI.hidePreviewCardObject()
   }

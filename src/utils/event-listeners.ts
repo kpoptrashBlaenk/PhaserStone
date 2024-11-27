@@ -1,6 +1,9 @@
 import { Card } from '../gameObjects/card'
 import { EVENTS_KEYS, TargetKeys } from './event-keys'
 
+/**
+ * Receive Draw from deck
+ */
 export function onDrawFromDeck(
   emitter: Phaser.Events.EventEmitter,
   callback: ({ player }: { player: TargetKeys }) => void
@@ -10,6 +13,9 @@ export function onDrawFromDeck(
   })
 }
 
+/**
+ * Receive Add card to hand
+ */
 export function onAddCardToHand(
   emitter: Phaser.Events.EventEmitter,
   callback: ({ player, card }: { player: TargetKeys; card: Card }) => void
@@ -19,6 +25,9 @@ export function onAddCardToHand(
   })
 }
 
+/**
+ * Receive Card played on board
+ */
 export function onCardPlayedOnBoard(
   emitter: Phaser.Events.EventEmitter,
   callback: ({ player, card }: { player: TargetKeys; card: Card }) => void

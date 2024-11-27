@@ -10,8 +10,8 @@ export const BOARD_PADDING = {
 }
 
 export class BoardUI {
-  protected scene: Phaser.Scene
-  protected boardContainer: Phaser.GameObjects.Container
+  private scene: Phaser.Scene
+  private boardContainer: Phaser.GameObjects.Container
   private previewUI: PreviewUI
   private owner: TargetKeys
   private emitter: Phaser.Events.EventEmitter
@@ -31,6 +31,9 @@ export class BoardUI {
     this.setEvents()
   }
 
+  /**
+   * Listeners: CardPlayedOnBoard
+   */
   private setEvents(): void {
     onCardPlayedOnBoard(this.emitter, ({ player, card }) => {
       if (player === this.owner) {
@@ -39,25 +42,23 @@ export class BoardUI {
     })
   }
 
-  public getCardContainer(card: Card): Phaser.GameObjects.Container | null {
-    for (const cardContainer of this.boardContainer.getAll()) {
-      const handCardUI = cardContainer.getData('handCardUI') as BoardCardUI
-      if (handCardUI && handCardUI.thisCard === card) {
-        return cardContainer as Phaser.GameObjects.Container // Promise this is a Container
-      }
-    }
-
-    return null // If no card
-  }
-
-  public playCard(card: Card) {
+  /**
+   * Create BoardCardU ->
+   * Add it to boardContainer ->
+   * Set data of boardCardUI ->
+   * Resize
+   */
+  private playCard(card: Card): void {
     const cardContainer = new BoardCardUI(this.scene, card, this.previewUI)
     this.boardContainer.add(cardContainer.cardContainer)
     cardContainer.cardContainer.setData('boardCardUI', cardContainer)
     this.resizeBoardContainer()
   }
 
-  protected setPosition(): void {
+  /**
+   * Set Position of boardContainer
+   */
+  private setPosition(): void {
     if (this.owner === TARGETS_KEYS.PLAYER) {
       const { x, y } = this.calculatePosition(BOARD_PADDING.PLAYER)
       this.boardContainer.setPosition(x, y)
@@ -67,18 +68,27 @@ export class BoardUI {
     }
   }
 
-  protected calculatePosition(paddingY: number): { x: number; y: number } {
+  /**
+   * Calculate Position of boardContainer
+   */
+  private calculatePosition(paddingY: number): { x: number; y: number } {
     return {
       x: this.scene.scale.width / 2 - this.boardContainer.width / 2,
       y: this.scene.scale.height / 2 + paddingY,
     }
   }
 
+  /**
+   * Create boardContainer
+   */
   private createBoardContainer(): void {
     this.boardContainer = this.scene.add.container()
   }
 
-  private resizeBoardContainer() {
+  /**
+   * Resize boardContainer when amount of cards inside change
+   */
+  private resizeBoardContainer(): void {
     // Also reposition it
     const padding = 10
     let newWidth = 0

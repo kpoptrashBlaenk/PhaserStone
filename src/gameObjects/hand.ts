@@ -15,18 +15,9 @@ export class Hand {
     this.setEvents()
   }
 
-  public get hand(): Card[] {
-    return this.handCards
-  }
-
-  public drawCard(card: Card): void {
-    this.handCards.push(card)
-  }
-
-  public playCard(card: Card): void {
-    this.handCards.splice(this.handCards.indexOf(card), 1)
-  }
-
+  /**
+   * Listeners: AddCardToHand, CardPlayedOnBoard
+   */
   private setEvents(): void {
     onAddCardToHand(this.emitter, ({ player, card }) => {
       if (this.owner === player) {
@@ -39,5 +30,19 @@ export class Hand {
         this.playCard(card)
       }
     })
+  }
+
+  /**
+   * Add Card to Hand
+   */
+  private drawCard(card: Card): void {
+    this.handCards.push(card)
+  }
+
+  /**
+   * Remove Card from Hand
+   */
+  private playCard(card: Card): void {
+    this.handCards.splice(this.handCards.indexOf(card), 1)
   }
 }

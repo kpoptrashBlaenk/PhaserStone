@@ -41,7 +41,6 @@ export class CardUI {
   protected cardAttackText: Phaser.GameObjects.Text
   protected cardHealthText: Phaser.GameObjects.Text
   protected cardNameText: Phaser.GameObjects.Text
-  // TODO: private cardEffectsText: Phaser.GameObjects.Text
 
   constructor(scene: Phaser.Scene, card: Card) {
     this.scene = scene
@@ -50,10 +49,16 @@ export class CardUI {
     this.createCardObject(card)
   }
 
+  /**
+   * Get Card data of this CardUI
+   */
   public get thisCard(): Card {
     return this.card
   }
 
+  /**
+   * Create card object with: Image, Text, Cost, Attack, Health, Name
+   */
   private createCardObject(card: Card): void {
     this.cardImage = this.scene.add.image(0, 0, card.assetKey).setOrigin(0)
     this.cardContainer = this.scene.add
