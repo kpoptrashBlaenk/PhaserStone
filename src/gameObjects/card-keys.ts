@@ -1,4 +1,5 @@
-import { CardAssetKeys } from '../../assets/asset-keys'
+import { CardAssetKeys } from "../assets/asset-keys"
+
 
 export type CardData = {
   assetKey: CardAssetKeys
@@ -27,9 +28,3 @@ export const RACE_KEYS = Object.freeze({
   BEAST: 'BEAST',
 })
 export type RaceKeys = keyof typeof TYPE_KEYS
-
-export const CONTEXT_KEYS = Object.freeze({
-  DECK: 'DECK',
-  HAND: 'HAND',
-})
-export type Context = keyof typeof CONTEXT_KEYS

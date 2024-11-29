@@ -1,5 +1,5 @@
-import { Card } from '../card/card'
-import { CardData, CONTEXT_KEYS } from '../card/card-keys'
+import { Card } from './card'
+import { CardData } from './card-keys'
 
 export class Deck {
   private scene: Phaser.Scene
@@ -14,6 +14,13 @@ export class Deck {
   }
 
   /**
+   * Remove and return top card
+   */
+  public drawCard(): Card | undefined {
+    return this.deck.shift()
+  }
+
+  /**
    * Create Random Deck
    */
   private createRandomDeck(allCards: CardData[]): Card[] {
@@ -22,7 +29,9 @@ export class Deck {
 
     for (let i = 0; i < allCards.length; i++) {
       const randomNumber = Math.floor(Math.random() * availableCards.length)
-      deck.push(new Card(this.scene, availableCards.splice(randomNumber, 1)[0], CONTEXT_KEYS.DECK))
+      const card = new Card(this.scene, availableCards.splice(randomNumber, 1)[0])
+      card.hideCard()
+      deck.push(card)
     }
 
     return deck

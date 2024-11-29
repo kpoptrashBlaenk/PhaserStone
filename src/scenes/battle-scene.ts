@@ -1,11 +1,15 @@
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
-import { Deck } from '../gameObjects/deck/deck'
+import { Deck } from '../gameObjects/deck'
+import { Hand } from '../gameObjects/hand'
+import { TARGET_KEYS } from '../utils/keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
 export class BattleScene extends BaseScene {
   private playerDeck: Deck
   private opponentDeck: Deck
+  private playerHand: Hand
+  private opponentHand: Hand
 
   constructor() {
     super({
@@ -16,5 +20,19 @@ export class BattleScene extends BaseScene {
   create(): void {
     this.playerDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS))
     this.opponentDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS))
+
+    this.playerHand = new Hand(this, TARGET_KEYS.PLAYER)
+    this.opponentHand = new Hand(this, TARGET_KEYS.OPPONENT)
+
+    this.drawCard()
+    this.drawCard()
+    this.drawCard()
+  }
+
+  private drawCard(): void {
+    const card = this.playerDeck.drawCard()
+    if (card) {
+      this.playerHand.drawCard(card)
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { FONT_KEYS } from '../../assets/font-keys'
+import { FONT_KEYS } from '../assets/font-keys'
 import { CardData } from './card-keys'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
@@ -32,29 +32,47 @@ const CARD_NAME_PADDING = {
   y: 200,
 }
 
-export class CardUI {
-  public cardContainer: Phaser.GameObjects.Container
-  protected scene: Phaser.Scene
-  protected card: CardData
-  protected cardImage: Phaser.GameObjects.Image
-  protected cardCostText: Phaser.GameObjects.Text
-  protected cardAttackText: Phaser.GameObjects.Text
-  protected cardHealthText: Phaser.GameObjects.Text
-  protected cardNameText: Phaser.GameObjects.Text
+export class Card {
+  private scene: Phaser.Scene
+  private card: CardData
+  private cardContainer: Phaser.GameObjects.Container
+  private cardImage: Phaser.GameObjects.Image
+  private cardCostText: Phaser.GameObjects.Text
+  private cardAttackText: Phaser.GameObjects.Text
+  private cardHealthText: Phaser.GameObjects.Text
+  private cardNameText: Phaser.GameObjects.Text
 
   constructor(scene: Phaser.Scene, card: CardData) {
     this.scene = scene
     this.card = card
 
-    this.createCardObject(card)
+    this.cardContainer = this.createCardObject(card)
+  }
+
+  public get cardUI() {
+    return this.cardContainer
+  }
+
+  /**
+   * Hides Card
+   */
+  public hideCard() {
+    this.cardContainer.setAlpha(0)
+  }
+
+  /**
+   * Shows Card
+   */
+  public showCard() {
+    this.cardContainer.setAlpha(1)
   }
 
   /**
    * Create card object with: Image, Text, Cost, Attack, Health, Name
    */
-  private createCardObject(card: CardData): void {
+  private createCardObject(card: CardData): Phaser.GameObjects.Container {
     this.cardImage = this.scene.add.image(0, 0, card.assetKey).setOrigin(0)
-    this.cardContainer = this.scene.add
+    const cardContainer = this.scene.add
       .container(0, 0, this.cardImage)
       .setSize(this.cardImage.width, this.cardImage.height)
 
@@ -84,6 +102,7 @@ export class CardUI {
     )
     this.cardNameText.setX(this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2)
 
-    this.cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
+    cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
+    return cardContainer
   }
 }
