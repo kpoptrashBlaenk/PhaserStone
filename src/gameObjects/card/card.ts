@@ -1,4 +1,5 @@
 import { FONT_KEYS } from '../../assets/font-keys'
+import { BattleScene } from '../../scenes/battle-scene'
 import { CardData } from './card-keys'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
@@ -33,8 +34,8 @@ const CARD_NAME_PADDING = {
 }
 
 export class Card {
-  protected scene: Phaser.Scene
-  private card: CardData
+  protected scene: BattleScene
+  protected card: CardData
   protected cardContainer: Phaser.GameObjects.Container
   protected cardImage: Phaser.GameObjects.Image
   protected cardCostText: Phaser.GameObjects.Text
@@ -42,7 +43,7 @@ export class Card {
   protected cardHealthText: Phaser.GameObjects.Text
   protected cardNameText: Phaser.GameObjects.Text
 
-  constructor(scene: Phaser.Scene, card: CardData) {
+  constructor(scene: BattleScene, card: CardData) {
     this.scene = scene
     this.card = card
 

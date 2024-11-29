@@ -1,18 +1,20 @@
 import { TARGET_KEYS, TargetKeys } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
+import { BattleScene } from '../../scenes/battle-scene'
 
 const CARD_NAME_PADDING_X = 10
 const PREVIEW_CARD_PADDING = 20
 
-export class PreviewCard extends Card {
+export class Preview extends Card {
   private owner: TargetKeys
 
-  constructor(scene: Phaser.Scene, card: CardData, owner: TargetKeys) {
+  constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card)
     this.owner = owner
 
     this.setPosition()
+    this.hideCard()
   }
 
   /**

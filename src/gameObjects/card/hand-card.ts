@@ -3,6 +3,7 @@ import { CardData } from './card-keys'
 import { Card } from './card'
 import { Coordinate } from '../../types/typedef'
 import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
+import { BattleScene } from '../../scenes/battle-scene'
 
 export const PLAYER_BOARD_BOUNDS = Object.freeze({
   startX: 449,
@@ -16,7 +17,7 @@ export class HandCard extends Card {
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
 
-  constructor(scene: Phaser.Scene, card: CardData, owner: TargetKeys) {
+  constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card)
     this.owner = owner
 
@@ -34,8 +35,21 @@ export class HandCard extends Card {
    */
   private forPlayer(): void {
     this.cardImage.setInteractive()
-    // this.addHover()
+    this.addHover()
     this.addDrag()
+  }
+
+  /**
+   * Add PreviewUI to hover and hide it on unhover
+   */
+  private addHover(): void {
+    this.cardImage.on('pointerover', () => {
+      this.scene.playerPreview.modifyPreviewCardObjects(this.card)
+    })
+
+    this.cardImage.on('pointerout', () => {
+      this.scene.playerPreview.hideCard()
+    })
   }
 
   /**
@@ -78,6 +92,8 @@ export class HandCard extends Card {
       } else {
         // Return to Hand
         this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
+
+        this.scene.playerPreview.hideCard()
       }
     })
   }

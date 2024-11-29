@@ -1,13 +1,14 @@
 import { TargetKeys } from '../utils/keys'
 import { HandCard } from './card/hand-card'
 import { CardData } from './card/card-keys'
+import { BattleScene } from '../scenes/battle-scene'
 
 export class Deck {
-  private scene: Phaser.Scene
+  private scene: BattleScene
   private owner: TargetKeys
   private deck: HandCard[]
 
-  constructor(scene: Phaser.Scene, allCards: CardData[], owner: TargetKeys) {
+  constructor(scene: BattleScene, allCards: CardData[], owner: TargetKeys) {
     this.scene = scene
     this.owner = owner
 
