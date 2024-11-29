@@ -1,5 +1,6 @@
 import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
 import { FONT_KEYS } from '../assets/font-keys'
+import { Coordinate } from '../types/typedef'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { CardData } from './card-keys'
 
@@ -34,6 +35,13 @@ const CARD_NAME_PADDING = {
   y: 200,
 }
 
+export const PLAYER_BOARD_BOUNDS = Object.freeze({
+  startX: 449,
+  endX: 1599,
+  startY: 487,
+  endY: 637,
+})
+
 export class Card {
   private scene: Phaser.Scene
   private card: CardData
@@ -44,6 +52,8 @@ export class Card {
   private cardAttackText: Phaser.GameObjects.Text
   private cardHealthText: Phaser.GameObjects.Text
   private cardNameText: Phaser.GameObjects.Text
+  private pointerCheckpoint: Coordinate
+  private cardContainerCheckpoint: Coordinate
 
   constructor(scene: Phaser.Scene, card: CardData, owner: TargetKeys) {
     this.scene = scene
@@ -82,10 +92,54 @@ export class Card {
    * Add Hover and Drag
    */
   private forPlayer(): void {
-    // this.cardImage.setInteractive()
+    this.cardImage.setInteractive()
     // this.addHover()
-    // this.addDrag()
+    this.addDrag()
   }
+
+    /**
+   * Pointerdown: Set draggingFromHand data to true
+   * 
+   * Pointermove: Make card follow mouse
+   * 
+   * Pointerup: If card on board, play it, if not return to hand
+   */
+    private addDrag(): void {
+      this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+        this.cardContainer.setData('draggingFromHand', true).setDepth(1)
+        this.pointerCheckpoint = {
+          x: pointer.x,
+          y: pointer.y,
+        }
+        this.cardContainerCheckpoint = {
+          x: this.cardContainer.x,
+          y: this.cardContainer.y,
+        }
+      })
+  
+      this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+        if (this.cardContainer.getData('draggingFromHand')) {
+          this.cardContainer.x = this.cardContainerCheckpoint.x + (pointer.x - this.pointerCheckpoint.x)
+          this.cardContainer.y = this.cardContainerCheckpoint.y + (pointer.y - this.pointerCheckpoint.y)
+        }
+      })
+  
+      this.cardImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
+        this.cardContainer.setData('draggingFromHand', false).setDepth(0)
+        // Check if card is placed on board
+        if (
+          pointer.x >= PLAYER_BOARD_BOUNDS.startX &&
+          pointer.x <= PLAYER_BOARD_BOUNDS.endX &&
+          pointer.y >= PLAYER_BOARD_BOUNDS.startY &&
+          pointer.y <= PLAYER_BOARD_BOUNDS.endY
+        ) {
+          // Play Card
+        } else {
+          // Return to Hand
+          this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
+        }
+      })
+    }
 
   /**
    * Show only CardBack
