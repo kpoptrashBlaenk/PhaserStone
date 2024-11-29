@@ -1,7 +1,7 @@
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { Deck } from '../gameObjects/deck'
 import { Hand } from '../gameObjects/hand'
-import { TARGET_KEYS } from '../utils/keys'
+import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
@@ -24,15 +24,22 @@ export class BattleScene extends BaseScene {
     this.playerHand = new Hand(this, TARGET_KEYS.PLAYER)
     this.opponentHand = new Hand(this, TARGET_KEYS.OPPONENT)
 
-    this.drawCard()
-    this.drawCard()
-    this.drawCard()
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
   }
 
-  private drawCard(): void {
-    const card = this.playerDeck.drawCard()
-    if (card) {
-      this.playerHand.drawCard(card)
+  private drawCard(target: TargetKeys): void {
+    if (target === TARGET_KEYS.PLAYER) {
+      const card = this.playerDeck.drawCard()
+      if (card) {
+        this.playerHand.drawCard(card)
+      }
+    } else {
+      const card = this.opponentDeck.drawCard()
+      if (card) {
+        this.opponentHand.drawCard(card)
+      }
     }
   }
 }
