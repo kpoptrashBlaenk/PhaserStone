@@ -1,5 +1,5 @@
 import { CardAssetKeys } from '../../../src/assets/asset-keys'
-import { ClassKeys, RaceKeys, TypeKeys } from './card-keys'
+import { ClassKeys, RaceKeys, TypeKeys } from '../../../src/gameObjects/card/card-keys'
 
 export type CardData = {
   assetKey: CardAssetKeys

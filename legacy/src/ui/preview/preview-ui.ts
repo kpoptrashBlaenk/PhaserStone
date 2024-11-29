@@ -1,7 +1,7 @@
 import { CARD_ASSETS_KEYS } from '../../../../src/assets/asset-keys'
 import { TargetKeys } from '../../utils/event-keys'
 import { Card } from '../../gameObjects/card'
-import { CLASS_KEYS, TYPE_KEYS } from '../../gameObjects/card-keys'
+import { CLASS_KEYS, TYPE_KEYS } from '../../../../src/gameObjects/card/card-keys'
 import { PreviewCardUI } from './preview-card-ui'
 
 export class PreviewUI {
