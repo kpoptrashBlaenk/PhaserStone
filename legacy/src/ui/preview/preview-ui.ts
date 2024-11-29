@@ -1,4 +1,4 @@
-import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
+import { CARD_ASSETS_KEYS } from '../../../../src/assets/asset-keys'
 import { TargetKeys } from '../../utils/event-keys'
 import { Card } from '../../gameObjects/card'
 import { CLASS_KEYS, TYPE_KEYS } from '../../gameObjects/card-keys'

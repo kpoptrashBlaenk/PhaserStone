@@ -1,4 +1,4 @@
-import { FONT_KEYS } from '../../assets/font-keys'
+import { FONT_KEYS } from '../../../../src/assets/font-keys'
 import { Card } from '../../gameObjects/card'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({

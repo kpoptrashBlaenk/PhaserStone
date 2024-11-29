@@ -1,9 +1,9 @@
 import { Card } from '../../gameObjects/card'
-import { Coordinate } from '../../types/typedef'
+import { Coordinate } from '../../../../src/types/typedef'
 import { PLAYER_BOARD_BOUNDS } from '../board-ui-controller'
 import { CardUI } from './card-ui'
 import { PreviewUI } from '../preview/preview-ui'
-import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
+import { CARD_ASSETS_KEYS } from '../../../../src/assets/asset-keys'
 import { TargetKeys, TARGETS_KEYS } from '../../utils/event-keys'
 import { emitCardPlayedOnBoard } from '../../utils/event-emitters'
 

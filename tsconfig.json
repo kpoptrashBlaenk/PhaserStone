@@ -10,6 +10,6 @@
     "moduleResolution": "node", // Ensure module resolution is set to node
     "strictPropertyInitialization": false
   },
-  "include": ["public/**/*.ts", "src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["public/**/*.ts", "src/**/*.ts", "legacy/src/scenes/base-scene.ts", "legacy/src/scenes/battle-scene.ts", "legacy/src/scenes/preload-scene.ts", "legacy/src/scenes/scene-keys.ts"],
+  "exclude": ["node_modules", "legacy"]
 }
