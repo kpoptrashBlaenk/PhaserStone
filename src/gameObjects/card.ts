@@ -1,4 +1,6 @@
+import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
 import { FONT_KEYS } from '../assets/font-keys'
+import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { CardData } from './card-keys'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
@@ -35,6 +37,7 @@ const CARD_NAME_PADDING = {
 export class Card {
   private scene: Phaser.Scene
   private card: CardData
+  private owner: TargetKeys
   private cardContainer: Phaser.GameObjects.Container
   private cardImage: Phaser.GameObjects.Image
   private cardCostText: Phaser.GameObjects.Text
@@ -42,11 +45,19 @@ export class Card {
   private cardHealthText: Phaser.GameObjects.Text
   private cardNameText: Phaser.GameObjects.Text
 
-  constructor(scene: Phaser.Scene, card: CardData) {
+  constructor(scene: Phaser.Scene, card: CardData, owner: TargetKeys) {
     this.scene = scene
     this.card = card
+    this.owner = owner
 
     this.cardContainer = this.createCardObject(card)
+    this.handSize()
+
+    if (this.owner === TARGET_KEYS.PLAYER) {
+      this.forPlayer()
+    } else {
+      this.forOpponent()
+    }
   }
 
   public get cardUI() {
@@ -65,6 +76,37 @@ export class Card {
    */
   public showCard() {
     this.cardContainer.setAlpha(1)
+  }
+
+  /**
+   * Add Hover and Drag
+   */
+  private forPlayer(): void {
+    // this.cardImage.setInteractive()
+    // this.addHover()
+    // this.addDrag()
+  }
+
+  /**
+   * Show only CardBack
+   */
+  private forOpponent(): void {
+    this.cardImage.setTexture(CARD_ASSETS_KEYS.CARD_BACK)
+    this.cardCostText.setAlpha(0)
+    this.cardAttackText.setAlpha(0)
+    this.cardHealthText.setAlpha(0)
+    this.cardNameText.setAlpha(0)
+  }
+
+  /**
+   * Resize Card to fit in hand
+   */
+  private handSize(): void {
+    this.cardContainer.setScale(0.36)
+    this.cardContainer.setSize(
+      this.cardContainer.width * this.cardContainer.scaleX,
+      this.cardContainer.height * this.cardContainer.scaleY
+    )
   }
 
   /**

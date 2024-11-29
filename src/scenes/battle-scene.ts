@@ -18,17 +18,26 @@ export class BattleScene extends BaseScene {
   }
 
   create(): void {
-    this.playerDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS))
-    this.opponentDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS))
+    // Decks
+    this.playerDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.PLAYER)
+    this.opponentDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.OPPONENT)
 
+    // Hands
     this.playerHand = new Hand(this, TARGET_KEYS.PLAYER)
     this.opponentHand = new Hand(this, TARGET_KEYS.OPPONENT)
 
+    // Game Start
     this.drawCard(TARGET_KEYS.PLAYER)
     this.drawCard(TARGET_KEYS.PLAYER)
     this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.OPPONENT)
   }
 
+  /**
+   * Target draws card from Deck and adds it to Hand
+   */
   private drawCard(target: TargetKeys): void {
     if (target === TARGET_KEYS.PLAYER) {
       const card = this.playerDeck.drawCard()

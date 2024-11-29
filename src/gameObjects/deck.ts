@@ -1,12 +1,15 @@
+import { TargetKeys } from '../utils/keys'
 import { Card } from './card'
 import { CardData } from './card-keys'
 
 export class Deck {
   private scene: Phaser.Scene
+  private owner: TargetKeys
   private deck: Card[]
 
-  constructor(scene: Phaser.Scene, allCards: CardData[]) {
+  constructor(scene: Phaser.Scene, allCards: CardData[], owner: TargetKeys) {
     this.scene = scene
+    this.owner = owner
 
     this.deck = this.createRandomDeck(allCards)
 
@@ -29,7 +32,7 @@ export class Deck {
 
     for (let i = 0; i < allCards.length; i++) {
       const randomNumber = Math.floor(Math.random() * availableCards.length)
-      const card = new Card(this.scene, availableCards.splice(randomNumber, 1)[0])
+      const card = new Card(this.scene, availableCards.splice(randomNumber, 1)[0], this.owner)
       card.hideCard()
       deck.push(card)
     }
