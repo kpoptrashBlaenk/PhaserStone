@@ -1,4 +1,4 @@
-import { CardAssetKeys } from "../assets/asset-keys"
+import { CardAssetKeys } from "../../assets/asset-keys"
 
 
 export type CardData = {

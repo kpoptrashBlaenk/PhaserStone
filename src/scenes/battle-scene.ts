@@ -1,6 +1,7 @@
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { Deck } from '../gameObjects/deck'
 import { Hand } from '../gameObjects/hand'
+import { Preview } from '../gameObjects/preview'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
@@ -10,6 +11,8 @@ export class BattleScene extends BaseScene {
   private opponentDeck: Deck
   private playerHand: Hand
   private opponentHand: Hand
+  private playerPreview: Preview
+  private opponentPreview: Preview
 
   constructor() {
     super({
@@ -25,6 +28,10 @@ export class BattleScene extends BaseScene {
     // Hands
     this.playerHand = new Hand(this, TARGET_KEYS.PLAYER)
     this.opponentHand = new Hand(this, TARGET_KEYS.OPPONENT)
+
+    // Preview
+    this.playerPreview = new Preview(this, TARGET_KEYS.PLAYER)
+    this.opponentPreview = new Preview(this, TARGET_KEYS.OPPONENT)
 
     // Game Start
     this.drawCard(TARGET_KEYS.PLAYER)

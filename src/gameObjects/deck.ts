@@ -1,11 +1,11 @@
 import { TargetKeys } from '../utils/keys'
-import { Card } from './card'
-import { CardData } from './card-keys'
+import { HandCard } from './card/hand-card'
+import { CardData } from './card/card-keys'
 
 export class Deck {
   private scene: Phaser.Scene
   private owner: TargetKeys
-  private deck: Card[]
+  private deck: HandCard[]
 
   constructor(scene: Phaser.Scene, allCards: CardData[], owner: TargetKeys) {
     this.scene = scene
@@ -19,20 +19,20 @@ export class Deck {
   /**
    * Remove and return top card
    */
-  public drawCard(): Card | undefined {
+  public drawCard(): HandCard | undefined {
     return this.deck.shift()
   }
 
   /**
    * Create Random Deck
    */
-  private createRandomDeck(allCards: CardData[]): Card[] {
+  private createRandomDeck(allCards: CardData[]): HandCard[] {
     const deck = []
     const availableCards = [...allCards]
 
     for (let i = 0; i < allCards.length; i++) {
       const randomNumber = Math.floor(Math.random() * availableCards.length)
-      const card = new Card(this.scene, availableCards.splice(randomNumber, 1)[0], this.owner)
+      const card = new HandCard(this.scene, availableCards.splice(randomNumber, 1)[0], this.owner)
       card.hideCard()
       deck.push(card)
     }

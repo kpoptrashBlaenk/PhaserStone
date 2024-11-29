@@ -1,5 +1,5 @@
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { Card } from './card'
+import { HandCard } from './card/hand-card'
 
 export class Hand {
   private scene: Phaser.Scene
@@ -16,7 +16,7 @@ export class Hand {
   /**
    * Create HandCardUI -> Add it to handContainer -> Set data of handCardUI -> Resize handContainer
    */
-  public drawCard(card: Card): void {
+  public drawCard(card: HandCard): void {
     this.handContainer.add(card.cardUI)
     card.showCard()
     this.resizeHandContainer()
