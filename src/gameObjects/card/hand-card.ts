@@ -1,4 +1,4 @@
-import { TARGET_KEYS, TargetKeys } from '../../utils/keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
 import { Coordinate } from '../../types/typedef'
@@ -61,7 +61,10 @@ export class HandCard extends Card {
    */
   private addDrag(): void {
     this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      if (this.scene.currentTurn === TARGET_KEYS.PLAYER) {
+      if (
+        this.scene.currentTurn === TARGET_KEYS.PLAYER &&
+        this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN
+      ) {
         this.cardContainer.setData('draggingFromHand', true).setDepth(1)
         this.pointerCheckpoint = {
           x: pointer.x,
@@ -72,7 +75,7 @@ export class HandCard extends Card {
           y: this.cardContainer.y,
         }
       } else {
-        console.log("It's not your turn!")
+        console.log("You can't do that!")
       }
     })
 
@@ -84,21 +87,23 @@ export class HandCard extends Card {
     })
 
     this.cardImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
-      this.cardContainer.setData('draggingFromHand', false).setDepth(0)
-      // Check if card is placed on board
-      if (
-        pointer.x >= PLAYER_BOARD_BOUNDS.startX &&
-        pointer.x <= PLAYER_BOARD_BOUNDS.endX &&
-        pointer.y >= PLAYER_BOARD_BOUNDS.startY &&
-        pointer.y <= PLAYER_BOARD_BOUNDS.endY
-      ) {
-        // Play Card
-        this.scene.playCard(this, this.owner)
-      } else {
-        // Return to Hand
-        this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
+      if (this.cardContainer.getData('draggingFromHand')) {
+        this.cardContainer.setData('draggingFromHand', false).setDepth(0)
+        // Check if card is placed on board
+        if (
+          pointer.x >= PLAYER_BOARD_BOUNDS.startX &&
+          pointer.x <= PLAYER_BOARD_BOUNDS.endX &&
+          pointer.y >= PLAYER_BOARD_BOUNDS.startY &&
+          pointer.y <= PLAYER_BOARD_BOUNDS.endY
+        ) {
+          // Play Card
+          this.scene.playCard(this, this.owner)
+        } else {
+          // Return to Hand
+          this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
 
-        this.scene.playerPreview.hideCard()
+          this.scene.playerPreview.hideCard()
+        }
       }
     })
   }

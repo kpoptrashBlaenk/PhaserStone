@@ -1,4 +1,4 @@
-import { TARGET_KEYS, TargetKeys } from '../../utils/keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
@@ -11,18 +11,36 @@ export class BoardCard extends Card {
     this.owner = owner
 
     this.boardSize()
+    this.cardImage.setInteractive()
+    this.addHover()
 
     if (this.owner === TARGET_KEYS.PLAYER) {
       this.forPlayer()
+    } else {
+      this.forOpponent()
     }
   }
 
   /**
-   * Add Hover and Drag
+   * Add Click
    */
   private forPlayer(): void {
-    this.cardImage.setInteractive()
-    this.addHover()
+    this.cardImage.on('pointerup', () => {
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN) {
+        this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_MINION_CHOSEN, this)
+      }
+    })
+  }
+
+  /**
+   * Add Click
+   */
+  private forOpponent(): void {
+    this.cardImage.on('pointerup', () => {
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_MINION_CHOSEN) {
+        this.scene.stateMachine.setState(BATTLE_STATES.OPPONENT_MINION_CHOSEN, this)
+      }
+    })
   }
 
   /**

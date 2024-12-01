@@ -10,6 +10,8 @@ export class PreloadScene extends BaseScene {
   }
 
   preload() {
+    super.preload()
+
     const cardAssetsPath: string = 'assets/images/cards'
     const boardAssetsPath: string = 'assets/images/boards'
 

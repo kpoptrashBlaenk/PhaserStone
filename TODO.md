@@ -21,11 +21,11 @@
 - [x] Make all public methods that don't need to get accessed outside anymore to private
 - [x] Make JSDocs for methods to explain use
 - [x] Make all the event listeners in battle scene to choose when to do what
-- [ ] State Machine
+- [x] State Machine
 
 # Board
 
 - [x] Board Minion
-- [ ] Minion On Click
+- [x] Minion On Click
 - [ ] Attack Animation
 - [ ] Attack Logic

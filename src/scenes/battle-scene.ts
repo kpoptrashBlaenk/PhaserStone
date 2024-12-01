@@ -4,15 +4,18 @@ import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
 import { Preview } from '../gameObjects/card/preview-card'
 import { Deck } from '../gameObjects/deck'
 import { Hand } from '../gameObjects/hand'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Board } from '../gameObjects/board'
 import { HandCard } from '../gameObjects/card/hand-card'
+import { StateMachine } from '../utils/state-machine'
+import { BoardCard } from '../gameObjects/card/board-card'
 
 export class BattleScene extends BaseScene {
   public playerPreview: Preview
   public playerBoard: Board
+  public stateMachine: StateMachine
   public currentTurn: TargetKeys
   private playerDeck: Deck
   private opponentDeck: Deck
@@ -20,14 +23,25 @@ export class BattleScene extends BaseScene {
   private opponentHand: Hand
   private opponentPreview: Preview
   private opponentBoard: Board
+  private chosenMinions: {
+    player: BoardCard | undefined
+    opponent: BoardCard | undefined
+  }
 
   constructor() {
     super({
       key: SCENE_KEYS.BATTLE_SCENE,
     })
+
+    this.chosenMinions = {
+      player: undefined,
+      opponent: undefined,
+    }
   }
 
   create(): void {
+    super.create()
+
     // Background
     new Background(this)
 
@@ -56,6 +70,9 @@ export class BattleScene extends BaseScene {
     this.playerBoard = new Board(this, TARGET_KEYS.PLAYER)
     this.opponentBoard = new Board(this, TARGET_KEYS.OPPONENT)
 
+    // State Machine
+    this.createStateMachine()
+
     // Game Start
     this.drawCard(TARGET_KEYS.PLAYER)
     this.drawCard(TARGET_KEYS.PLAYER)
@@ -65,7 +82,15 @@ export class BattleScene extends BaseScene {
     this.drawCard(TARGET_KEYS.OPPONENT)
 
     this.startTurn(TARGET_KEYS.PLAYER)
+    this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
 
+    this.opponentBoard.playCard(previewTemplate)
+  }
+
+  update(): void {
+    super.update()
+
+    this.stateMachine.update()
   }
 
   /**
@@ -104,5 +129,49 @@ export class BattleScene extends BaseScene {
         this.opponentHand.drawCard(card)
       }
     }
+  }
+
+  /**
+   * Create the state machine
+   *
+   * PLAYER_TURN:
+   *
+   * MINION_CHOSEN_FOR_BATTLE:
+   *
+   * MINION_BATTLE:
+   */
+  private createStateMachine(): void {
+    this.stateMachine = new StateMachine('battle', this)
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.PLAYER_TURN,
+      onEnter: () => {},
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.PLAYER_MINION_CHOSEN,
+      onEnter: (playerMinion: BoardCard) => {
+        console.log(`Player: ${playerMinion.cardData.name}`)
+        this.chosenMinions.player = playerMinion
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.OPPONENT_MINION_CHOSEN,
+      onEnter: (opponentMinion: BoardCard) => {
+        console.log(`Opponent: ${opponentMinion.cardData.name}`)
+        this.chosenMinions.opponent = opponentMinion
+        this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.MINION_BATTLE,
+      onEnter: () => {
+        console.log(
+          `${this.chosenMinions.player?.cardData.name} vs ${this.chosenMinions.opponent?.cardData.name}`
+        )
+      },
+    })
   }
 }
