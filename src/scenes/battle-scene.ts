@@ -7,15 +7,19 @@ import { Hand } from '../gameObjects/hand'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
+import { Board } from '../gameObjects/board'
+import { HandCard } from '../gameObjects/card/hand-card'
 
 export class BattleScene extends BaseScene {
   public playerPreview: Preview
+  public playerBoard: Board
   public currentTurn: TargetKeys
   private playerDeck: Deck
   private opponentDeck: Deck
   private playerHand: Hand
   private opponentHand: Hand
   private opponentPreview: Preview
+  private opponentBoard: Board
 
   constructor() {
     super({
@@ -49,6 +53,9 @@ export class BattleScene extends BaseScene {
     this.playerPreview = new Preview(this, previewTemplate, TARGET_KEYS.PLAYER)
     this.opponentPreview = new Preview(this, previewTemplate, TARGET_KEYS.OPPONENT)
 
+    this.playerBoard = new Board(this, TARGET_KEYS.PLAYER)
+    this.opponentBoard = new Board(this, TARGET_KEYS.OPPONENT)
+
     // Game Start
     this.drawCard(TARGET_KEYS.PLAYER)
     this.drawCard(TARGET_KEYS.PLAYER)
@@ -57,7 +64,21 @@ export class BattleScene extends BaseScene {
     this.drawCard(TARGET_KEYS.OPPONENT)
     this.drawCard(TARGET_KEYS.OPPONENT)
 
-    this.startTurn(TARGET_KEYS.OPPONENT)
+    this.startTurn(TARGET_KEYS.PLAYER)
+
+  }
+
+  /**
+   * Target plays card from Hand and adds it to Board
+   */
+  public playCard(card: HandCard, target: TargetKeys): void {
+    if (target === TARGET_KEYS.PLAYER) {
+      this.playerHand.playCard(card)
+      this.playerBoard.playCard(card)
+    } else {
+      this.opponentHand.playCard(card)
+      this.opponentBoard.playCard(card)
+    }
   }
 
   /**

@@ -1,6 +1,7 @@
 import { FONT_KEYS } from '../../assets/font-keys'
 import { BattleScene } from '../../scenes/battle-scene'
 import { CardData } from './card-keys'
+import { CardAssetKeys } from '../../assets/asset-keys';
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
   fontFamily: FONT_KEYS.HEARTHSTONE,
@@ -35,7 +36,7 @@ const CARD_NAME_PADDING = {
 
 export class Card {
   protected scene: BattleScene
-  protected card: CardData
+  public card: CardData
   protected cardContainer: Phaser.GameObjects.Container
   protected cardImage: Phaser.GameObjects.Image
   protected cardCostText: Phaser.GameObjects.Text

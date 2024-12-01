@@ -5,11 +5,13 @@ export class Hand {
   private scene: Phaser.Scene
   private owner: TargetKeys
   private handContainer: Phaser.GameObjects.Container
+  private hand: HandCard[]
 
   constructor(scene: Phaser.Scene, owner: TargetKeys) {
     this.scene = scene
     this.owner = owner
 
+    this.hand = []
     this.handContainer = this.createHandContainer()
   }
 
@@ -17,8 +19,19 @@ export class Hand {
    * Create HandCardUI -> Add it to handContainer -> Set data of handCardUI -> Resize handContainer
    */
   public drawCard(card: HandCard): void {
+    this.hand.push(card)
     this.handContainer.add(card.cardUI)
     card.showCard()
+    this.resizeHandContainer()
+  }
+
+  /**
+   * Remove Card from hand and handContainer -> Resize
+   */
+  public playCard(card: HandCard): void {
+    const index = this.hand.findIndex((handCard) => handCard === card)
+    this.hand.splice(index, 1)
+    this.handContainer.remove(card.cardUI)
     this.resizeHandContainer()
   }
 
