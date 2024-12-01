@@ -20,11 +20,12 @@
 - [x] Use emit for all events
 - [x] Make all public methods that don't need to get accessed outside anymore to private
 - [x] Make JSDocs for methods to explain use
-- [ ] Combine UI and Logic classes (i don't know why I haven't done this yet...)
 - [ ] Make all the event listeners in battle scene to choose when to do what
+- [ ] State Machine
 
 # Board
 
+- [ ] Board Minion
 - [ ] Minion On Click
 - [ ] Attack Animation
 - [ ] Attack Logic

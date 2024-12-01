@@ -1,4 +1,5 @@
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
+import { Background } from '../ui/board-background'
 import { CardData, CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
 import { Preview } from '../gameObjects/card/preview-card'
 import { Deck } from '../gameObjects/deck'
@@ -9,6 +10,7 @@ import { SCENE_KEYS } from './scene-keys'
 
 export class BattleScene extends BaseScene {
   public playerPreview: Preview
+  public currentTurn: TargetKeys
   private playerDeck: Deck
   private opponentDeck: Deck
   private playerHand: Hand
@@ -22,6 +24,9 @@ export class BattleScene extends BaseScene {
   }
 
   create(): void {
+    // Background
+    new Background(this)
+
     // Decks
     this.playerDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.PLAYER)
     this.opponentDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.OPPONENT)
@@ -51,6 +56,16 @@ export class BattleScene extends BaseScene {
     this.drawCard(TARGET_KEYS.OPPONENT)
     this.drawCard(TARGET_KEYS.OPPONENT)
     this.drawCard(TARGET_KEYS.OPPONENT)
+
+    this.startTurn(TARGET_KEYS.OPPONENT)
+  }
+
+  /**
+   * Target's turn starts
+   */
+  private startTurn(target: TargetKeys): void {
+    this.currentTurn = target
+    this.drawCard(target)
   }
 
   /**

@@ -61,14 +61,18 @@ export class HandCard extends Card {
    */
   private addDrag(): void {
     this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      this.cardContainer.setData('draggingFromHand', true).setDepth(1)
-      this.pointerCheckpoint = {
-        x: pointer.x,
-        y: pointer.y,
-      }
-      this.cardContainerCheckpoint = {
-        x: this.cardContainer.x,
-        y: this.cardContainer.y,
+      if (this.scene.currentTurn === TARGET_KEYS.PLAYER) {
+        this.cardContainer.setData('draggingFromHand', true).setDepth(1)
+        this.pointerCheckpoint = {
+          x: pointer.x,
+          y: pointer.y,
+        }
+        this.cardContainerCheckpoint = {
+          x: this.cardContainer.x,
+          y: this.cardContainer.y,
+        }
+      } else {
+        console.log("It's not your turn!")
       }
     })
 
