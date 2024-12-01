@@ -93,7 +93,6 @@ export class HandCard extends Card {
         pointer.y <= PLAYER_BOARD_BOUNDS.endY
       ) {
         // Play Card
-        this.cardUI.setPosition(0,0) // Reset cardUI position
         this.scene.playCard(this, this.owner)
       } else {
         // Return to Hand

@@ -1,6 +1,6 @@
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { Background } from '../ui/board-background'
-import { CardData, CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
+import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
 import { Preview } from '../gameObjects/card/preview-card'
 import { Deck } from '../gameObjects/deck'
 import { Hand } from '../gameObjects/hand'
@@ -74,10 +74,10 @@ export class BattleScene extends BaseScene {
   public playCard(card: HandCard, target: TargetKeys): void {
     if (target === TARGET_KEYS.PLAYER) {
       this.playerHand.playCard(card)
-      this.playerBoard.playCard(card)
+      this.playerBoard.playCard(card.cardData)
     } else {
       this.opponentHand.playCard(card)
-      this.opponentBoard.playCard(card)
+      this.opponentBoard.playCard(card.cardData)
     }
   }
 

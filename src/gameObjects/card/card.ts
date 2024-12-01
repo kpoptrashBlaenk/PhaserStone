@@ -1,7 +1,7 @@
 import { FONT_KEYS } from '../../assets/font-keys'
 import { BattleScene } from '../../scenes/battle-scene'
 import { CardData } from './card-keys'
-import { CardAssetKeys } from '../../assets/asset-keys';
+import { CardAssetKeys } from '../../assets/asset-keys'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
   fontFamily: FONT_KEYS.HEARTHSTONE,
@@ -35,8 +35,8 @@ const CARD_NAME_PADDING = {
 }
 
 export class Card {
+  protected card: CardData
   protected scene: BattleScene
-  public card: CardData
   protected cardContainer: Phaser.GameObjects.Container
   protected cardImage: Phaser.GameObjects.Image
   protected cardCostText: Phaser.GameObjects.Text
@@ -51,8 +51,12 @@ export class Card {
     this.cardContainer = this.createCardObject(this.card)
   }
 
-  public get cardUI() {
+  public get cardUI(): Phaser.GameObjects.Container {
     return this.cardContainer
+  }
+
+  public get cardData(): CardData {
+    return this.card
   }
 
   /**

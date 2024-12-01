@@ -1,5 +1,7 @@
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { HandCard } from './card/hand-card'
+import { BattleScene } from '../scenes/battle-scene'
+import { TargetKeys } from '../utils/keys'
+import { BoardCard } from './card/board-card'
+import { CardData } from './card/card-keys'
 
 const BOARD_POSITION_Y = {
   PLAYER: 500,
@@ -7,12 +9,12 @@ const BOARD_POSITION_Y = {
 }
 
 export class Board {
-  private scene: Phaser.Scene
+  private scene: BattleScene
   private owner: TargetKeys
   private boardContainer: Phaser.GameObjects.Container
-  private board: HandCard[]
+  private board: BoardCard[]
 
-  constructor(scene: Phaser.Scene, owner: TargetKeys) {
+  constructor(scene: BattleScene, owner: TargetKeys) {
     this.scene = scene
     this.owner = owner
 
@@ -21,11 +23,12 @@ export class Board {
   }
 
   /**
-   * Create HandCardUI -> Add it to boardContainer -> Set data of handCardUI -> Resize boardContainer
+   * Create BoardCard -> Add it to boardContainer -> Resize boardContainer
    */
-  public playCard(card: HandCard): void {
-    this.board.push(card)
-    this.boardContainer.add(card.cardUI)
+  public playCard(card: CardData): void {
+    const cardPlayed = new BoardCard(this.scene, card, this.owner)
+    this.board.push(cardPlayed)
+    this.boardContainer.add(cardPlayed.cardUI)
     this.resizeBoardContainer()
   }
 
