@@ -71,7 +71,7 @@
     "type": "MINION"
   },
   {
-    "assetKey": "GLACIAL_SHARD",
+    "assetKey": "TEMPLATE",
     "attack": 2,
     "cardClass": "NEUTRAL",
     "cost": 1,
