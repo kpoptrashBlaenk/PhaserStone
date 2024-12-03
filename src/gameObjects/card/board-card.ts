@@ -2,6 +2,7 @@ import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
+import { EFFECT_ASSET_KEYS } from '../../assets/asset-keys'
 
 export class BoardCard extends Card {
   private owner: TargetKeys
@@ -19,6 +20,86 @@ export class BoardCard extends Card {
     } else {
       this.forOpponent()
     }
+  }
+
+  /**
+   * Attacking Minion logic
+   */
+  public attack(opponent: BoardCard, callback?: () => void): void {
+    const startX = this.cardUI.x
+    const startY = this.cardUI.y
+
+    // Calculate difference between enemy card position and player card position to translate the position correctly
+    const targetX = opponent.cardUI.getBounds().centerX - this.cardUI.getBounds().centerX
+    const targetY =
+      opponent.cardUI.getBounds().centerY - this.cardUI.getBounds().centerY + this.cardUI.height / 3
+
+    this.cardUI.setDepth(1)
+
+    // Card takes a step back
+    this.scene.tweens.add({
+      targets: this.cardUI,
+      y: startY + 10,
+      duration: 150,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        // Attack enemy
+        this.scene.tweens.add({
+          targets: this.cardUI,
+          x: targetX,
+          y: targetY,
+          duration: 200,
+          ease: 'Quad.easeOut',
+          onComplete: () => {
+            opponent.attacked()
+            
+            // Return to position
+            this.scene.tweens.add({
+              targets: this.cardUI,
+              x: startX,
+              y: startY,
+              duration: 200,
+              ease: 'Quad.easeIn',
+              onComplete: () => {
+                callback?.()
+                this.cardUI.setDepth(0)
+              },
+            })
+          },
+        })
+      },
+    })
+  }
+
+  /**
+   * Minion being attacking logic
+   */
+  public attacked() {
+    // Flash effect
+    this.scene.tweens.add({
+      targets: this.cardUI,
+      alpha: 0,
+      duration: 50,
+      yoyo: true,
+      repeat: 2,
+    })
+
+    // Particle effect
+    this.scene.add.particles(
+      this.cardUI.getBounds().centerX,
+      this.cardUI.getBounds().centerY,
+      EFFECT_ASSET_KEYS.SPARK,
+      {
+        scale: 0.075,
+        speed: 100,
+        lifespan: 500,
+        gravityY: 100,
+        duration: 100,
+      }
+    )
+
+    // Camera shake
+    this.scene.cameras.main.shake(100, 0.01)
   }
 
   /**

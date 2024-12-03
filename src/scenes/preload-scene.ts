@@ -1,4 +1,4 @@
-import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
+import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
@@ -12,8 +12,10 @@ export class PreloadScene extends BaseScene {
   preload() {
     super.preload()
 
-    const cardAssetsPath: string = 'assets/images/cards'
-    const boardAssetsPath: string = 'assets/images/boards'
+    const cardAssetsPath = 'assets/images/cards'
+    const boardAssetsPath = 'assets/images/boards'
+    const effectAssetsPath = 'assets/images/effects'
+    const jsonAssetPath = 'assets/data'
 
     // Board Assets
     this.load.image(UI_ASSET_KEYS.BOARD, `${boardAssetsPath}/board.webp`)
@@ -22,8 +24,11 @@ export class PreloadScene extends BaseScene {
     this.load.image(CARD_ASSETS_KEYS.TEMPLATE, `${cardAssetsPath}/card-template.png`)
     this.load.image(CARD_ASSETS_KEYS.CARD_BACK, `${cardAssetsPath}/card-back.webp`)
 
+    // Effect Assets
+    this.load.image(EFFECT_ASSET_KEYS.SPARK, `${effectAssetsPath}/spark.png`)
+
     // JSON Data
-    this.load.json(DATA_ASSET_KEYS.CARDS, 'assets/data/cards.json')
+    this.load.json(DATA_ASSET_KEYS.CARDS, `${jsonAssetPath}/cards.json`)
   }
 
   create() {

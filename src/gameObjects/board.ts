@@ -23,6 +23,13 @@ export class Board {
   }
 
   /**
+   * Set the depth of board container for making attacking minion over opponent
+   */
+  public set depth(depth: 0 | 1) {
+    this.boardContainer.setDepth(depth)
+  }
+
+  /**
    * Create BoardCard -> Add it to boardContainer -> Resize boardContainer
    */
   public playCard(card: CardData): void {

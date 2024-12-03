@@ -12,7 +12,6 @@ export const CARD_ASSETS_KEYS = Object.freeze({
   MURMY: 'MURMY',
   SOUTHSEA_DECKHAND: 'SOUTHSEA_DECKHAND',
 })
-
 export type CardAssetKeys = keyof typeof CARD_ASSETS_KEYS
 
 export const DATA_ASSET_KEYS = Object.freeze({
@@ -21,4 +20,8 @@ export const DATA_ASSET_KEYS = Object.freeze({
 
 export const UI_ASSET_KEYS = Object.freeze({
   BOARD: 'BOARD'
+})
+
+export const EFFECT_ASSET_KEYS = Object.freeze({
+  SPARK: 'SPARK'
 })

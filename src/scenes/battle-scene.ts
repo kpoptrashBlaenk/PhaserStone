@@ -85,6 +85,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
 
     this.opponentBoard.playCard(previewTemplate)
+    this.playerBoard.playCard(previewTemplate)
   }
 
   update(): void {
@@ -93,18 +94,18 @@ export class BattleScene extends BaseScene {
     this.stateMachine.update()
   }
 
-  /**
+    /**
    * Target plays card from Hand and adds it to Board
    */
-  public playCard(card: HandCard, target: TargetKeys): void {
-    if (target === TARGET_KEYS.PLAYER) {
-      this.playerHand.playCard(card)
-      this.playerBoard.playCard(card.cardData)
-    } else {
-      this.opponentHand.playCard(card)
-      this.opponentBoard.playCard(card.cardData)
+    public playCard(card: HandCard, target: TargetKeys): void {
+      if (target === TARGET_KEYS.PLAYER) {
+        this.playerHand.playCard(card)
+        this.playerBoard.playCard(card.cardData)
+      } else {
+        this.opponentHand.playCard(card)
+        this.opponentBoard.playCard(card.cardData)
+      }
     }
-  }
 
   /**
    * Target's turn starts
@@ -168,11 +169,18 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.MINION_BATTLE,
       onEnter: () => {
-        console.log(
-          `${this.chosenMinions.player?.cardData.name} vs ${this.chosenMinions.opponent?.cardData.name}`
-        )
+        if (this.chosenMinions.opponent) {
+          console.log(
+            `${this.chosenMinions.player?.cardData.name} vs ${this.chosenMinions.opponent?.cardData.name}`
+          )
+
+          this.playerBoard.depth = 1
+          this.chosenMinions.player?.attack(this.chosenMinions.opponent, () => {
+            this.playerBoard.depth = 0
+            this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+          })
+        }
       },
     })
   }
 }
- 
