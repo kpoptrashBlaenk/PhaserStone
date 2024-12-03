@@ -23,6 +23,13 @@ export class BoardCard extends Card {
   }
 
   /**
+   * Get card owner
+   */
+  public get player(): TargetKeys {
+    return this.owner
+  }
+
+  /**
    * Attacking Minion logic
    */
   public attack(opponent: BoardCard, callback?: () => void): void {
@@ -115,7 +122,7 @@ export class BoardCard extends Card {
   /**
    * Death Animation: Shrink and fade out
    */
-  public death(): void {
+  public death(callback?: () => void): void {
     this.scene.tweens.add({
       delay: 200,
       targets: this.cardUI,
@@ -123,6 +130,9 @@ export class BoardCard extends Card {
       alpha: 0,
       duration: 500,
       ease: 'Cubic.easeOut',
+      onComplete: () => {
+        callback?.()
+      },
     })
 
     // this.cardUI.setTint(0xff0000)

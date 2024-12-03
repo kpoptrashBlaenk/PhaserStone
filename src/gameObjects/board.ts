@@ -9,8 +9,8 @@ const BOARD_POSITION_Y = {
 }
 
 export class Board {
-  private scene: BattleScene
   private owner: TargetKeys
+  private scene: BattleScene
   private boardContainer: Phaser.GameObjects.Container
   private board: BoardCard[]
 
@@ -27,6 +27,16 @@ export class Board {
    */
   public set depth(depth: 0 | 1) {
     this.boardContainer.setDepth(depth)
+  }
+
+  /**
+   * Remove cardUI and card from board
+   */
+  public cardDies(card: BoardCard): void {
+    const index = this.board.findIndex((boardCard) => boardCard === card)
+    this.board.splice(index, 1)
+    this.boardContainer.remove(card.cardUI)
+    this.resizeBoardContainer()
   }
 
   /**

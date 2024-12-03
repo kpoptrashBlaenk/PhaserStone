@@ -198,11 +198,26 @@ export class BattleScene extends BaseScene {
         const defender = this.chosenMinions.opponent
 
         if (attacker && defender) {
+          // Check if attacker died
           if (attacker.cardData.health <= 0) {
-            attacker.death()
+            attacker.death(() => {
+              if (attacker.player === TARGET_KEYS.PLAYER) {
+                this.playerBoard.cardDies(attacker)
+              } else {
+                this.opponentBoard.cardDies(attacker)
+              }
+            })
           }
+
+          // Check if defender died
           if (defender.cardData.health <= 0) {
-            defender.death()
+            defender.death(() => {
+              if (attacker.player === TARGET_KEYS.PLAYER) {
+                this.playerBoard.cardDies(attacker)
+              } else {
+                this.opponentBoard.cardDies(attacker)
+              }
+            })
           }
         }
 
