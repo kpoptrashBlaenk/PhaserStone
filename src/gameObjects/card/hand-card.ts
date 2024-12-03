@@ -44,7 +44,7 @@ export class HandCard extends Card {
    */
   private addHover(): void {
     this.cardImage.on('pointerover', () => {
-      this.scene.playerPreview.modifyPreviewCardObjects(this.card)
+      this.scene.playerPreview.modifyPreviewCardObjects(this.card, this.originalCard)
     })
 
     this.cardImage.on('pointerout', () => {

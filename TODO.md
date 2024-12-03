@@ -28,4 +28,4 @@
 - [x] Board Minion
 - [x] Minion On Click
 - [x] Attack Animation
-- [ ] Attack Logic
+- [x] Attack Logic

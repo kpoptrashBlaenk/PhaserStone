@@ -1,7 +1,6 @@
 import { FONT_KEYS } from '../../assets/font-keys'
 import { BattleScene } from '../../scenes/battle-scene'
 import { CardData } from './card-keys'
-import { CardAssetKeys } from '../../assets/asset-keys'
 
 const CARD_NUMBER_FONT_STYLE = Object.freeze({
   fontFamily: FONT_KEYS.HEARTHSTONE,
@@ -35,6 +34,7 @@ const CARD_NAME_PADDING = {
 }
 
 export class Card {
+  protected originalCard: CardData
   protected card: CardData
   protected scene: BattleScene
   protected cardContainer: Phaser.GameObjects.Container
@@ -47,6 +47,7 @@ export class Card {
   constructor(scene: BattleScene, card: CardData) {
     this.scene = scene
     this.card = card
+    this.originalCard = Object.assign({}, card) // Create shallow copy so it won't change when card changes
 
     this.cardContainer = this.createCardObject(this.card)
   }
@@ -71,6 +72,27 @@ export class Card {
    */
   public showCard() {
     this.cardContainer.setAlpha(1)
+  }
+
+  /**
+   * Sets stats then check for changes and apply colors
+   */
+  protected setStats(): void {
+    const changeAndCheck = (current: number, original: number, textObject: Phaser.GameObjects.Text): void => {
+      textObject.setText(String(current))
+
+      if (current > original) {
+        textObject.setColor('#00FF00')
+      } else if (current < original) {
+        textObject.setColor('#FF0000')
+      } else {
+        textObject.setColor('#FFFFFF')
+      }
+    }
+
+    changeAndCheck(this.card.attack, this.originalCard.attack, this.cardAttackText)
+    changeAndCheck(this.card.health, this.originalCard.health, this.cardHealthText)
+    changeAndCheck(this.card.cost, this.originalCard.cost, this.cardCostText)
   }
 
   /**

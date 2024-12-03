@@ -51,8 +51,15 @@ export class BoardCard extends Card {
           duration: 200,
           ease: 'Quad.easeOut',
           onComplete: () => {
+            const damageDealt = this.card.attack
+            opponent.card.health -= damageDealt
+
+            const damageTaken = opponent.card.attack
+            this.card.health -= damageTaken
+
+            this.attacked()
             opponent.attacked()
-            
+
             // Return to position
             this.scene.tweens.add({
               targets: this.cardUI,
@@ -94,12 +101,31 @@ export class BoardCard extends Card {
         speed: 100,
         lifespan: 500,
         gravityY: 100,
-        duration: 100,
+        duration: 50,
       }
     )
 
     // Camera shake
     this.scene.cameras.main.shake(100, 0.01)
+
+    // Set stats and check changes
+    this.setStats()
+  }
+
+  /**
+   * Death Animation: Shrink and fade out
+   */
+  public death(): void {
+    this.scene.tweens.add({
+      delay: 200,
+      targets: this.cardUI,
+      scale: 0,
+      alpha: 0,
+      duration: 500,
+      ease: 'Cubic.easeOut',
+    })
+
+    // this.cardUI.setTint(0xff0000)
   }
 
   /**
@@ -129,7 +155,7 @@ export class BoardCard extends Card {
    */
   private addHover(): void {
     this.cardImage.on('pointerover', () => {
-      this.scene.playerPreview.modifyPreviewCardObjects(this.card)
+      this.scene.playerPreview.modifyPreviewCardObjects(this.card, this.originalCard)
     })
 
     this.cardImage.on('pointerout', () => {

@@ -20,7 +20,10 @@ export class Preview extends Card {
   /**
    * Modify Card Objects
    */
-  public modifyPreviewCardObjects(card: CardData): void {
+  public modifyPreviewCardObjects(card: CardData, originalCard: CardData): void {
+    this.originalCard = originalCard
+    this.card = card
+
     this.cardImage.setTexture(card.assetKey)
     this.cardCostText.setText(String(card.cost))
     this.cardAttackText.setText(String(card.attack))
@@ -29,6 +32,8 @@ export class Preview extends Card {
     this.cardNameText.setX(
       this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + CARD_NAME_PADDING_X
     )
+
+    this.setStats()
     this.showCard()
   }
 
