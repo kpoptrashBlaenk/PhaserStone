@@ -30,7 +30,7 @@ export class BoardCard extends Card {
     const startY = this.cardUI.y
 
     // Calculate difference between enemy card position and player card position to translate the position correctly
-    const targetX = opponent.cardUI.getBounds().centerX - this.cardUI.getBounds().centerX
+    const targetX = opponent.cardUI.getBounds().centerX - this.cardUI.getBounds().centerX + this.cardUI.x
     const targetY =
       opponent.cardUI.getBounds().centerY - this.cardUI.getBounds().centerY + this.cardUI.height / 3
 
