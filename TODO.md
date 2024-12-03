@@ -1,31 +1,38 @@
-# Board
+# Deck/Hand
 
-- [x] Minions on board logic
-- [x] Minions on board UI
-- [x] Card disappears from hand and stays on board
-- [x] Resize board
-
-# Enemy
-
-- [x] Enemy Deck
-- [x] Enemy Hand
-- [x] Enemy Board
-- [x] Enemy Play Card
-- [x] Enemy Preview On Play Card
-
-# Refactor
-
-- [x] Remove all class extensions and differ by owner
-- [x] Make file for all event functions to keep consistency
-- [x] Use emit for all events
-- [x] Make all public methods that don't need to get accessed outside anymore to private
-- [x] Make JSDocs for methods to explain use
-- [x] Make all the event listeners in battle scene to choose when to do what
-- [x] State Machine
+- [ ] Drawing Card Animation
 
 # Board
 
-- [x] Board Minion
-- [x] Minion On Click
-- [x] Attack Animation
-- [x] Attack Logic
+- [ ] Animation for resizing
+- [ ] Placed Card goes into Board (keeps world bounds) then moves with resizing animation
+- [ ] Change pointer for clicking on cards
+- [ ] Turn Button
+- [ ] Title saying "Your Turn" and subtitle saying "You can't do this"
+
+# Mana Crystals
+
+- [ ] Create Mana Crystals
+- [ ] Check if enough Mana and draw green border around card
+- [ ] Reduce Mana Crystal On Play
+
+# BattleScene
+
+- [ ] Place BattleScene methods into BattleStateMachine
+
+# General
+
+- [ ] Create Methods for Animations and give them callbacks
+
+# Hero
+
+- [ ] Add Heroes
+
+# Minion
+
+- [ ] Give summoning sickness and attack once per turn
+- [ ] Create Battlecry
+
+# Add Spells
+
+- [ ] Create spells
