@@ -16,13 +16,12 @@ export class BattleScene extends BaseScene {
   public playerPreview: Preview
   public playerBoard: Board
   public stateMachine: StateMachine
-  public currentTurn: TargetKeys
   private playerDeck: Deck
   private opponentDeck: Deck
   private playerHand: Hand
   private opponentHand: Hand
   private opponentPreview: Preview
-  private opponentBoard: Board
+  public opponentBoard: Board
   private chosenMinions: {
     player: BoardCard | undefined
     opponent: BoardCard | undefined
@@ -75,17 +74,9 @@ export class BattleScene extends BaseScene {
 
     // Game Start
     this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
     this.drawCard(TARGET_KEYS.OPPONENT)
 
-    this.startTurn(TARGET_KEYS.PLAYER)
-    this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
-
-    this.opponentBoard.playCard(previewTemplate)
-    // this.playerBoard.playCard(previewTemplate)
+    this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
   }
 
   update(): void {
@@ -99,20 +90,14 @@ export class BattleScene extends BaseScene {
    */
   public playCard(card: HandCard, target: TargetKeys): void {
     if (target === TARGET_KEYS.PLAYER) {
-      this.playerHand.playCard(card)
-      this.playerBoard.playCard(card.cardData)
+      this.playerHand.playCard(card, () => {
+        this.playerBoard.playCard(card.cardData)
+      })
     } else {
-      this.opponentHand.playCard(card)
-      this.opponentBoard.playCard(card.cardData)
+      this.opponentHand.playCard(card, () => {
+        this.opponentBoard.playCard(card.cardData)
+      })
     }
-  }
-
-  /**
-   * Target's turn starts
-   */
-  private startTurn(target: TargetKeys): void {
-    this.currentTurn = target
-    this.drawCard(target)
   }
 
   /**
@@ -145,6 +130,14 @@ export class BattleScene extends BaseScene {
     this.stateMachine = new StateMachine('battle', this)
 
     this.stateMachine.addState({
+      name: BATTLE_STATES.PLAYER_TURN_START,
+      onEnter: () => {
+        this.drawCard(TARGET_KEYS.PLAYER)
+        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+      },
+    })
+
+    this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN,
       onEnter: () => {},
     })
@@ -152,7 +145,6 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_MINION_CHOSEN,
       onEnter: (playerMinion: BoardCard) => {
-        console.log(`Player: ${playerMinion.cardData.name}`)
         this.chosenMinions.player = playerMinion
       },
     })
@@ -160,7 +152,6 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_MINION_CHOSEN,
       onEnter: (opponentMinion: BoardCard) => {
-        console.log(`Opponent: ${opponentMinion.cardData.name}`)
         this.chosenMinions.opponent = opponentMinion
         this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
       },
@@ -170,24 +161,12 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.MINION_BATTLE,
       onEnter: () => {
         if (this.chosenMinions.opponent) {
-          console.log(
-            `${this.chosenMinions.player?.cardData.name} vs ${this.chosenMinions.opponent?.cardData.name}`
-          )
-
           this.playerBoard.depth = 1
           this.chosenMinions.player?.attack(this.chosenMinions.opponent, () => {
             this.playerBoard.depth = 0
             this.stateMachine.setState(BATTLE_STATES.AFTER_BATTLE_CHECK)
           })
         }
-      },
-    })
-
-    this.stateMachine.addState({
-      name: BATTLE_STATES.MINION_DEATH,
-      onEnter: (targetMinion: BoardCard) => {
-        console.log(`${targetMinion.cardData.name} died`)
-        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
       },
     })
 
@@ -212,16 +191,51 @@ export class BattleScene extends BaseScene {
           // Check if defender died
           if (defender.cardData.health <= 0) {
             defender.death(() => {
-              if (attacker.player === TARGET_KEYS.PLAYER) {
-                this.playerBoard.cardDies(attacker)
+              if (defender.player === TARGET_KEYS.PLAYER) {
+                this.playerBoard.cardDies(defender)
               } else {
-                this.opponentBoard.cardDies(attacker)
+                this.opponentBoard.cardDies(defender)
               }
             })
           }
         }
 
         this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.OPPONENT_TURN_START,
+      onEnter: () => {
+        this.drawCard(TARGET_KEYS.OPPONENT)
+        this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.OPPONENT_TURN,
+      onEnter: () => {
+        const hand = this.opponentHand.handCards
+        const card = hand[Math.floor(Math.random() * hand.length)]
+        if (card) {
+          this.stateMachine.setState(BATTLE_STATES.OPPONENT_PLAY_CARD, card)
+        } else {
+          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
+        }
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.OPPONENT_PLAY_CARD,
+      onEnter: (card: HandCard) => {
+        this.playCard(card, TARGET_KEYS.OPPONENT)
+        setTimeout(() => {
+          setTimeout(() => {
+            this.opponentPreview.hideCard()
+            this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
+          }, 1500)
+          this.opponentPreview.modifyPreviewCardObjects(card.cardData, card.cardData)
+        }, 250)
       },
     })
   }

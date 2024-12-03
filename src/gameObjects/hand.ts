@@ -1,18 +1,28 @@
+import { BattleScene } from '../scenes/battle-scene'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { BOARD_POSITION_Y } from './board'
 import { HandCard } from './card/hand-card'
 
 export class Hand {
-  private scene: Phaser.Scene
+  private scene: BattleScene
   private owner: TargetKeys
   private handContainer: Phaser.GameObjects.Container
   private hand: HandCard[]
 
-  constructor(scene: Phaser.Scene, owner: TargetKeys) {
+  constructor(scene: BattleScene, owner: TargetKeys) {
     this.scene = scene
     this.owner = owner
 
     this.hand = []
-    this.handContainer = this.createHandContainer()
+    // Always above board cards
+    this.handContainer = this.createHandContainer().setDepth(1)
+  }
+
+  /**
+   * Return all hand cards
+   */
+  public get handCards(): HandCard[] {
+    return this.hand
   }
 
   /**
@@ -28,11 +38,31 @@ export class Hand {
   /**
    * Remove Card from hand and handContainer -> Resize
    */
-  public playCard(card: HandCard): void {
-    const index = this.hand.findIndex((handCard) => handCard === card)
-    this.hand.splice(index, 1)
-    this.handContainer.remove(card.cardUI)
-    this.resizeHandContainer()
+  public playCard(card: HandCard, callback: () => void): void {
+    // Prepare remove card from hand function
+    const removeFromHand = () => {
+      const index = this.hand.findIndex((handCard) => handCard === card)
+      this.hand.splice(index, 1)
+      this.handContainer.remove(card.cardUI, true)
+      this.resizeHandContainer()
+      callback?.()
+    }
+
+    // If player, execute function, if not, play PlayCardAnimation and then execute function
+    if (this.owner === TARGET_KEYS.PLAYER) {
+      removeFromHand()
+    } else {
+      this.scene.tweens.add({
+        targets: card.cardUI,
+        x: this.scene.scale.width / 2 - card.cardUI.getBounds().centerX + card.cardUI.x,
+        y: BOARD_POSITION_Y.OPPONENT - card.cardUI.getBounds().y + card.cardUI.y,
+        duration: 500,
+        ease: 'Sine.easeOut',
+        onComplete: () => {
+          removeFromHand()
+        },
+      })
+    }
   }
 
   /**

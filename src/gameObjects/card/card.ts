@@ -46,7 +46,7 @@ export class Card {
 
   constructor(scene: BattleScene, card: CardData) {
     this.scene = scene
-    this.card = card
+    this.card = Object.assign({}, card)
     this.originalCard = Object.assign({}, card) // Create shallow copy so it won't change when card changes
 
     this.cardContainer = this.createCardObject(this.card)

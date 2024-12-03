@@ -61,10 +61,7 @@ export class HandCard extends Card {
    */
   private addDrag(): void {
     this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      if (
-        this.scene.currentTurn === TARGET_KEYS.PLAYER &&
-        this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN
-      ) {
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN) {
         this.cardContainer.setData('draggingFromHand', true).setDepth(1)
         this.pointerCheckpoint = {
           x: pointer.x,

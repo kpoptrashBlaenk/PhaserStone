@@ -3,7 +3,7 @@ import { TargetKeys } from '../utils/keys'
 import { BoardCard } from './card/board-card'
 import { CardData } from './card/card-keys'
 
-const BOARD_POSITION_Y = {
+export const BOARD_POSITION_Y = {
   PLAYER: 500,
   OPPONENT: 330,
 }
@@ -35,7 +35,7 @@ export class Board {
   public cardDies(card: BoardCard): void {
     const index = this.board.findIndex((boardCard) => boardCard === card)
     this.board.splice(index, 1)
-    this.boardContainer.remove(card.cardUI)
+    this.boardContainer.remove(card.cardUI, true)
     this.resizeBoardContainer()
   }
 
