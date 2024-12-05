@@ -6,7 +6,7 @@
 
 ## Board
 
-- [ ] Animation for resizing
+- [x] Animation for resizing
 - [ ] Placed Card goes into Board (keeps world bounds) then moves with resizing animation
 - [ ] Change pointer for clicking on cards
 - [ ] Turn Button

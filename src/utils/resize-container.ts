@@ -16,3 +16,13 @@ export function resizeContainer(container: Phaser.GameObjects.Container, callbac
 
   callback?.()
 }
+
+export function repositionContainer(container: Phaser.GameObjects.Container, x: number, y: number): void {
+  container.scene.tweens.add({
+    targets: container,
+    x: x,
+    y: y,
+    duration: 500,
+    ease: 'Cubic.easeOut',
+  })
+}

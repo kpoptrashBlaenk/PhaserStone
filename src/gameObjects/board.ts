@@ -1,6 +1,6 @@
 import { BattleScene } from '../scenes/battle-scene'
 import { TargetKeys } from '../utils/keys'
-import { resizeContainer } from '../utils/resize-container'
+import { repositionContainer, resizeContainer } from '../utils/resize-container'
 import { BoardCard } from './card/board-card'
 import { CardData } from './card/card-keys'
 
@@ -21,6 +21,7 @@ export class Board {
 
     this.board = []
     this.boardContainer = this.createBoardContainer()
+    this.resizeBoardContainer()
   }
 
   /**
@@ -55,18 +56,12 @@ export class Board {
    */
   private resizeBoardContainer(): void {
     resizeContainer(this.boardContainer, () => {
-      this.setPosition()
+      repositionContainer(
+        this.boardContainer,
+        this.scene.scale.width / 2 - this.boardContainer.width / 2,
+        BOARD_POSITION_Y[this.owner]
+      )
     })
-  }
-
-  /**
-   * Set Position of boardContainer
-   */
-  private setPosition(): void {
-    this.boardContainer.setPosition(
-      this.scene.scale.width / 2 - this.boardContainer.width / 2,
-      BOARD_POSITION_Y[this.owner]
-    )
   }
 
   /**

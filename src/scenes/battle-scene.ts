@@ -49,7 +49,7 @@ export class BattleScene extends BaseScene {
     this.setupStateMachine()
 
     // Game Start
-    this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
+    this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
   }
 
   update(): void {
@@ -144,7 +144,7 @@ export class BattleScene extends BaseScene {
   private createStateMachine(): void {
     this.stateMachine = new StateMachine('battle', this)
 
-    // 1. Game Flow States
+    // Game Flow States
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN_START,
       onEnter: () => {
@@ -159,7 +159,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
-    // 2. Player-Specific States
+    // Player-Specific States
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_DRAW_CARD,
       onEnter: () =>
@@ -182,7 +182,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
-    // 3. Opponent-Specific States
+    // Opponent-Specific States
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_DRAW_CARD,
       onEnter: () =>
@@ -219,7 +219,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
-    // 4. Battle States
+    // Battle States
     this.stateMachine.addState({
       name: BATTLE_STATES.ATTACKER_MINION_CHOSEN,
       onEnter: (attackerMinion: BoardCard) => {

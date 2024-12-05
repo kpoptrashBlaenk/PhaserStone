@@ -1,6 +1,6 @@
 import { BattleScene } from '../scenes/battle-scene'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { resizeContainer } from '../utils/resize-container'
+import { repositionContainer, resizeContainer } from '../utils/resize-container'
 import { BOARD_POSITION_Y } from './board'
 import { HAND_CARD_SIZE, HandCard } from './card/hand-card'
 
@@ -103,25 +103,15 @@ export class Hand {
    */
   private resizeHandContainer(): void {
     resizeContainer(this.handContainer, () => {
-      this.setPosition()
-    })
-  }
+      const x = this.scene.scale.width / 2 - Math.max(this.handContainer.width, HAND_CARD_SIZE.width) / 2
+      let y
 
-  /**
-   * Set Position of handContainer, Math.max to ensure default placement of empty hand
-   */
-  private setPosition(): void {
-    if (this.owner === TARGET_KEYS.PLAYER) {
-      this.handContainer.setPosition(
-        this.scene.scale.width / 2 - Math.max(this.handContainer.width, HAND_CARD_SIZE.width) / 2,
-        this.scene.scale.height - Math.max(this.handContainer.height, HAND_CARD_SIZE.height)
-      )
-    } else {
-      this.handContainer.setPosition(
-        this.scene.scale.width / 2 - Math.max(this.handContainer.width, HAND_CARD_SIZE.width) / 2,
-        0
-      )
-    }
+      this.owner === TARGET_KEYS.PLAYER
+        ? (y = this.scene.scale.height - Math.max(this.handContainer.height, HAND_CARD_SIZE.height))
+        : (y = 0)
+
+      repositionContainer(this.handContainer, x, y)
+    })
   }
 
   /**
