@@ -20,8 +20,8 @@
 
 ## BattleScene
 
-- [ ] Place BattleScene methods into BattleStateMachine
-- [ ] Refactor variables in BattleScene to use hand[this.owner], etc...
+- [x] Place BattleScene methods into BattleStateMachine
+- [x] Refactor variables in BattleScene to use hand[this.owner], etc...
 
 ## General
 
@@ -33,6 +33,8 @@
 
 ## Minion
 
+- [ ] Rework Death Animation
+- [ ] Rework Card Name Sizes
 - [ ] Give summoning sickness and attack once per turn
 - [ ] Create Battlecry
 

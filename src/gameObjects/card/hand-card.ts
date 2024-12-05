@@ -87,10 +87,11 @@ export class HandCard extends Card {
     })
 
     this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-      if (this.cardContainer.getData('draggingFromHand')) {
-        this.cardContainer.x = this.cardContainerCheckpoint.x + (pointer.x - this.pointerCheckpoint.x)
-        this.cardContainer.y = this.cardContainerCheckpoint.y + (pointer.y - this.pointerCheckpoint.y)
+      if (!this.cardContainer.getData('draggingFromHand')) {
+        return
       }
+      this.cardContainer.x = this.cardContainerCheckpoint.x + (pointer.x - this.pointerCheckpoint.x)
+      this.cardContainer.y = this.cardContainerCheckpoint.y + (pointer.y - this.pointerCheckpoint.y)
     })
 
     this.cardImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
@@ -104,7 +105,12 @@ export class HandCard extends Card {
           pointer.y <= PLAYER_BOARD_BOUNDS.endY
         ) {
           // Play Card
-          this.scene.playCard(this, this.owner)
+          this.scene.stateMachine.setState(
+            this.owner === TARGET_KEYS.PLAYER
+              ? BATTLE_STATES.PLAYER_PLAY_CARD
+              : BATTLE_STATES.OPPONENT_PLAY_CARD,
+            this
+          )
         } else {
           // Return to Hand
           this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)

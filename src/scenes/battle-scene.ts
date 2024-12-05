@@ -4,7 +4,7 @@ import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
 import { Preview } from '../gameObjects/card/preview-card'
 import { Deck } from '../gameObjects/deck'
 import { Hand } from '../gameObjects/hand'
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Board } from '../gameObjects/board'
@@ -13,46 +13,73 @@ import { StateMachine } from '../utils/state-machine'
 import { BoardCard } from '../gameObjects/card/board-card'
 
 export class BattleScene extends BaseScene {
-  public playerPreview: Preview
-  public playerBoard: Board
   public stateMachine: StateMachine
-  private playerDeck: Deck
-  private opponentDeck: Deck
-  private playerHand: Hand
-  private opponentHand: Hand
+  public playerPreview: Preview
   private opponentPreview: Preview
-  public opponentBoard: Board
-  private chosenMinions: {
-    player: BoardCard | undefined
-    opponent: BoardCard | undefined
-  }
+
+  private deck: {
+    PLAYER: Deck
+    OPPONENT: Deck
+  } = { PLAYER: null as any, OPPONENT: null as any }
+  private hand: {
+    PLAYER: Hand
+    OPPONENT: Hand
+  } = { PLAYER: null as any, OPPONENT: null as any }
+  private board: {
+    PLAYER: Board
+    OPPONENT: Board
+  } = { PLAYER: null as any, OPPONENT: null as any }
 
   constructor() {
     super({
       key: SCENE_KEYS.BATTLE_SCENE,
     })
 
-    this.chosenMinions = {
-      player: undefined,
-      opponent: undefined,
-    }
+    this.chosenBattleMinions[BATTLE_TARGET_KEYS.ATTACKER] = undefined
+    this.chosenBattleMinions[BATTLE_TARGET_KEYS.DEFENDER] = undefined
   }
 
   create(): void {
     super.create()
 
-    // Background
+    this.setupBackground()
+    this.setupDecksAndHands()
+    this.setupPreviews()
+    this.setupBoards()
+    this.setupStateMachine()
+
+    // Game Start
+    this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
+  }
+
+  update(): void {
+    super.update()
+
+    this.stateMachine.update()
+  }
+
+  /**
+   * Sets up background
+   */
+  private setupBackground(): void {
     new Background(this)
+  }
 
-    // Decks
-    this.playerDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.PLAYER)
-    this.opponentDeck = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.OPPONENT)
+  /**
+   * Sets up decks and hands
+   */
+  private setupDecksAndHands(): void {
+    this.deck.PLAYER = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.PLAYER)
+    this.deck.OPPONENT = new Deck(this, this.cache.json.get(DATA_ASSET_KEYS.CARDS), TARGET_KEYS.OPPONENT)
 
-    // Hands
-    this.playerHand = new Hand(this, TARGET_KEYS.PLAYER)
-    this.opponentHand = new Hand(this, TARGET_KEYS.OPPONENT)
+    this.hand.PLAYER = new Hand(this, TARGET_KEYS.PLAYER)
+    this.hand.OPPONENT = new Hand(this, TARGET_KEYS.OPPONENT)
+  }
 
-    // Preview
+  /**
+   * Sets up previews
+   */
+  private setupPreviews(): void {
     const previewTemplate = {
       assetKey: CARD_ASSETS_KEYS.TEMPLATE,
       attack: 4,
@@ -65,78 +92,80 @@ export class BattleScene extends BaseScene {
     }
     this.playerPreview = new Preview(this, previewTemplate, TARGET_KEYS.PLAYER)
     this.opponentPreview = new Preview(this, previewTemplate, TARGET_KEYS.OPPONENT)
+  }
 
-    this.playerBoard = new Board(this, TARGET_KEYS.PLAYER)
-    this.opponentBoard = new Board(this, TARGET_KEYS.OPPONENT)
+  /**
+   * Sets up boards
+   */
+  private setupBoards(): void {
+    this.board.PLAYER = new Board(this, TARGET_KEYS.PLAYER)
+    this.board.OPPONENT = new Board(this, TARGET_KEYS.OPPONENT)
+  }
 
-    // State Machine
+  /**
+   * Sets up state machine
+   */
+  private setupStateMachine(): void {
     this.createStateMachine()
-
-    // Game Start
-    // this.drawCard(TARGET_KEYS.PLAYER)
-    // this.drawCard(TARGET_KEYS.OPPONENT)
-
-    this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
-  }
-
-  update(): void {
-    super.update()
-
-    this.stateMachine.update()
   }
 
   /**
-   * Target plays card from Hand and adds it to Board
+   * Target draws card
    */
-  public playCard(card: HandCard, target: TargetKeys): void {
-    if (target === TARGET_KEYS.PLAYER) {
-      this.playerHand.playCard(card, () => {
-        this.playerBoard.playCard(card.cardData)
+  private drawCard(target: TargetKeys, callback?: () => void): void {
+    this.deck[target].drawCard((card) => {
+      this.hand[target].drawCard(card, () => {
+        callback?.()
       })
-    } else {
-      this.opponentHand.playCard(card, () => {
-        this.opponentBoard.playCard(card.cardData)
-      })
-    }
+    })
   }
 
   /**
-   * Target draws card from Deck and adds it to Hand
+   * Target plays card
    */
-  private drawCard(target: TargetKeys): void {
-    if (target === TARGET_KEYS.PLAYER) {
-      this.playerDeck.drawCard((card) => {
-        this.playerHand.drawCard(card, () => {
-          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
-        })
-      })
-    } else {
-      this.opponentDeck.drawCard((card) => {
-        this.opponentHand.drawCard(card, () => {
-          this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
-        })
-      })
-    }
+  private playCard(target: TargetKeys, card: HandCard, callback?: () => void): void {
+    this.hand[target].playCard(card, () => {
+      this.board[target].playCard(card.cardData)
+      callback?.()
+    })
+  }
+
+  /**
+   * Track and set attacker and defender minions
+   */
+  private chosenBattleMinions: Record<BattleTargetKeys, BoardCard | undefined> = {
+    ATTACKER: undefined,
+    DEFENDER: undefined,
   }
 
   /**
    * Create the state machine
-   *
-   * PLAYER_TURN:
-   *
-   * MINION_CHOSEN_FOR_BATTLE:
-   *
-   * MINION_BATTLE:
    */
   private createStateMachine(): void {
     this.stateMachine = new StateMachine('battle', this)
 
+    // 1. Game Flow States
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN_START,
       onEnter: () => {
-        this.drawCard(TARGET_KEYS.PLAYER)
-        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+        this.stateMachine.setState(BATTLE_STATES.PLAYER_DRAW_CARD)
       },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.OPPONENT_TURN_START,
+      onEnter: () => {
+        this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
+      },
+    })
+
+    // 2. Player-Specific States
+    this.stateMachine.addState({
+      name: BATTLE_STATES.PLAYER_DRAW_CARD,
+      onEnter: () =>
+        this.drawCard(TARGET_KEYS.PLAYER, () => {
+          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+        }),
     })
 
     this.stateMachine.addState({
@@ -145,78 +174,27 @@ export class BattleScene extends BaseScene {
     })
 
     this.stateMachine.addState({
-      name: BATTLE_STATES.PLAYER_MINION_CHOSEN,
-      onEnter: (playerMinion: BoardCard) => {
-        this.chosenMinions.player = playerMinion
+      name: BATTLE_STATES.PLAYER_PLAY_CARD,
+      onEnter: (card: HandCard) => {
+        this.playCard(TARGET_KEYS.PLAYER, card, () => {
+          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+        })
       },
     })
 
+    // 3. Opponent-Specific States
     this.stateMachine.addState({
-      name: BATTLE_STATES.OPPONENT_MINION_CHOSEN,
-      onEnter: (opponentMinion: BoardCard) => {
-        this.chosenMinions.opponent = opponentMinion
-        this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
-      },
-    })
-
-    this.stateMachine.addState({
-      name: BATTLE_STATES.MINION_BATTLE,
-      onEnter: () => {
-        if (this.chosenMinions.opponent) {
-          this.playerBoard.depth = 1
-          this.chosenMinions.player?.attack(this.chosenMinions.opponent, () => {
-            this.playerBoard.depth = 0
-            this.stateMachine.setState(BATTLE_STATES.AFTER_BATTLE_CHECK)
-          })
-        }
-      },
-    })
-
-    this.stateMachine.addState({
-      name: BATTLE_STATES.AFTER_BATTLE_CHECK,
-      onEnter: () => {
-        const attacker = this.chosenMinions.player
-        const defender = this.chosenMinions.opponent
-
-        if (attacker && defender) {
-          // Check if attacker died
-          if (attacker.cardData.health <= 0) {
-            attacker.death(() => {
-              if (attacker.player === TARGET_KEYS.PLAYER) {
-                this.playerBoard.cardDies(attacker)
-              } else {
-                this.opponentBoard.cardDies(attacker)
-              }
-            })
-          }
-
-          // Check if defender died
-          if (defender.cardData.health <= 0) {
-            defender.death(() => {
-              if (defender.player === TARGET_KEYS.PLAYER) {
-                this.playerBoard.cardDies(defender)
-              } else {
-                this.opponentBoard.cardDies(defender)
-              }
-            })
-          }
-        }
-
-        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
-      },
-    })
-
-    this.stateMachine.addState({
-      name: BATTLE_STATES.OPPONENT_TURN_START,
-      onEnter: () => {
-        this.drawCard(TARGET_KEYS.OPPONENT)
-      },
+      name: BATTLE_STATES.OPPONENT_DRAW_CARD,
+      onEnter: () =>
+        this.drawCard(TARGET_KEYS.OPPONENT, () => {
+          this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
+        }),
     })
 
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN,
       onEnter: () => {
-        const hand = this.opponentHand.handCards
+        const hand = this.hand.OPPONENT.handCards
         const card = hand[Math.floor(Math.random() * hand.length)]
         if (card) {
           this.stateMachine.setState(BATTLE_STATES.OPPONENT_PLAY_CARD, card)
@@ -229,7 +207,8 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_PLAY_CARD,
       onEnter: (card: HandCard) => {
-        this.playCard(card, TARGET_KEYS.OPPONENT)
+        this.playCard(TARGET_KEYS.OPPONENT, card)
+        // Preview
         setTimeout(() => {
           setTimeout(() => {
             this.opponentPreview.hideCard()
@@ -237,6 +216,63 @@ export class BattleScene extends BaseScene {
           }, 1500)
           this.opponentPreview.modifyPreviewCardObjects(card.cardData, card.cardData)
         }, 250)
+      },
+    })
+
+    // 4. Battle States
+    this.stateMachine.addState({
+      name: BATTLE_STATES.ATTACKER_MINION_CHOSEN,
+      onEnter: (attackerMinion: BoardCard) => {
+        this.chosenBattleMinions[BATTLE_TARGET_KEYS.ATTACKER] = attackerMinion
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.DEFENDER_MINION_CHOSEN,
+      onEnter: (defenderMinion: BoardCard) => {
+        this.chosenBattleMinions[BATTLE_TARGET_KEYS.DEFENDER] = defenderMinion
+        this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.MINION_BATTLE,
+      onEnter: () => {
+        if (this.chosenBattleMinions.ATTACKER && this.chosenBattleMinions.DEFENDER) {
+          this.board.PLAYER.depth = 1
+          this.chosenBattleMinions.ATTACKER?.attack(this.chosenBattleMinions.DEFENDER, () => {
+            this.board.PLAYER.depth = 0
+            this.stateMachine.setState(BATTLE_STATES.AFTER_BATTLE_CHECK)
+          })
+        }
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.AFTER_BATTLE_CHECK,
+      onEnter: () => {
+        const attacker = this.chosenBattleMinions.ATTACKER
+        const defender = this.chosenBattleMinions.DEFENDER
+
+        if (attacker && defender) {
+          // Check if attacker died
+          if (attacker.cardData.health <= 0) {
+            attacker.death(() => {
+              this.board[attacker.player].cardDies(attacker)
+            })
+          }
+
+          // Check if defender died
+          if (defender.cardData.health <= 0) {
+            defender.death(() => {
+              defender.death(() => {
+                this.board[defender.player].cardDies(defender)
+              })
+            })
+          }
+        }
+
+        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
       },
     })
   }

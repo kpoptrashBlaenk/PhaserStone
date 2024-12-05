@@ -145,7 +145,7 @@ export class BoardCard extends Card {
   private forPlayer(): void {
     this.cardImage.on('pointerup', () => {
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN) {
-        this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_MINION_CHOSEN, this)
+        this.scene.stateMachine.setState(BATTLE_STATES.ATTACKER_MINION_CHOSEN, this)
       }
     })
   }
@@ -155,8 +155,8 @@ export class BoardCard extends Card {
    */
   private forOpponent(): void {
     this.cardImage.on('pointerup', () => {
-      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_MINION_CHOSEN) {
-        this.scene.stateMachine.setState(BATTLE_STATES.OPPONENT_MINION_CHOSEN, this)
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
+        this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, this)
       }
     })
   }
