@@ -1,7 +1,7 @@
 import { BattleScene } from '../scenes/battle-scene'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { BOARD_POSITION_Y } from './board'
-import { HandCard } from './card/hand-card'
+import { HAND_CARD_SIZE, HandCard } from './card/hand-card'
 
 export class Hand {
   private scene: BattleScene
@@ -16,6 +16,7 @@ export class Hand {
     this.hand = []
     // Always above board cards
     this.handContainer = this.createHandContainer().setDepth(1)
+    this.resizeHandContainer()
   }
 
   /**
@@ -26,13 +27,37 @@ export class Hand {
   }
 
   /**
-   * Create HandCardUI -> Add it to handContainer -> Set data of handCardUI -> Resize handContainer
+   * Get original position of card on deck -> add to handContainer then resize container and get new position -> set to old position and animate movement to new position
    */
-  public drawCard(card: HandCard): void {
+  public drawCard(card: HandCard, callback: () => void): void {
     this.hand.push(card)
+
+    // Get original global position of card
+    const originalPositionX = card.cardUI.getBounds().x
+    const originalPositionY = card.cardUI.getBounds().y
+
     this.handContainer.add(card.cardUI)
-    card.showCard()
     this.resizeHandContainer()
+
+    const newPositionX = card.cardUI.x
+    const newPositionY = card.cardUI.y
+
+    card.cardUI.setPosition(
+      originalPositionX - this.handContainer.x,
+      originalPositionY - this.handContainer.y
+    )
+
+    // Moving to Hand Animation
+    this.scene.tweens.add({
+      targets: card.cardUI,
+      x: newPositionX,
+      y: newPositionY,
+      duration: 500,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        callback()
+      },
+    })
   }
 
   /**
@@ -88,16 +113,19 @@ export class Hand {
   }
 
   /**
-   * Set Position of handContainer
+   * Set Position of handContainer, Math.max to ensure default placement of empty hand
    */
   private setPosition(): void {
     if (this.owner === TARGET_KEYS.PLAYER) {
       this.handContainer.setPosition(
-        this.scene.scale.width / 2 - this.handContainer.width / 2,
-        this.scene.scale.height - this.handContainer.height
+        this.scene.scale.width / 2 - Math.max(this.handContainer.width, HAND_CARD_SIZE.width) / 2,
+        this.scene.scale.height - Math.max(this.handContainer.height, HAND_CARD_SIZE.height)
       )
     } else {
-      this.handContainer.setPosition(this.scene.scale.width / 2 - this.handContainer.width / 2, 0)
+      this.handContainer.setPosition(
+        this.scene.scale.width / 2 - Math.max(this.handContainer.width, HAND_CARD_SIZE.width) / 2,
+        0
+      )
     }
   }
 

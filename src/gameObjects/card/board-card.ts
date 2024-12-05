@@ -3,6 +3,7 @@ import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
 import { EFFECT_ASSET_KEYS } from '../../assets/asset-keys'
+import { HAND_CARD_SIZE } from './hand-card'
 
 export class BoardCard extends Card {
   private owner: TargetKeys
@@ -177,7 +178,7 @@ export class BoardCard extends Card {
    * Resize Card to fit in hand
    */
   private boardSize(): void {
-    this.cardContainer.setScale(0.36)
+    this.cardContainer.setScale(HAND_CARD_SIZE.scale)
     this.cardContainer.setSize(
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY

@@ -2,7 +2,7 @@ import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
 import { Coordinate } from '../../types/typedef'
-import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
+import { CARD_ASSETS_KEYS, CardAssetKeys } from '../../assets/asset-keys'
 import { BattleScene } from '../../scenes/battle-scene'
 
 export const PLAYER_BOARD_BOUNDS = Object.freeze({
@@ -10,6 +10,12 @@ export const PLAYER_BOARD_BOUNDS = Object.freeze({
   endX: 1599,
   startY: 487,
   endY: 637,
+})
+
+export const HAND_CARD_SIZE = Object.freeze({
+  scale: 0.36,
+  height: 147.88,
+  width: 97.2,
 })
 
 export class HandCard extends Card {
@@ -22,18 +28,22 @@ export class HandCard extends Card {
     this.owner = owner
 
     this.handSize()
+    this.showBackSide()
+  }
 
-    if (this.owner === TARGET_KEYS.PLAYER) {
-      this.forPlayer()
-    } else {
-      this.forOpponent()
-    }
+  public set cardImageAsset(assetKey: CardAssetKeys) {
+    this.cardImage.setTexture(assetKey)
   }
 
   /**
-   * Add Hover and Drag
+   * Show front side and add Add Hover and Drag
    */
-  private forPlayer(): void {
+  public showFrontSide(): void {
+    this.cardCostText.setAlpha(1)
+    this.cardAttackText.setAlpha(1)
+    this.cardHealthText.setAlpha(1)
+    this.cardNameText.setAlpha(1)
+
     this.cardImage.setInteractive()
     this.addHover()
     this.addDrag()
@@ -108,7 +118,7 @@ export class HandCard extends Card {
   /**
    * Show only CardBack
    */
-  private forOpponent(): void {
+  private showBackSide(): void {
     this.cardImage.setTexture(CARD_ASSETS_KEYS.CARD_BACK)
     this.cardCostText.setAlpha(0)
     this.cardAttackText.setAlpha(0)
@@ -120,7 +130,7 @@ export class HandCard extends Card {
    * Resize Card to fit in hand
    */
   private handSize(): void {
-    this.cardContainer.setScale(0.36)
+    this.cardContainer.setScale(HAND_CARD_SIZE.scale)
     this.cardContainer.setSize(
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY

@@ -73,8 +73,8 @@ export class BattleScene extends BaseScene {
     this.createStateMachine()
 
     // Game Start
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.OPPONENT)
+    // this.drawCard(TARGET_KEYS.PLAYER)
+    // this.drawCard(TARGET_KEYS.OPPONENT)
 
     this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
   }
@@ -105,15 +105,17 @@ export class BattleScene extends BaseScene {
    */
   private drawCard(target: TargetKeys): void {
     if (target === TARGET_KEYS.PLAYER) {
-      const card = this.playerDeck.drawCard()
-      if (card) {
-        this.playerHand.drawCard(card)
-      }
+      this.playerDeck.drawCard((card) => {
+        this.playerHand.drawCard(card, () => {
+          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+        })
+      })
     } else {
-      const card = this.opponentDeck.drawCard()
-      if (card) {
-        this.opponentHand.drawCard(card)
-      }
+      this.opponentDeck.drawCard((card) => {
+        this.opponentHand.drawCard(card, () => {
+          this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
+        })
+      })
     }
   }
 
@@ -208,7 +210,6 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.OPPONENT_TURN_START,
       onEnter: () => {
         this.drawCard(TARGET_KEYS.OPPONENT)
-        this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
       },
     })
 

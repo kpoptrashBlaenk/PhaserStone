@@ -1,8 +1,10 @@
-# Deck/Hand
+# TODO
 
-- [ ] Drawing Card Animation
+## Deck/Hand
 
-# Board
+- [x] Drawing Card Animation
+
+## Board
 
 - [ ] Animation for resizing
 - [ ] Placed Card goes into Board (keeps world bounds) then moves with resizing animation
@@ -10,29 +12,30 @@
 - [ ] Turn Button
 - [ ] Title saying "Your Turn" and subtitle saying "You can't do this"
 
-# Mana Crystals
+## Mana Crystals
 
 - [ ] Create Mana Crystals
 - [ ] Check if enough Mana and draw green border around card
 - [ ] Reduce Mana Crystal On Play
 
-# BattleScene
+## BattleScene
 
 - [ ] Place BattleScene methods into BattleStateMachine
+- [ ] Refactor variables in BattleScene to use hand[this.owner], etc...
 
-# General
+## General
 
 - [ ] Create Methods for Animations and give them callbacks
 
-# Hero
+## Hero
 
 - [ ] Add Heroes
 
-# Minion
+## Minion
 
 - [ ] Give summoning sickness and attack once per turn
 - [ ] Create Battlecry
 
-# Add Spells
+## Add Spells
 
 - [ ] Create spells
