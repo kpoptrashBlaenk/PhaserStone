@@ -25,7 +25,7 @@
 
 ## General
 
-- [ ] Create Methods for Animations and give them callbacks
+- [x] Create Methods for Animations and give them callbacks
 
 ## Hero
 

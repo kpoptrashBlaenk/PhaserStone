@@ -78,17 +78,24 @@ export class Hand {
     if (this.owner === TARGET_KEYS.PLAYER) {
       removeFromHand()
     } else {
-      this.scene.tweens.add({
-        targets: card.cardUI,
-        x: this.scene.scale.width / 2 - card.cardUI.getBounds().centerX + card.cardUI.x,
-        y: BOARD_POSITION_Y.OPPONENT - card.cardUI.getBounds().y + card.cardUI.y,
-        duration: 500,
-        ease: 'Sine.easeOut',
-        onComplete: () => {
-          removeFromHand()
-        },
-      })
+      this.animateCardFromHandToBoard(card, removeFromHand)
     }
+  }
+
+  /**
+   * Animates opponent playing card from hand
+   */
+  private animateCardFromHandToBoard(card: HandCard, callback?: () => void): void {
+    this.scene.tweens.add({
+      targets: card.cardUI,
+      x: this.scene.scale.width / 2 - card.cardUI.getBounds().centerX + card.cardUI.x,
+      y: BOARD_POSITION_Y.OPPONENT - card.cardUI.getBounds().y + card.cardUI.y,
+      duration: 500,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        callback?.()
+      },
+    })
   }
 
   /**

@@ -44,43 +44,66 @@ export class BoardCard extends Card {
 
     this.cardUI.setDepth(1)
 
+    this.animateAttack({ x: startX, y: startY }, { x: targetX, y: targetY }, () => {
+      const damageDealt = this.card.attack
+      opponent.card.health -= damageDealt
+
+      const damageTaken = opponent.card.attack
+      this.card.health -= damageTaken
+
+      this.damageTaken()
+      opponent.damageTaken()
+
+      // Return to position
+      this.animateReturnToPosition({ x: startX, y: startY }, () => {
+        callback?.()
+        this.cardUI.setDepth(0)
+      })
+    })
+  }
+
+  /**
+   * Death Animation: Shrink and fade out
+   */
+  public death(callback?: () => void): void {
+    this.scene.tweens.add({
+      delay: 200,
+      targets: this.cardUI,
+      scale: 0,
+      alpha: 0,
+      duration: 500,
+      ease: 'Cubic.easeOut',
+      onComplete: () => {
+        callback?.()
+      },
+    })
+
+    // this.cardUI.setTint(0xff0000)
+  }
+
+  /**
+   * Animates taking a step back and crashing into defending minion
+   */
+  private animateAttack(
+    startPosition: { x: number; y: number },
+    targetPosition: { x: number; y: number },
+    callback?: () => void
+  ): void {
     // Card takes a step back
     this.scene.tweens.add({
       targets: this.cardUI,
-      y: startY + 10,
+      y: startPosition.y + 10,
       duration: 150,
       ease: 'Sine.easeOut',
       onComplete: () => {
         // Attack enemy
         this.scene.tweens.add({
           targets: this.cardUI,
-          x: targetX,
-          y: targetY,
+          x: targetPosition.x,
+          y: targetPosition.y,
           duration: 200,
           ease: 'Quad.easeOut',
-          onComplete: () => {
-            const damageDealt = this.card.attack
-            opponent.card.health -= damageDealt
-
-            const damageTaken = opponent.card.attack
-            this.card.health -= damageTaken
-
-            this.attacked()
-            opponent.attacked()
-
-            // Return to position
-            this.scene.tweens.add({
-              targets: this.cardUI,
-              x: startX,
-              y: startY,
-              duration: 200,
-              ease: 'Quad.easeIn',
-              onComplete: () => {
-                callback?.()
-                this.cardUI.setDepth(0)
-              },
-            })
-          },
+          onComplete: () => callback?.(),
         })
       },
     })
@@ -89,7 +112,17 @@ export class BoardCard extends Card {
   /**
    * Minion being attacking logic
    */
-  public attacked() {
+  private damageTaken() {
+    this.animateDamageTaken()
+
+    // Set stats and check changes
+    this.setStats()
+  }
+
+  /**
+   * Flash, Particles and Camera Shake when damage taken
+   */
+  private animateDamageTaken(): void {
     // Flash effect
     this.scene.tweens.add({
       targets: this.cardUI,
@@ -115,28 +148,22 @@ export class BoardCard extends Card {
 
     // Camera shake
     this.scene.cameras.main.shake(100, 0.01)
-
-    // Set stats and check changes
-    this.setStats()
   }
 
   /**
-   * Death Animation: Shrink and fade out
+   * Returns minion to original position
    */
-  public death(callback?: () => void): void {
+  private animateReturnToPosition(position: { x: number; y: number }, callback?: () => void): void {
     this.scene.tweens.add({
-      delay: 200,
       targets: this.cardUI,
-      scale: 0,
-      alpha: 0,
-      duration: 500,
-      ease: 'Cubic.easeOut',
+      x: position.x,
+      y: position.y,
+      duration: 200,
+      ease: 'Quad.easeIn',
       onComplete: () => {
         callback?.()
       },
     })
-
-    // this.cardUI.setTint(0xff0000)
   }
 
   /**
