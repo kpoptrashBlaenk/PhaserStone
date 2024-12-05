@@ -10,9 +10,14 @@ const CARD_NUMBER_FONT_STYLE = Object.freeze({
   strokeThickness: 4,
 })
 
-const CARD_NAME_FONT_STYLE = Object.freeze({
+const CARD_NAME_FONT_STYLE_BIG = Object.freeze({
   ...CARD_NUMBER_FONT_STYLE,
   fontSize: '26px',
+})
+
+const CARD_NAME_FONT_STYLE_SMALL = Object.freeze({
+  ...CARD_NUMBER_FONT_STYLE,
+  fontSize: '18px',
 })
 
 const CARD_COST_PADDING = {
@@ -29,7 +34,7 @@ const CARD_HEALTH_PADDING = {
 }
 
 const CARD_NAME_PADDING = {
-  x: 0,
+  x: 7,
   y: 200,
 }
 
@@ -72,6 +77,14 @@ export class Card {
    */
   public showCard() {
     this.cardContainer.setAlpha(1)
+  }
+
+  protected setCardText(text: string): void {
+    this.cardNameText.setText(text)
+    this.cardNameText.setStyle(text.length < 15 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL)
+    this.cardNameText.setX(
+      this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + CARD_NAME_PADDING.x
+    )
   }
 
   /**
@@ -126,9 +139,11 @@ export class Card {
       0,
       this.cardImage.y + CARD_NAME_PADDING.y,
       card.name,
-      CARD_NAME_FONT_STYLE
+      card.name.length < 10 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL
     )
-    this.cardNameText.setX(this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2)
+    this.cardNameText.setX(
+      this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + CARD_NAME_PADDING.x
+    )
 
     cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
     return cardContainer

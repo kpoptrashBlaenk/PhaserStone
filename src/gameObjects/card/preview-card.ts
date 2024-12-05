@@ -3,7 +3,7 @@ import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
 
-const CARD_NAME_PADDING_X = 10
+// const CARD_NAME_PADDING_X = 10
 const PREVIEW_CARD_PADDING = 20
 
 export class Preview extends Card {
@@ -28,10 +28,7 @@ export class Preview extends Card {
     this.cardCostText.setText(String(card.cost))
     this.cardAttackText.setText(String(card.attack))
     this.cardHealthText.setText(String(card.health))
-    this.cardNameText.setText(card.name)
-    this.cardNameText.setX(
-      this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + CARD_NAME_PADDING_X
-    )
+    this.setCardText(card.name)
 
     this.setStats()
     this.showCard()
