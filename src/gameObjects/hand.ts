@@ -1,5 +1,6 @@
 import { BattleScene } from '../scenes/battle-scene'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { resizeContainer } from '../utils/resize-container'
 import { BOARD_POSITION_Y } from './board'
 import { HAND_CARD_SIZE, HandCard } from './card/hand-card'
 
@@ -91,25 +92,12 @@ export class Hand {
   }
 
   /**
-   * Resize handContainer
+   * Resize handContainer and reposition it
    */
   private resizeHandContainer(): void {
-    // Also reposition it
-    const padding = 10
-    let newWidth = 0
-    let newHeight = 0
-    let index = 0
-
-    this.handContainer.iterate((child: Phaser.GameObjects.Container) => {
-      child.setX(child.width * index)
-      newWidth += child.width
-      newHeight = child.height + padding
-      index++
+    resizeContainer(this.handContainer, () => {
+      this.setPosition()
     })
-
-    this.handContainer.width = newWidth
-    this.handContainer.height = newHeight
-    this.setPosition()
   }
 
   /**

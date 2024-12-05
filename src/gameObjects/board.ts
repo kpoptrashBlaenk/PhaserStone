@@ -1,5 +1,6 @@
 import { BattleScene } from '../scenes/battle-scene'
 import { TargetKeys } from '../utils/keys'
+import { resizeContainer } from '../utils/resize-container'
 import { BoardCard } from './card/board-card'
 import { CardData } from './card/card-keys'
 
@@ -50,25 +51,12 @@ export class Board {
   }
 
   /**
-   * Resize boardContainer
+   * Resize boardContainer and reposition it
    */
   private resizeBoardContainer(): void {
-    // Also reposition it
-    const padding = 10
-    let newWidth = 0
-    let newHeight = 0
-    let index = 0
-
-    this.boardContainer.iterate((child: Phaser.GameObjects.Container) => {
-      child.setX(child.width * index)
-      newWidth += child.width
-      newHeight = child.height + padding
-      index++
+    resizeContainer(this.boardContainer, () => {
+      this.setPosition()
     })
-
-    this.boardContainer.width = newWidth
-    this.boardContainer.height = newHeight
-    this.setPosition()
   }
 
   /**
