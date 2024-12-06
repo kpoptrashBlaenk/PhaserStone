@@ -11,11 +11,13 @@ import { Board } from '../gameObjects/board'
 import { HandCard } from '../gameObjects/card/hand-card'
 import { StateMachine } from '../utils/state-machine'
 import { BoardCard } from '../gameObjects/card/board-card'
+import { TurnButton } from '../ui/turn-button'
 
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
   public playerPreview: Preview
   private opponentPreview: Preview
+  private turnButton: TurnButton
 
   private deck: {
     PLAYER: Deck
@@ -43,6 +45,7 @@ export class BattleScene extends BaseScene {
     super.create()
 
     this.setupBackground()
+    this.setupTurnButton()
     this.setupDecksAndHands()
     this.setupPreviews()
     this.setupBoards()
@@ -63,6 +66,13 @@ export class BattleScene extends BaseScene {
    */
   private setupBackground(): void {
     new Background(this)
+  }
+
+  /**
+   * Sets up turn button
+   */
+  private setupTurnButton(): void {
+    this.turnButton = new TurnButton(this)
   }
 
   /**
@@ -199,7 +209,7 @@ export class BattleScene extends BaseScene {
         if (card) {
           this.stateMachine.setState(BATTLE_STATES.OPPONENT_PLAY_CARD, card)
         } else {
-          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
+          this.turnButton.changeTurn()
         }
       },
     })

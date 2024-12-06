@@ -7,9 +7,10 @@
 ## Board
 
 - [x] Animation for resizing
+- [ ] Resizing from right to left works but not from left to right
 - [x] Placed Card goes into Board (keeps world bounds) then moves with resizing animation
 - [x] Change pointer for clicking on cards
-- [ ] Turn Button
+- [x] Turn Button
 - [ ] Title saying "Your Turn" and subtitle saying "You can't do this"
 
 ## Mana Crystals
