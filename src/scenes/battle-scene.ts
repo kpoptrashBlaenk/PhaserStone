@@ -52,7 +52,7 @@ export class BattleScene extends BaseScene {
     this.setupStateMachine()
 
     // Game Start
-    this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
+    this.turnButton.changeTurn()
   }
 
   update(): void {
