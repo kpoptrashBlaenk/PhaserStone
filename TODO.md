@@ -7,7 +7,7 @@
 ## Board
 
 - [x] Animation for resizing
-- [ ] Resizing from right to left works but not from left to right
+- [x] Resizing from right to left works but not from left to right
 - [x] Placed Card goes into Board (keeps world bounds) then moves with resizing animation
 - [x] Change pointer for clicking on cards
 - [x] Turn Button

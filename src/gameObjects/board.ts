@@ -53,10 +53,10 @@ export class Board {
     const originalPositionY = card.cardUI.getBounds().y
 
     this.boardContainer.add(cardPlayed.cardUI)
-    this.resizeBoardContainer()
 
-    const newPositionX = cardPlayed.cardUI.x
-    const newPositionY = cardPlayed.cardUI.y
+    // Place card to the right of container then resize
+    const newPositionX = this.boardContainer.width
+    const newPositionY = 0
 
     cardPlayed.cardUI.setPosition(
       originalPositionX - this.boardContainer.x,
@@ -70,6 +70,9 @@ export class Board {
       y: newPositionY,
       duration: 250,
       ease: 'Sine.easeOut',
+      onComplete: () => {
+        this.resizeBoardContainer()
+      },
     })
   }
 

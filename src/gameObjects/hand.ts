@@ -38,10 +38,10 @@ export class Hand {
     const originalPositionY = card.cardUI.getBounds().y
 
     this.handContainer.add(card.cardUI)
-    this.resizeHandContainer()
 
-    const newPositionX = card.cardUI.x
-    const newPositionY = card.cardUI.y
+    // Place card to the right of container then resize
+    const newPositionX = this.handContainer.width
+    const newPositionY = 0
 
     card.cardUI.setPosition(
       originalPositionX - this.handContainer.x,
@@ -56,6 +56,7 @@ export class Hand {
       duration: 500,
       ease: 'Sine.easeOut',
       onComplete: () => {
+        this.resizeHandContainer()
         callback()
       },
     })

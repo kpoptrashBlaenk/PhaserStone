@@ -5,7 +5,13 @@ export function resizeContainer(container: Phaser.GameObjects.Container, callbac
   let index = 0
 
   container.iterate((child: Phaser.GameObjects.Container) => {
-    child.setX(child.width * index)
+    container.scene.tweens.add({
+      targets: child,
+      x: child.width * index,
+      duration: 500,
+      ease: 'Cubic.easeOut',
+    })
+
     newWidth += child.width
     newHeight = child.height + padding
     index++
