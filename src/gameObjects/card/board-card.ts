@@ -13,7 +13,9 @@ export class BoardCard extends Card {
     this.owner = owner
 
     this.boardSize()
-    this.cardImage.setInteractive()
+    this.cardImage.setInteractive({
+      cursor: 'pointer',
+    })
     this.addHover()
 
     if (this.owner === TARGET_KEYS.PLAYER) {

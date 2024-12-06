@@ -44,7 +44,9 @@ export class HandCard extends Card {
     this.cardHealthText.setAlpha(1)
     this.cardNameText.setAlpha(1)
 
-    this.cardImage.setInteractive()
+    this.cardImage.setInteractive({
+      cursor: 'pointer',
+    })
     this.addHover()
     this.addDrag()
   }
