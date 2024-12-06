@@ -12,10 +12,12 @@ import { HandCard } from '../gameObjects/card/hand-card'
 import { StateMachine } from '../utils/state-machine'
 import { BoardCard } from '../gameObjects/card/board-card'
 import { TurnButton } from '../ui/turn-button'
+import { WarnMessage } from '../ui/warn-message'
 
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
   public playerPreview: Preview
+  public warnMessage: WarnMessage
   private opponentPreview: Preview
   private turnButton: TurnButton
 
@@ -46,6 +48,7 @@ export class BattleScene extends BaseScene {
 
     this.setupBackground()
     this.setupTurnButton()
+    this.setupWarnMessage()
     this.setupDecksAndHands()
     this.setupPreviews()
     this.setupBoards()
@@ -73,6 +76,13 @@ export class BattleScene extends BaseScene {
    */
   private setupTurnButton(): void {
     this.turnButton = new TurnButton(this)
+  }
+
+  /**
+   * Sets up warn message
+   */
+  private setupWarnMessage(): void {
+    this.warnMessage = new WarnMessage(this)
   }
 
   /**

@@ -1,4 +1,4 @@
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../../utils/keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
 import { Coordinate } from '../../types/typedef'
@@ -84,7 +84,7 @@ export class HandCard extends Card {
           y: this.cardContainer.y,
         }
       } else {
-        console.log("You can't do that!")
+        this.scene.warnMessage.showTurnMessage(WARNING_KEYS.CANT_PLAY)
       }
     })
 

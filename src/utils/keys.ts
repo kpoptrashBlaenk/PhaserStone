@@ -25,3 +25,8 @@ export const BATTLE_STATES = Object.freeze({
   MINION_BATTLE: 'MINION_BATTLE',
 })
 export type BattleStates = keyof typeof BATTLE_STATES
+
+export const WARNING_KEYS = Object.freeze({
+  CANT_PLAY: "YOU CAN'T PLAY THIS RIGHT NOW",
+})
+export type WarningKeys = (typeof WARNING_KEYS)[keyof typeof WARNING_KEYS]
