@@ -7,7 +7,7 @@
 ## Board
 
 - [x] Animation for resizing
-- [ ] Placed Card goes into Board (keeps world bounds) then moves with resizing animation
+- [x] Placed Card goes into Board (keeps world bounds) then moves with resizing animation
 - [ ] Change pointer for clicking on cards
 - [ ] Turn Button
 - [ ] Title saying "Your Turn" and subtitle saying "You can't do this"

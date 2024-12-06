@@ -69,9 +69,9 @@ export class Hand {
     const removeFromHand = () => {
       const index = this.hand.findIndex((handCard) => handCard === card)
       this.hand.splice(index, 1)
+      callback?.()
       this.handContainer.remove(card.cardUI, true)
       this.resizeHandContainer()
-      callback?.()
     }
 
     // If player, execute function, if not, play PlayCardAnimation and then execute function

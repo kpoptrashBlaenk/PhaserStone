@@ -3,6 +3,7 @@ import { TargetKeys } from '../utils/keys'
 import { repositionContainer, resizeContainer } from '../utils/resize-container'
 import { BoardCard } from './card/board-card'
 import { CardData } from './card/card-keys'
+import { HandCard } from './card/hand-card'
 
 export const BOARD_POSITION_Y = {
   PLAYER: 500,
@@ -44,11 +45,32 @@ export class Board {
   /**
    * Create BoardCard -> Add it to boardContainer -> Resize boardContainer
    */
-  public playCard(card: CardData): void {
-    const cardPlayed = new BoardCard(this.scene, card, this.owner)
+  public playCard(card: HandCard): void {
+    const cardPlayed = new BoardCard(this.scene, card.cardData, this.owner)
     this.board.push(cardPlayed)
+
+    const originalPositionX = card.cardUI.getBounds().x
+    const originalPositionY = card.cardUI.getBounds().y
+
     this.boardContainer.add(cardPlayed.cardUI)
     this.resizeBoardContainer()
+
+    const newPositionX = cardPlayed.cardUI.x
+    const newPositionY = cardPlayed.cardUI.y
+
+    cardPlayed.cardUI.setPosition(
+      originalPositionX - this.boardContainer.x,
+      originalPositionY - this.boardContainer.y
+    )
+
+    // Moving to Board Animation
+    this.scene.tweens.add({
+      targets: cardPlayed.cardUI,
+      x: newPositionX,
+      y: newPositionY,
+      duration: 250,
+      ease: 'Sine.easeOut',
+    })
   }
 
   /**

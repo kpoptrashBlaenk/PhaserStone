@@ -125,7 +125,7 @@ export class BattleScene extends BaseScene {
    */
   private playCard(target: TargetKeys, card: HandCard, callback?: () => void): void {
     this.hand[target].playCard(card, () => {
-      this.board[target].playCard(card.cardData)
+      this.board[target].playCard(card)
       callback?.()
     })
   }
