@@ -3,7 +3,7 @@ import { TargetKeys } from '../utils/keys'
 import { repositionContainer, resizeContainer } from '../utils/resize-container'
 import { BoardCard } from './card/board-card'
 import { CardData } from './card/card-keys'
-import { HandCard } from './card/hand-card'
+import { HAND_CARD_SIZE, HandCard } from './card/hand-card'
 
 export const BOARD_POSITION_Y = {
   PLAYER: 500,
@@ -80,7 +80,7 @@ export class Board {
     resizeContainer(this.boardContainer, () => {
       repositionContainer(
         this.boardContainer,
-        this.scene.scale.width / 2 - this.boardContainer.width / 2,
+        this.scene.scale.width / 2 - Math.max(this.boardContainer.width, HAND_CARD_SIZE.width) / 2,
         BOARD_POSITION_Y[this.owner]
       )
     })
