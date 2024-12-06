@@ -4,7 +4,14 @@ import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
 import { Preview } from '../gameObjects/card/preview-card'
 import { Deck } from '../gameObjects/deck'
 import { Hand } from '../gameObjects/hand'
-import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import {
+  BATTLE_STATES,
+  BATTLE_TARGET_KEYS,
+  BattleTargetKeys,
+  TARGET_KEYS,
+  TargetKeys,
+  WARNING_KEYS,
+} from '../utils/keys'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { Board } from '../gameObjects/board'
@@ -159,6 +166,16 @@ export class BattleScene extends BaseScene {
   }
 
   /**
+   * Reset Summoning Sickness and Minions who attacked
+   */
+  private resetMinionsAttackState(board: Board): void {
+    board.boardCards.forEach((card) => {
+      card.setSummoningSick = false
+      card.setAlreadyAttacked = false
+    })
+  }
+
+  /**
    * Create the state machine
    */
   private createStateMachine(): void {
@@ -168,6 +185,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN_START,
       onEnter: () => {
+        this.resetMinionsAttackState(this.board.PLAYER)
         this.stateMachine.setState(BATTLE_STATES.PLAYER_DRAW_CARD)
       },
     })
@@ -175,6 +193,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN_START,
       onEnter: () => {
+        this.resetMinionsAttackState(this.board.OPPONENT)
         this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
       },
     })
@@ -243,6 +262,18 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.ATTACKER_MINION_CHOSEN,
       onEnter: (attackerMinion: BoardCard) => {
+        if (attackerMinion.isSummoningSick) {
+          this.warnMessage.showTurnMessage(WARNING_KEYS.SUMMONING_SICK)
+          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+          return
+        }
+
+        if (attackerMinion.isAlreadyAttacked) {
+          this.warnMessage.showTurnMessage(WARNING_KEYS.ALREADY_ATTACKED)
+          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+          return
+        }
+
         this.chosenBattleMinions[BATTLE_TARGET_KEYS.ATTACKER] = attackerMinion
       },
     })

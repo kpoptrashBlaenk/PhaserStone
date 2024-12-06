@@ -28,5 +28,7 @@ export type BattleStates = keyof typeof BATTLE_STATES
 
 export const WARNING_KEYS = Object.freeze({
   CANT_PLAY: "YOU CAN'T PLAY THIS RIGHT NOW",
+  SUMMONING_SICK: 'THIS MINION NEEDS A TURN TO BE READY',
+  ALREADY_ATTACKED: 'THIS MINION ALREADY ATTACKED',
 })
 export type WarningKeys = (typeof WARNING_KEYS)[keyof typeof WARNING_KEYS]

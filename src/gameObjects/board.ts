@@ -26,6 +26,13 @@ export class Board {
   }
 
   /**
+   * Return all board cards (used for resetting minions attack state)
+   */
+  public get boardCards(): BoardCard[] {
+    return this.board
+  }
+
+  /**
    * Set the depth of board container for making attacking minion over opponent
    */
   public set depth(depth: 0 | 1) {

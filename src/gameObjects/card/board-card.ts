@@ -7,10 +7,14 @@ import { HAND_CARD_SIZE } from './hand-card'
 
 export class BoardCard extends Card {
   private owner: TargetKeys
+  private summoningSick: boolean
+  private alreadyAttacked: boolean
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card)
     this.owner = owner
+    this.summoningSick = true
+    this.alreadyAttacked = false
 
     this.boardSize()
     this.cardImage.setInteractive({
@@ -30,6 +34,34 @@ export class BoardCard extends Card {
    */
   public get player(): TargetKeys {
     return this.owner
+  }
+
+  /**
+   * Get if minion has is summoning sick
+   */
+  public get isSummoningSick(): boolean {
+    return this.summoningSick
+  }
+
+  /**
+   * Get if minion already attacked
+   */
+  public get isAlreadyAttacked(): boolean {
+    return this.alreadyAttacked
+  }
+
+  /**
+   * Sets if minion has is summoning sick
+   */
+  public set setSummoningSick(value: boolean) {
+    this.summoningSick = value
+  }
+
+  /**
+   * Sets if minion already attacked
+   */
+  public set setAlreadyAttacked(value: boolean) {
+    this.alreadyAttacked = value
   }
 
   /**

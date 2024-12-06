@@ -37,7 +37,7 @@
 
 - [ ] Rework Death Animation
 - [x] Rework Card Name Sizes
-- [ ] Give summoning sickness and attack once per turn
+- [x] Give summoning sickness and attack once per turn
 - [ ] Create Battlecry
 - [ ] Give minion portraits
 
