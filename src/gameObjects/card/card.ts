@@ -2,7 +2,7 @@ import { FONT_KEYS } from '../../assets/font-keys'
 import { BattleScene } from '../../scenes/battle-scene'
 import { CardData } from './card-keys'
 
-const CARD_NUMBER_FONT_STYLE = Object.freeze({
+export const CARD_NUMBER_FONT_STYLE = Object.freeze({
   fontFamily: FONT_KEYS.HEARTHSTONE,
   fontSize: '48px',
   fontStyle: 'bold',

@@ -15,7 +15,7 @@
 
 ## Mana Crystals
 
-- [ ] Create Mana Crystals
+- [x] Create Mana Crystals
 - [ ] Check if enough Mana and draw green border around card
 - [ ] Reduce Mana Crystal On Play
 

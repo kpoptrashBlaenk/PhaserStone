@@ -20,6 +20,7 @@ import { StateMachine } from '../utils/state-machine'
 import { BoardCard } from '../gameObjects/card/board-card'
 import { TurnButton } from '../ui/turn-button'
 import { WarnMessage } from '../ui/warn-message'
+import { Mana } from '../gameObjects/mana'
 
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
@@ -40,6 +41,10 @@ export class BattleScene extends BaseScene {
     PLAYER: Board
     OPPONENT: Board
   } = { PLAYER: null as any, OPPONENT: null as any }
+  private mana: {
+    PLAYER: Mana
+    OPPONENT: Mana
+  } = { PLAYER: null as any, OPPONENT: null as any }
 
   constructor() {
     super({
@@ -59,6 +64,7 @@ export class BattleScene extends BaseScene {
     this.setupDecksAndHands()
     this.setupPreviews()
     this.setupBoards()
+    this.setupMana()
     this.setupStateMachine()
 
     // Game Start
@@ -130,6 +136,14 @@ export class BattleScene extends BaseScene {
   }
 
   /**
+   * Sets up mana
+   */
+  private setupMana(): void {
+    this.mana.PLAYER = new Mana(this, TARGET_KEYS.PLAYER)
+    this.mana.OPPONENT = new Mana(this, TARGET_KEYS.OPPONENT)
+  }
+
+  /**
    * Sets up state machine
    */
   private setupStateMachine(): void {
@@ -185,7 +199,8 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN_START,
       onEnter: () => {
-        this.resetMinionsAttackState(this.board.PLAYER)
+        this.mana.PLAYER.addManaCrystal()
+        this.resetMinionsAttackState(this.board.OPPONENT)
         this.stateMachine.setState(BATTLE_STATES.PLAYER_DRAW_CARD)
       },
     })
@@ -193,7 +208,8 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN_START,
       onEnter: () => {
-        this.resetMinionsAttackState(this.board.OPPONENT)
+        this.mana.OPPONENT.addManaCrystal()
+        this.resetMinionsAttackState(this.board.PLAYER)
         this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
       },
     })

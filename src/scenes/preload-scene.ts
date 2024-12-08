@@ -13,12 +13,13 @@ export class PreloadScene extends BaseScene {
     super.preload()
 
     const cardAssetsPath = 'assets/images/cards'
-    const boardAssetsPath = 'assets/images/boards'
+    const boardAssetsPath = 'assets/images/ui'
     const effectAssetsPath = 'assets/images/effects'
     const jsonAssetPath = 'assets/data'
 
-    // Board Assets
+    // UI Assets
     this.load.image(UI_ASSET_KEYS.BOARD, `${boardAssetsPath}/board.webp`)
+    this.load.image(UI_ASSET_KEYS.MANA_CRYSTAL, `${boardAssetsPath}/mana-crystal.webp`)
 
     // Card Assets
     this.load.image(CARD_ASSETS_KEYS.TEMPLATE, `${cardAssetsPath}/card-template.png`)
