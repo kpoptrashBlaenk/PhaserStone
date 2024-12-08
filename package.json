@@ -23,5 +23,9 @@
     "semi": false,
     "printWidth": 110,
     "singleQuote": true
+  },
+  "dependencies": {
+    "phaser3-rex-plugins": "^1.80.12",
+    "phaser3-rex-plugins-types": "^0.2.0"
   }
 }

@@ -4,6 +4,7 @@ import { Card } from './card'
 import { Coordinate } from '../../types/typedef'
 import { CARD_ASSETS_KEYS, CardAssetKeys } from '../../assets/asset-keys'
 import { BattleScene } from '../../scenes/battle-scene'
+import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
 
 export const PLAYER_BOARD_BOUNDS = Object.freeze({
   startX: 449,
@@ -18,14 +19,24 @@ export const HAND_CARD_SIZE = Object.freeze({
   width: 97.2,
 })
 
+export const OUTLINE_CONFIG = Object.freeze({
+  thickness: 3,
+  outlineColor: 0x00ff00,
+  quality: 0.1,
+  name: 'outline',
+})
+
 export class HandCard extends Card {
   private owner: TargetKeys
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
+  private cardBorder: OutlinePipelinePlugin | undefined
+  private isPlayable: boolean
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card)
     this.owner = owner
+    this.isPlayable = false
 
     this.handSize()
     this.showBackSide()
@@ -52,6 +63,23 @@ export class HandCard extends Card {
   }
 
   /**
+   * Compare cost to mana crystals to see if it's playable and add or remove border
+   */
+  public checkPlayable(currentMana: number): void {
+    if (currentMana >= this.card.cost) {
+      if (!this.cardBorder) {
+        this.cardBorder = this.scene.plugins.get('rexOutlinePipeline') as OutlinePipelinePlugin
+        this.cardBorder?.add(this.cardImage, OUTLINE_CONFIG)
+
+        this.isPlayable = true
+      }
+    } else if (this.cardBorder) {
+      this.cardBorder.remove(this.cardImage, 'outline')
+      this.isPlayable = false
+    }
+  }
+
+  /**
    * Add PreviewUI to hover and hide it on unhover
    */
   private addHover(): void {
@@ -73,7 +101,7 @@ export class HandCard extends Card {
    */
   private addDrag(): void {
     this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN) {
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN && this.isPlayable) {
         this.cardContainer.setData('draggingFromHand', true).setDepth(1)
         this.pointerCheckpoint = {
           x: pointer.x,

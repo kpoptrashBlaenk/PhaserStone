@@ -172,6 +172,15 @@ export class BattleScene extends BaseScene {
   }
 
   /**
+   * Checks what cards are playable
+   */
+  private checkPlayable(): void {
+    this.hand.PLAYER.handCards.forEach((card) => {
+      card.checkPlayable(this.mana.PLAYER.getCurrentMana)
+    })
+  }
+
+  /**
    * Track and set attacker and defender minions
    */
   private chosenBattleMinions: Record<BattleTargetKeys, BoardCard | undefined> = {
@@ -219,6 +228,7 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.PLAYER_DRAW_CARD,
       onEnter: () =>
         this.drawCard(TARGET_KEYS.PLAYER, () => {
+          this.checkPlayable()
           this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
         }),
     })

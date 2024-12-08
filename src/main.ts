@@ -1,11 +1,12 @@
 import Phaser from 'phaser'
+import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin.js'
 import { SCENE_KEYS } from './scenes/scene-keys'
 import { BattleScene } from './scenes/battle-scene'
 import { PreloadScene } from './scenes/preload-scene'
 
 // Launch game instance
 const game = new Phaser.Game({
-  type: Phaser.CANVAS,
+  type: Phaser.AUTO,
   scale: {
     parent: 'game-container',
     width: 2048,
@@ -14,6 +15,15 @@ const game = new Phaser.Game({
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   backgroundColor: '#000000',
+  plugins: {
+    global: [
+      {
+        key: 'rexOutlinePipeline',
+        plugin: OutlinePipelinePlugin,
+        start: true,
+      },
+    ],
+  },
 })
 
 game.scene.add(SCENE_KEYS.PRELOAD_SCENE, PreloadScene)

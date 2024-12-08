@@ -36,6 +36,13 @@ export class Mana {
   }
 
   /**
+   * Get current mana
+   */
+  public get getCurrentMana(): number {
+    return this.currentMana
+  }
+
+  /**
    * Add a mana crystal if max mana is not reached
    */
   public addManaCrystal(): void {
