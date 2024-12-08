@@ -26,6 +26,7 @@ export class PreloadScene extends BaseScene {
 
     // Effect Assets
     this.load.image(EFFECT_ASSET_KEYS.SPARK, `${effectAssetsPath}/spark.png`)
+    this.load.image(EFFECT_ASSET_KEYS.Z, `${effectAssetsPath}/z.png`)
 
     // JSON Data
     this.load.json(DATA_ASSET_KEYS.CARDS, `${jsonAssetPath}/cards.json`)

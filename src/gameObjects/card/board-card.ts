@@ -5,18 +5,23 @@ import { BattleScene } from '../../scenes/battle-scene'
 import { EFFECT_ASSET_KEYS } from '../../assets/asset-keys'
 import { HAND_CARD_SIZE } from './hand-card'
 
+const ZZZ_ANIMATION_POSITION = Object.freeze({
+  x: 220,
+  y: 90,
+})
+
 export class BoardCard extends Card {
   private owner: TargetKeys
   private summoningSick: boolean
   private alreadyAttacked: boolean
+  private summoningSickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card)
     this.owner = owner
-    this.summoningSick = true
-    this.alreadyAttacked = false
 
     this.boardSize()
+
     this.cardImage.setInteractive({
       cursor: 'pointer',
     })
@@ -27,6 +32,9 @@ export class BoardCard extends Card {
     } else {
       this.forOpponent()
     }
+
+    this.setSummoningSick = true
+    this.setAlreadyAttacked = false
   }
 
   /**
@@ -55,6 +63,7 @@ export class BoardCard extends Card {
    */
   public set setSummoningSick(value: boolean) {
     this.summoningSick = value
+    this.summoningSickAnimation()
   }
 
   /**
@@ -244,5 +253,34 @@ export class BoardCard extends Card {
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY
     )
+  }
+
+  /**
+   * Play or destroy zzz animation depending on summoningSick
+   */
+  private summoningSickAnimation(): void {
+    if (this.summoningSick) {
+      this.summoningSickParticles = this.scene.add.particles(
+        ZZZ_ANIMATION_POSITION.x,
+        ZZZ_ANIMATION_POSITION.y,
+        EFFECT_ASSET_KEYS.Z,
+        {
+          scale: { start: 0.2, end: 0 },
+          speed: 50,
+          lifespan: 2000,
+          frequency: 1000,
+          angle: { min: -90, max: -90 },
+          gravityY: 10,
+          accelerationX: 50,
+          accelerationY: -50,
+        }
+      )
+
+      this.cardUI.add(this.summoningSickParticles)
+      return
+    }
+
+    this.summoningSickParticles?.destroy()
+    this.summoningSickParticles = null
   }
 }

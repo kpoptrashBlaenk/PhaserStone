@@ -19,9 +19,10 @@ export const DATA_ASSET_KEYS = Object.freeze({
 })
 
 export const UI_ASSET_KEYS = Object.freeze({
-  BOARD: 'BOARD'
+  BOARD: 'BOARD',
 })
 
 export const EFFECT_ASSET_KEYS = Object.freeze({
-  SPARK: 'SPARK'
+  SPARK: 'SPARK',
+  Z: 'Z',
 })
