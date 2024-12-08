@@ -79,6 +79,7 @@ export class TurnButton {
       })
       .setOrigin(0.5)
       .setAlpha(0)
+      .setDepth(10)
   }
 
   /**
