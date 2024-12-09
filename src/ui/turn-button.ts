@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import { BattleScene } from '../scenes/battle-scene'
-import { BATTLE_STATES } from '../utils/keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { FONT_KEYS } from '../assets/font-keys'
 
 const BUTTON_CONFIGS = Object.freeze({
@@ -14,6 +14,7 @@ export class TurnButton {
   private scene: BattleScene
   private button: Phaser.GameObjects.Rectangle
   private turnMessage: Phaser.GameObjects.Text
+  private currentTurn: TargetKeys
 
   constructor(scene: BattleScene) {
     this.scene = scene
@@ -37,24 +38,31 @@ export class TurnButton {
     this.turnMessage = this.createTurnMessage()
   }
 
+  public get getCurrentTurn(): TargetKeys {
+    return this.currentTurn
+  }
+
   /**
    * Change turn depending on player
    */
   public changeTurn(): void {
-    if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN) {
+    if (this.currentTurn === TARGET_KEYS.PLAYER) {
+      this.currentTurn = TARGET_KEYS.OPPONENT
       this.scene.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
       return
     }
 
-    if (this.scene.stateMachine.currentStateName === BATTLE_STATES.OPPONENT_TURN) {
+    if (this.currentTurn === TARGET_KEYS.OPPONENT) {
       this.showTurnMessage()
+      this.currentTurn = TARGET_KEYS.PLAYER
       this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
       return
     }
 
     // Default
-    this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
     this.showTurnMessage()
+    this.currentTurn = TARGET_KEYS.PLAYER
+    this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
   }
 
   /**

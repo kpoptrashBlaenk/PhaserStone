@@ -138,7 +138,7 @@ export class BoardCard extends Card {
     // Card takes a step back
     this.scene.tweens.add({
       targets: this.cardUI,
-      y: startPosition.y + 10,
+      y: startPosition.y + (this.owner === TARGET_KEYS.PLAYER ? 10 : -10),
       duration: 150,
       ease: 'Sine.easeOut',
       onComplete: () => {

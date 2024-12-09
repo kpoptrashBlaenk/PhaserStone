@@ -145,11 +145,6 @@ export class Card {
       )
       .setOrigin(0.5)
 
-    console.log(`Cost: {x:${this.cardCostText.x} y:${this.cardCostText.y}}`)
-    console.log(`Attack: {x:${this.cardAttackText.x} y:${this.cardAttackText.y}}`)
-    console.log(`Health: {x:${this.cardHealthText.x} y:${this.cardHealthText.y}}`)
-    console.log(`Name: {x:${this.cardNameText.x} y:${this.cardNameText.y}}`)
-
     cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
     return cardContainer
   }

@@ -75,6 +75,7 @@ export class HandCard extends Card {
       }
     } else if (this.cardBorder) {
       this.cardBorder.remove(this.cardImage, 'outline')
+      this.cardBorder = undefined
       this.isPlayable = false
     }
   }

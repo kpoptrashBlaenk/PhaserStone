@@ -42,11 +42,11 @@ export class Board {
   /**
    * Remove cardUI and card from board
    */
-  public cardDies(card: BoardCard): void {
+  public cardDies(card: BoardCard, callback?: () => void): void {
     const index = this.board.findIndex((boardCard) => boardCard === card)
     this.board.splice(index, 1)
     this.boardContainer.remove(card.cardUI, true)
-    this.resizeBoardContainer()
+    this.resizeBoardContainer(callback)
   }
 
   /**
@@ -86,7 +86,7 @@ export class Board {
   /**
    * Resize boardContainer and reposition it
    */
-  private resizeBoardContainer(): void {
+  private resizeBoardContainer(callback?: () => void): void {
     resizeContainer(this.boardContainer, () => {
       repositionContainer(
         this.boardContainer,
@@ -94,6 +94,9 @@ export class Board {
         BOARD_POSITION_Y[this.owner]
       )
     })
+
+    // Because callback needs to be passed through too many callbacks
+    setTimeout(() => callback?.(), 500)
   }
 
   /**

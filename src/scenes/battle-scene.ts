@@ -68,10 +68,16 @@ export class BattleScene extends BaseScene {
     this.setupStateMachine()
 
     // Game Start
+    this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
     this.turnButton.changeTurn()
-    this.drawCard(TARGET_KEYS.OPPONENT, () => {
-      this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
-    })
   }
 
   update(): void {
@@ -213,6 +219,7 @@ export class BattleScene extends BaseScene {
       onEnter: () => {
         this.mana.PLAYER.addManaCrystal()
         this.mana.PLAYER.refreshMana()
+        this.checkPlayable()
         this.resetMinionsAttackState(this.board.OPPONENT)
         this.stateMachine.setState(BATTLE_STATES.PLAYER_DRAW_CARD)
       },
@@ -223,6 +230,7 @@ export class BattleScene extends BaseScene {
       onEnter: () => {
         this.mana.OPPONENT.addManaCrystal()
         this.mana.OPPONENT.refreshMana()
+        this.checkPlayable()
         this.resetMinionsAttackState(this.board.PLAYER)
         this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
       },
@@ -247,6 +255,7 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.PLAYER_PLAY_CARD,
       onEnter: (card: HandCard) => {
         this.mana.PLAYER.useMana(card.cardData.cost)
+        this.checkPlayable()
         this.playCard(TARGET_KEYS.PLAYER, card, () => {
           this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
         })
@@ -276,12 +285,32 @@ export class BattleScene extends BaseScene {
           }
         })
 
-        // If playable cards, play, if not change turn
+        // If playable cards, play, if not attack
         if (playableHand.length > 0) {
           const card = playableHand[Math.floor(Math.random() * playableHand.length)]
           this.stateMachine.setState(BATTLE_STATES.OPPONENT_PLAY_CARD, card)
         } else {
-          this.turnButton.changeTurn()
+          // Opponent Attack AI
+          const opponentBoard = this.board.OPPONENT.boardCards
+          const playerBoard = this.board.PLAYER.boardCards
+          const notSickMinions: BoardCard[] = []
+
+          // Get all playable cards
+          opponentBoard.forEach((card: BoardCard) => {
+            if (!card.isSummoningSick && !card.isAlreadyAttacked) {
+              notSickMinions.push(card)
+            }
+          })
+
+          // If fighting cards and fightable cards, play, if not change turn
+          if (notSickMinions.length > 0 && playerBoard.length > 0) {
+            this.chosenBattleMinions.ATTACKER =
+              notSickMinions[Math.floor(Math.random() * notSickMinions.length)]
+            this.chosenBattleMinions.DEFENDER = playerBoard[Math.floor(Math.random() * playerBoard.length)]
+            this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
+          } else {
+            this.turnButton.changeTurn()
+          }
         }
       },
     })
@@ -361,14 +390,17 @@ export class BattleScene extends BaseScene {
           // Check if defender died
           if (defender.cardData.health <= 0) {
             defender.death(() => {
-              defender.death(() => {
-                this.board[defender.player].cardDies(defender)
+              this.board[defender.player].cardDies(defender, () => {
+                // After death animation, go to idle turn
+                if (this.turnButton.getCurrentTurn === TARGET_KEYS.PLAYER) {
+                  this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+                } else {
+                  this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
+                }
               })
             })
           }
         }
-
-        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
       },
     })
   }
