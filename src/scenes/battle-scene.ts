@@ -69,6 +69,9 @@ export class BattleScene extends BaseScene {
 
     // Game Start
     this.turnButton.changeTurn()
+    this.drawCard(TARGET_KEYS.OPPONENT, () => {
+      this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
+    })
   }
 
   update(): void {
@@ -262,9 +265,20 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN,
       onEnter: () => {
+        // Play cards AI
         const hand = this.hand.OPPONENT.handCards
-        const card = hand[Math.floor(Math.random() * hand.length)]
-        if (card) {
+        let playableHand: HandCard[] = []
+
+        // Get all playable cards
+        hand.forEach((card: HandCard) => {
+          if (card.cardData.cost <= this.mana.OPPONENT.getCurrentMana) {
+            playableHand.push(card)
+          }
+        })
+
+        // If playable cards, play, if not change turn
+        if (playableHand.length > 0) {
+          const card = playableHand[Math.floor(Math.random() * playableHand.length)]
           this.stateMachine.setState(BATTLE_STATES.OPPONENT_PLAY_CARD, card)
         } else {
           this.turnButton.changeTurn()
