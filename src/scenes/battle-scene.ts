@@ -236,6 +236,20 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    this.stateMachine.addState({
+      name: BATTLE_STATES.PLAYER_TURN_END,
+      onEnter: () => {
+        this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.OPPONENT_TURN_END,
+      onEnter: () => {
+        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
+      },
+    })
+
     // Player-Specific States
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_DRAW_CARD,
@@ -309,7 +323,7 @@ export class BattleScene extends BaseScene {
             this.chosenBattleMinions.DEFENDER = playerBoard[Math.floor(Math.random() * playerBoard.length)]
             this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
           } else {
-            this.turnButton.changeTurn()
+            this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_END)
           }
         }
       },

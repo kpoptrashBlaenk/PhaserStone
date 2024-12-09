@@ -32,7 +32,11 @@ export class TurnButton {
     })
 
     this.button.on('pointerup', () => {
-      this.changeTurn()
+      this.scene.stateMachine.setState(
+        this.currentTurn === TARGET_KEYS.PLAYER
+          ? BATTLE_STATES.PLAYER_TURN_END
+          : BATTLE_STATES.OPPONENT_TURN_END
+      )
     })
 
     this.turnMessage = this.createTurnMessage()
