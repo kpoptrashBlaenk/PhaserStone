@@ -190,10 +190,23 @@ export class BattleScene extends BaseScene {
   }
 
   /**
+   * Checks what cards are playable
+   */
+  private checkCanAttack(): void {
+    this.board.PLAYER.boardCards.forEach((card) => {
+      card.checkCanAttack()
+    })
+  }
+
+  /**
    * Remove all green borders, because opponent turn
    */
   private removeGreenBorders(): void {
     this.hand.PLAYER.handCards.forEach((card) => {
+      card.removeBorder()
+    })
+
+    this.board.PLAYER.boardCards.forEach((card) => {
       card.removeBorder()
     })
   }
@@ -229,6 +242,7 @@ export class BattleScene extends BaseScene {
         this.mana.PLAYER.addManaCrystal()
         this.mana.PLAYER.refreshMana()
         this.checkPlayable()
+        this.checkCanAttack()
         this.resetMinionsAttackState(this.board.OPPONENT)
         this.stateMachine.setState(BATTLE_STATES.PLAYER_DRAW_CARD)
       },
@@ -279,6 +293,7 @@ export class BattleScene extends BaseScene {
       onEnter: (card: HandCard) => {
         this.mana.PLAYER.useMana(card.cardData.cost)
         this.checkPlayable()
+        this.checkCanAttack()
         this.playCard(TARGET_KEYS.PLAYER, card, () => {
           this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
         })
@@ -399,14 +414,28 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.AFTER_BATTLE_CHECK,
       onEnter: () => {
+        const setState = () => {
+          // After death animation, go to idle turn
+          if (this.turnButton.getCurrentTurn === TARGET_KEYS.PLAYER) {
+            this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
+          } else {
+            this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
+          }
+        }
+
         const attacker = this.chosenBattleMinions.ATTACKER
         const defender = this.chosenBattleMinions.DEFENDER
+        let attackerLives = true
+        let defenderLives = true
 
         if (attacker && defender) {
           // Check if attacker died
           if (attacker.cardData.health <= 0) {
             attacker.death(() => {
-              this.board[attacker.player].cardDies(attacker)
+              this.board[attacker.player].cardDies(attacker, () => {
+                setState()
+                attackerLives = false
+              })
             })
           }
 
@@ -414,14 +443,15 @@ export class BattleScene extends BaseScene {
           if (defender.cardData.health <= 0) {
             defender.death(() => {
               this.board[defender.player].cardDies(defender, () => {
-                // After death animation, go to idle turn
-                if (this.turnButton.getCurrentTurn === TARGET_KEYS.PLAYER) {
-                  this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
-                } else {
-                  this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
-                }
+                setState()
+                defenderLives = false
               })
             })
+          }
+
+          // If attacker and defender live, setState won't trigger after callback, so I call it here
+          if (attackerLives && defenderLives) {
+            setState()
           }
         }
       },

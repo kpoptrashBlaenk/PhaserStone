@@ -3,7 +3,8 @@ import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
 import { EFFECT_ASSET_KEYS } from '../../assets/asset-keys'
-import { HAND_CARD_SIZE } from './hand-card'
+import { HAND_CARD_SIZE, OUTLINE_CONFIG } from './hand-card'
+import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
 
 const ZZZ_ANIMATION_POSITION = Object.freeze({
   x: 220,
@@ -15,6 +16,7 @@ export class BoardCard extends Card {
   private summoningSick: boolean
   private alreadyAttacked: boolean
   private summoningSickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
+  private cardBorder: OutlinePipelinePlugin | undefined
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card)
@@ -71,6 +73,30 @@ export class BoardCard extends Card {
    */
   public set setAlreadyAttacked(value: boolean) {
     this.alreadyAttacked = value
+  }
+
+  /**
+   * Check if not summoning sick and didn't attack and add or remove border
+   */
+  public checkCanAttack(): void {
+    if (!this.summoningSick && !this.alreadyAttacked) {
+      if (!this.cardBorder) {
+        this.cardBorder = this.scene.plugins.get('rexOutlinePipeline') as OutlinePipelinePlugin
+        this.cardBorder?.add(this.cardImage, OUTLINE_CONFIG)
+      }
+    } else {
+      this.removeBorder()
+    }
+  }
+
+  /**
+   * Remove Border
+   */
+  public removeBorder(): void {
+    if (this.cardBorder) {
+      this.cardBorder.remove(this.cardImage, 'outline')
+      this.cardBorder = undefined
+    }
   }
 
   /**
