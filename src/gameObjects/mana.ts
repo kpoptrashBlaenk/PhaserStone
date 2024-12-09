@@ -24,13 +24,15 @@ export class Mana {
   private manaText: Phaser.GameObjects.Text
   private currentMana: number
   private maxMana: number
+  private manaLimit: number
   private manaContainer: Phaser.GameObjects.Container | undefined
 
   constructor(scene: Phaser.Scene, owner: TargetKeys) {
     this.scene = scene
     this.owner = owner
     this.currentMana = 0
-    this.maxMana = 10
+    this.maxMana = 0
+    this.manaLimit = 10
 
     this.createManaCrystals()
   }
@@ -46,15 +48,14 @@ export class Mana {
    * Add a mana crystal if max mana is not reached
    */
   public addManaCrystal(): void {
-    if (this.currentMana >= this.maxMana) {
+    if (this.currentMana >= this.manaLimit) {
       return
     }
 
-    this.currentMana += 1
-    this.manaText.setText(`${this.currentMana}/${this.maxMana}`)
+    this.maxMana += 1
 
     // If number too big, move text to the left
-    if (this.currentMana >= 10) {
+    if (this.maxMana >= 10) {
       this.manaText.setX(MANA_TEXT_POSITION[this.owner].x - 6)
     }
 
@@ -65,6 +66,36 @@ export class Mana {
       manaCrystal.setX(x)
       this.manaContainer.add(manaCrystal)
     }
+  }
+
+  /**
+   * Recalculate mana then change mana crystals color
+   */
+  public useMana(usedMana: number): void {
+    if (usedMana === 0) {
+      return
+    }
+
+    this.currentMana -= usedMana
+    this.manaText.setText(`${this.currentMana}/${this.maxMana}`)
+
+    if (this.manaContainer) {
+      let index = 0
+      this.manaContainer?.iterate((manaCrystal: Phaser.GameObjects.Image) => {
+        if (index >= this.currentMana) {
+          manaCrystal.setTint(0x555555)
+        }
+        index++
+      })
+    }
+  }
+
+  /**
+   * Refreshes mana to max
+   */
+  public refreshMana(): void {
+    this.currentMana = this.maxMana
+    this.manaText.setText(`${this.currentMana}/${this.maxMana}`)
   }
 
   /**

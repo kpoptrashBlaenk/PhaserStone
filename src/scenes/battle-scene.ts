@@ -209,6 +209,7 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.PLAYER_TURN_START,
       onEnter: () => {
         this.mana.PLAYER.addManaCrystal()
+        this.mana.PLAYER.refreshMana()
         this.resetMinionsAttackState(this.board.OPPONENT)
         this.stateMachine.setState(BATTLE_STATES.PLAYER_DRAW_CARD)
       },
@@ -218,6 +219,7 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.OPPONENT_TURN_START,
       onEnter: () => {
         this.mana.OPPONENT.addManaCrystal()
+        this.mana.OPPONENT.refreshMana()
         this.resetMinionsAttackState(this.board.PLAYER)
         this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
       },
@@ -241,6 +243,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_PLAY_CARD,
       onEnter: (card: HandCard) => {
+        this.mana.PLAYER.useMana(card.cardData.cost)
         this.playCard(TARGET_KEYS.PLAYER, card, () => {
           this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
         })
@@ -275,11 +278,13 @@ export class BattleScene extends BaseScene {
         this.playCard(TARGET_KEYS.OPPONENT, card)
         // Preview
         setTimeout(() => {
+          this.mana.OPPONENT.useMana(card.cardData.cost)
+          this.opponentPreview.modifyPreviewCardObjects(card.cardData, card.cardData)
+          // Delay after preview to resume turn
           setTimeout(() => {
             this.opponentPreview.hideCard()
             this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
           }, 1500)
-          this.opponentPreview.modifyPreviewCardObjects(card.cardData, card.cardData)
         }, 250)
       },
     })

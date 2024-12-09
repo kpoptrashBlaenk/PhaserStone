@@ -17,7 +17,7 @@
 
 - [x] Create Mana Crystals
 - [x] Check if enough Mana and draw green border around card
-- [ ] Reduce Mana Crystal On Play
+- [x] Reduce Mana Crystal On Play
 
 ## BattleScene
 
