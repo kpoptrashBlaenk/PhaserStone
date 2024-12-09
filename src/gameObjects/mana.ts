@@ -96,6 +96,10 @@ export class Mana {
   public refreshMana(): void {
     this.currentMana = this.maxMana
     this.manaText.setText(`${this.currentMana}/${this.maxMana}`)
+
+    this.manaContainer?.iterate((manaCrystal: Phaser.GameObjects.Image) => {
+      manaCrystal.setTint(0xffffff)
+    })
   }
 
   /**
