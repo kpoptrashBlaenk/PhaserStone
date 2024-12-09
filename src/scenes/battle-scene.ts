@@ -190,6 +190,15 @@ export class BattleScene extends BaseScene {
   }
 
   /**
+   * Remove all green borders, because opponent turn
+   */
+  private removeGreenBorders(): void {
+    this.hand.PLAYER.handCards.forEach((card) => {
+      card.removeBorder()
+    })
+  }
+
+  /**
    * Track and set attacker and defender minions
    */
   private chosenBattleMinions: Record<BattleTargetKeys, BoardCard | undefined> = {
@@ -228,9 +237,9 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN_START,
       onEnter: () => {
+        this.removeGreenBorders()
         this.mana.OPPONENT.addManaCrystal()
         this.mana.OPPONENT.refreshMana()
-        this.checkPlayable()
         this.resetMinionsAttackState(this.board.PLAYER)
         this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
       },
