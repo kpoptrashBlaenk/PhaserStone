@@ -20,22 +20,20 @@ const CARD_NAME_FONT_STYLE_SMALL = Object.freeze({
   fontSize: '18px',
 })
 
-const CARD_COST_PADDING = {
-  x: 25,
+const CARD_COST_POSITION = {
+  x: 23,
   y: 30,
 }
-const CARD_ATTACK_PADDING = {
-  x: 25,
-  y: -58,
+const CARD_ATTACK_POSITION = {
+  x: 27,
+  y: 322,
 }
-const CARD_HEALTH_PADDING = {
-  x: -50,
-  y: -58,
+const CARD_HEALTH_POSITION = {
+  x: 218,
+  y: 325,
 }
-
-const CARD_NAME_PADDING = {
-  x: 7,
-  y: 200,
+const CARD_NAME_POSITION = {
+  y: 215,
 }
 
 export class Card {
@@ -82,9 +80,6 @@ export class Card {
   protected setCardText(text: string): void {
     this.cardNameText.setText(text)
     this.cardNameText.setStyle(text.length < 15 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL)
-    this.cardNameText.setX(
-      this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + CARD_NAME_PADDING.x
-    )
   }
 
   /**
@@ -112,38 +107,48 @@ export class Card {
    * Create card object with: Image, Text, Cost, Attack, Health, Name
    */
   private createCardObject(card: CardData): Phaser.GameObjects.Container {
-    this.cardImage = this.scene.add.image(0, 0, card.assetKey).setOrigin(0)
+    // Image
+    this.cardImage = this.scene.add.image(0, 0, card.assetKey)
     const cardContainer = this.scene.add
       .container(0, 0, this.cardImage)
-      .setSize(this.cardImage.width, this.cardImage.height)
+      .setSize(this.cardImage.width, this.cardImage.height) // 270, 383
+    this.cardImage.setPosition(this.cardImage.width / 2, this.cardImage.height / 2)
 
+    // Cost
     this.cardCostText = this.scene.add.text(
-      this.cardImage.x + CARD_COST_PADDING.x,
-      this.cardImage.y + CARD_COST_PADDING.y,
+      CARD_COST_POSITION.x,
+      CARD_COST_POSITION.y,
       String(card.cost),
       CARD_NUMBER_FONT_STYLE
     )
+    // Attack
     this.cardAttackText = this.scene.add.text(
-      this.cardImage.x + CARD_ATTACK_PADDING.x,
-      this.cardImage.y + this.cardImage.height + CARD_ATTACK_PADDING.y,
+      CARD_ATTACK_POSITION.x,
+      CARD_ATTACK_POSITION.y,
       String(card.attack),
       CARD_NUMBER_FONT_STYLE
     )
+    // Health
     this.cardHealthText = this.scene.add.text(
-      this.cardImage.x + this.cardImage.width + CARD_HEALTH_PADDING.x,
-      this.cardImage.y + this.cardImage.height + CARD_HEALTH_PADDING.y,
+      CARD_HEALTH_POSITION.x,
+      CARD_HEALTH_POSITION.y,
       String(card.health),
       CARD_NUMBER_FONT_STYLE
     )
-    this.cardNameText = this.scene.add.text(
-      0,
-      this.cardImage.y + CARD_NAME_PADDING.y,
-      card.name,
-      card.name.length < 10 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL
-    )
-    this.cardNameText.setX(
-      this.cardImage.x + this.cardImage.width / 2 - this.cardNameText.width / 2 + CARD_NAME_PADDING.x
-    )
+    // Name
+    this.cardNameText = this.scene.add
+      .text(
+        this.cardImage.x,
+        CARD_NAME_POSITION.y,
+        card.name,
+        card.name.length < 10 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL
+      )
+      .setOrigin(0.5)
+
+    console.log(`Cost: {x:${this.cardCostText.x} y:${this.cardCostText.y}}`)
+    console.log(`Attack: {x:${this.cardAttackText.x} y:${this.cardAttackText.y}}`)
+    console.log(`Health: {x:${this.cardHealthText.x} y:${this.cardHealthText.y}}`)
+    console.log(`Name: {x:${this.cardNameText.x} y:${this.cardNameText.y}}`)
 
     cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
     return cardContainer

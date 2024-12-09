@@ -109,19 +109,22 @@ export class BoardCard extends Card {
    * Death Animation: Shrink and fade out
    */
   public death(callback?: () => void): void {
+    this.cardImage.setTint(0xff0000)
+
+    // x and y to shrink towards the center
     this.scene.tweens.add({
       delay: 200,
       targets: this.cardUI,
       scale: 0,
       alpha: 0,
+      x: this.cardUI.width / 2 + this.cardUI.x,
+      y: this.cardUI.height / 2 + this.cardUI.y,
       duration: 500,
       ease: 'Cubic.easeOut',
       onComplete: () => {
         callback?.()
       },
     })
-
-    // this.cardUI.setTint(0xff0000)
   }
 
   /**
