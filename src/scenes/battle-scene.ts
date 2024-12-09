@@ -285,7 +285,9 @@ export class BattleScene extends BaseScene {
 
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN,
-      onEnter: () => {},
+      onEnter: () => {
+        this.checkCanAttack()
+      },
     })
 
     this.stateMachine.addState({

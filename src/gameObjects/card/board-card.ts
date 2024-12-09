@@ -122,6 +122,7 @@ export class BoardCard extends Card {
 
       this.damageTaken()
       opponent.damageTaken()
+      this.alreadyAttacked = true
 
       // Return to position
       this.animateReturnToPosition({ x: startX, y: startY }, () => {
