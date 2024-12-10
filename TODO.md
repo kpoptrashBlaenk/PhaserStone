@@ -48,4 +48,5 @@
 
 ## Opponent
 
-- [ ] Battle AI
+- [x] Battle AI
+- [x] Improved Battle AI
