@@ -22,6 +22,7 @@ import { TurnButton } from '../ui/turn-button'
 import { WarnMessage } from '../ui/warn-message'
 import { Mana } from '../gameObjects/mana'
 import { Hero } from '../gameObjects/hero'
+import { FONT_KEYS } from '../assets/font-keys'
 
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
@@ -158,13 +159,13 @@ export class BattleScene extends BaseScene {
     this.mana.OPPONENT = new Mana(this, TARGET_KEYS.OPPONENT)
   }
 
-    /**
+  /**
    * Sets up heroes
    */
-    private setupHeroes(): void {
-      this.hero.PLAYER = new Hero(this, TARGET_KEYS.PLAYER)
-      this.hero.OPPONENT = new Hero(this, TARGET_KEYS.OPPONENT)
-    }
+  private setupHeroes(): void {
+    this.hero.PLAYER = new Hero(this, TARGET_KEYS.PLAYER)
+    this.hero.OPPONENT = new Hero(this, TARGET_KEYS.OPPONENT)
+  }
 
   /**
    * Sets up state machine
@@ -210,6 +211,9 @@ export class BattleScene extends BaseScene {
     this.board.PLAYER.boardCards.forEach((card) => {
       card.checkCanAttack()
     })
+
+    this.hero.PLAYER.checkCanAttack()
+    this.hero.OPPONENT.checkCanAttack()
   }
 
   /**
@@ -228,7 +232,7 @@ export class BattleScene extends BaseScene {
   /**
    * Track and set attacker and defender minions
    */
-  private chosenBattleMinions: Record<BattleTargetKeys, BoardCard | undefined> = {
+  private chosenBattleMinions: Record<BattleTargetKeys, BoardCard | Hero | undefined> = {
     ATTACKER: undefined,
     DEFENDER: undefined,
   }
@@ -240,6 +244,55 @@ export class BattleScene extends BaseScene {
     board.boardCards.forEach((card) => {
       card.setSummoningSick = false
       card.setAlreadyAttacked = false
+    })
+  }
+
+  /**
+   * Show message with game winner
+   */
+  private endGameMessage(message: string, color: string): void {
+    const screenCenterX = this.scale.width / 2
+    const screenCenterY = this.scale.height / 2
+
+    const textStyle = {
+      fontFamily: FONT_KEYS.HEARTHSTONE,
+      fontSize: '80px',
+      color: color,
+      stroke: '#000000',
+      strokeThickness: 8,
+      align: 'center',
+      shadow: {
+        offsetX: 3,
+        offsetY: 3,
+        color: '#000000',
+        blur: 6,
+        fill: true,
+      },
+    }
+
+    const messageText = this.add
+      .text(screenCenterX, screenCenterY, message, textStyle)
+      .setOrigin(0.5)
+      .setAlpha(0)
+
+    this.tweens.add({
+      targets: messageText,
+      alpha: { from: 0, to: 1 },
+      scale: { from: 0.5, to: 1 },
+      ease: 'Back.Out',
+      duration: 800,
+      onComplete: () => {
+        this.time.delayedCall(2000, () => {
+          this.tweens.add({
+            targets: messageText,
+            alpha: 0,
+            scale: 0.5,
+            ease: 'Back.In',
+            duration: 800,
+            onComplete: () => messageText.destroy(),
+          })
+        })
+      },
     })
   }
 
@@ -282,6 +335,15 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.OPPONENT_TURN_END,
       onEnter: () => {
         this.turnButton.changeTurn()
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.GAME_END,
+      onEnter: (loser: TargetKeys) => {
+        loser === TARGET_KEYS.PLAYER
+          ? this.endGameMessage('Defeat!', '#ff0000')
+          : this.endGameMessage('Victory!', '#00ff00')
       },
     })
 
@@ -407,7 +469,7 @@ export class BattleScene extends BaseScene {
 
     this.stateMachine.addState({
       name: BATTLE_STATES.DEFENDER_MINION_CHOSEN,
-      onEnter: (defenderMinion: BoardCard) => {
+      onEnter: (defenderMinion: BoardCard | Hero) => {
         this.chosenBattleMinions[BATTLE_TARGET_KEYS.DEFENDER] = defenderMinion
         this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
       },
@@ -416,10 +478,13 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.MINION_BATTLE,
       onEnter: () => {
-        if (this.chosenBattleMinions.ATTACKER && this.chosenBattleMinions.DEFENDER) {
-          this.board.PLAYER.depth = 1
-          this.chosenBattleMinions.ATTACKER?.attack(this.chosenBattleMinions.DEFENDER, () => {
-            this.board.PLAYER.depth = 0
+        const attacker = this.chosenBattleMinions.ATTACKER
+        const defender = this.chosenBattleMinions.DEFENDER
+
+        if (attacker && defender) {
+          this.board[attacker.player].depth = 1
+          attacker?.attack(defender, () => {
+            this.board[attacker.player].depth = 0
             this.stateMachine.setState(BATTLE_STATES.AFTER_BATTLE_CHECK)
           })
         }
@@ -442,24 +507,36 @@ export class BattleScene extends BaseScene {
         const defender = this.chosenBattleMinions.DEFENDER
 
         if (attacker && defender) {
-          const deadMinions: BoardCard[] = []
+          const attackerHealth =
+            attacker instanceof BoardCard ? attacker.cardData.health : attacker.currentHealth
+          const defenderHealth =
+            defender instanceof BoardCard ? defender.cardData.health : defender.currentHealth
+          const deadMinions = []
 
           // Check if attacker died
-          if (attacker.cardData.health <= 0) {
+          if (attackerHealth <= 0) {
             deadMinions.push(attacker)
           }
 
           // Check if defender died
-          if (defender.cardData.health <= 0) {
+          if (defenderHealth <= 0) {
             deadMinions.push(defender)
           }
 
           if (deadMinions.length > 0) {
-            deadMinions.forEach((card: BoardCard) => {
+            deadMinions.forEach((card) => {
               card.death(() => {
-                this.board[card.player].cardDies(card, () => {
-                  setState()
-                })
+                if (card instanceof BoardCard) {
+                  this.board[card.player].cardDies(card, () => {
+                    setState()
+                  })
+                  return
+                }
+
+                if (card instanceof Hero) {
+                  this.stateMachine.setState(BATTLE_STATES.GAME_END, card.player)
+                  return
+                }
               })
             })
           } else {

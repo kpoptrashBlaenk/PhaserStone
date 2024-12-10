@@ -57,6 +57,7 @@ export class StateMachine {
     this.currentState = this.states.get(name as BattleStates)
 
     if (this.currentState) {
+      console.log(`[${StateMachine.name}-${this.id}:${methodName}] changed to state: ${name}`)
       this.currentState.onEnter?.(data)
     }
 

@@ -22,6 +22,7 @@ export const UI_ASSET_KEYS = Object.freeze({
   BOARD: 'BOARD',
   MANA_CRYSTAL: 'MANA_CRYSTAL',
   HEALTH: 'HEALTH',
+  ATTACK: 'ATTACK'
 })
 
 export const EFFECT_ASSET_KEYS = Object.freeze({

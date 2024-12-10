@@ -5,6 +5,7 @@ import { BattleScene } from '../../scenes/battle-scene'
 import { EFFECT_ASSET_KEYS } from '../../assets/asset-keys'
 import { HAND_CARD_SIZE, OUTLINE_CONFIG } from './hand-card'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
+import { Hero } from '../hero'
 
 const ZZZ_ANIMATION_POSITION = Object.freeze({
   x: 220,
@@ -35,7 +36,7 @@ export class BoardCard extends Card {
       this.forOpponent()
     }
 
-    this.setSummoningSick = true
+    this.setSummoningSick = false // true
     this.setAlreadyAttacked = false
   }
 
@@ -102,36 +103,72 @@ export class BoardCard extends Card {
   /**
    * Attacking Minion logic
    */
-  public attack(opponent: BoardCard, callback?: () => void): void {
+  public attack(opponent: BoardCard | Hero, callback?: () => void): void {
     const startX = this.cardUI.x
     const startY = this.cardUI.y
-
-    // Calculate difference between enemy card position and player card position to translate the position correctly
-    const targetX = opponent.cardUI.getBounds().centerX - this.cardUI.getBounds().centerX + this.cardUI.x
-    const targetY =
-      opponent.cardUI.getBounds().centerY - this.cardUI.getBounds().centerY + this.cardUI.height / 3
-
     this.cardUI.setDepth(1)
 
-    this.animateAttack({ x: startX, y: startY }, { x: targetX, y: targetY }, () => {
-      const damageDealt = this.card.attack
-      opponent.card.health -= damageDealt
+    // Get target position based on opponent type
+    const target = this.getAttackTargetPosition(opponent)
 
-      const damageTaken = opponent.card.attack
-      this.card.health -= damageTaken
-
+    // Attack animation
+    this.animateAttack({ x: startX, y: startY }, target, () => {
+      // Damage
+      this.applyDamage(opponent)
       this.damageTaken()
       opponent.damageTaken()
 
       this.alreadyAttacked = true
       this.removeBorder()
 
-      // Return to position
+      // Return to the original position
       this.animateReturnToPosition({ x: startX, y: startY }, () => {
         callback?.()
         this.cardUI.setDepth(0)
       })
     })
+  }
+
+  /**
+   * Minion being attacking logic
+   */
+  public damageTaken(): void {
+    this.animateDamageTaken()
+
+    // Set stats and check changes
+    this.setStats()
+  }
+
+  /**
+   * Get target position based on opponent type
+   */
+  private getAttackTargetPosition(opponent: BoardCard | Hero): { x: number; y: number } {
+    const opponentBounds =
+      opponent instanceof BoardCard ? opponent.cardUI.getBounds() : opponent.heroUI.getBounds()
+    const cardBounds = this.cardUI.getBounds()
+
+    const targetX = opponentBounds.centerX - cardBounds.centerX + this.cardUI.x
+    const targetY = opponentBounds.centerY - cardBounds.centerY + this.cardUI.height / 3
+
+    return { x: targetX, y: targetY }
+  }
+
+  /**
+   * Apply damage to the opponent and update health values
+   */
+  private applyDamage(opponent: BoardCard | Hero): void {
+    const damageDealt = this.card.attack
+
+    if (opponent instanceof BoardCard) {
+      opponent.card.health -= damageDealt
+      const damageTaken = opponent.card.attack
+      this.card.health -= damageTaken
+      return
+    }
+
+    if (opponent instanceof Hero) {
+      opponent.currentHealth -= damageDealt
+    }
   }
 
   /**
@@ -182,16 +219,6 @@ export class BoardCard extends Card {
         })
       },
     })
-  }
-
-  /**
-   * Minion being attacking logic
-   */
-  private damageTaken() {
-    this.animateDamageTaken()
-
-    // Set stats and check changes
-    this.setStats()
   }
 
   /**
