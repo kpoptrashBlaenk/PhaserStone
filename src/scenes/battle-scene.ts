@@ -21,6 +21,7 @@ import { BoardCard } from '../gameObjects/card/board-card'
 import { TurnButton } from '../ui/turn-button'
 import { WarnMessage } from '../ui/warn-message'
 import { Mana } from '../gameObjects/mana'
+import { Hero } from '../gameObjects/hero'
 
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
@@ -45,6 +46,10 @@ export class BattleScene extends BaseScene {
     PLAYER: Mana
     OPPONENT: Mana
   } = { PLAYER: null as any, OPPONENT: null as any }
+  private hero: {
+    PLAYER: Hero
+    OPPONENT: Hero
+  } = { PLAYER: null as any, OPPONENT: null as any }
 
   constructor() {
     super({
@@ -65,6 +70,7 @@ export class BattleScene extends BaseScene {
     this.setupPreviews()
     this.setupBoards()
     this.setupMana()
+    this.setupHeroes()
     this.setupStateMachine()
 
     // Game Start
@@ -151,6 +157,14 @@ export class BattleScene extends BaseScene {
     this.mana.PLAYER = new Mana(this, TARGET_KEYS.PLAYER)
     this.mana.OPPONENT = new Mana(this, TARGET_KEYS.OPPONENT)
   }
+
+    /**
+   * Sets up heroes
+   */
+    private setupHeroes(): void {
+      this.hero.PLAYER = new Hero(this, TARGET_KEYS.PLAYER)
+      this.hero.OPPONENT = new Hero(this, TARGET_KEYS.OPPONENT)
+    }
 
   /**
    * Sets up state machine

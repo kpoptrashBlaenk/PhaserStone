@@ -20,7 +20,8 @@ export const DATA_ASSET_KEYS = Object.freeze({
 
 export const UI_ASSET_KEYS = Object.freeze({
   BOARD: 'BOARD',
-  MANA_CRYSTAL: 'MANA_CRYSTAL'
+  MANA_CRYSTAL: 'MANA_CRYSTAL',
+  HEALTH: 'HEALTH',
 })
 
 export const EFFECT_ASSET_KEYS = Object.freeze({
