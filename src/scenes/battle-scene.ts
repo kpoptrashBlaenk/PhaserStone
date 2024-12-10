@@ -262,14 +262,14 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN_END,
       onEnter: () => {
-        this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_START)
+        this.turnButton.changeTurn()
       },
     })
 
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN_END,
       onEnter: () => {
-        this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN_START)
+        this.turnButton.changeTurn()
       },
     })
 
@@ -416,8 +416,8 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.AFTER_BATTLE_CHECK,
       onEnter: () => {
+        // Set turn state
         const setState = () => {
-          // After death animation, go to idle turn
           if (this.turnButton.getCurrentTurn === TARGET_KEYS.PLAYER) {
             this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
           } else {
@@ -427,32 +427,30 @@ export class BattleScene extends BaseScene {
 
         const attacker = this.chosenBattleMinions.ATTACKER
         const defender = this.chosenBattleMinions.DEFENDER
-        let attackerLives = true
-        let defenderLives = true
 
         if (attacker && defender) {
+          const deadMinions: BoardCard[] = []
+
           // Check if attacker died
           if (attacker.cardData.health <= 0) {
-            attacker.death(() => {
-              this.board[attacker.player].cardDies(attacker, () => {
-                setState()
-                attackerLives = false
-              })
-            })
+            deadMinions.push(attacker)
           }
 
           // Check if defender died
           if (defender.cardData.health <= 0) {
-            defender.death(() => {
-              this.board[defender.player].cardDies(defender, () => {
-                setState()
-                defenderLives = false
-              })
-            })
+            deadMinions.push(defender)
           }
 
-          // If attacker and defender live, setState won't trigger after callback, so I call it here
-          if (attackerLives && defenderLives) {
+          if (deadMinions.length > 0) {
+            deadMinions.forEach((card: BoardCard) => {
+              card.death(() => {
+                this.board[card.player].cardDies(card, () => {
+                  setState()
+                })
+              })
+            })
+          } else {
+            // If no minions died, set states immediately
             setState()
           }
         }
