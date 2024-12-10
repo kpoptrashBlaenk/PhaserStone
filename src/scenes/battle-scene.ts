@@ -241,8 +241,6 @@ export class BattleScene extends BaseScene {
       onEnter: () => {
         this.mana.PLAYER.addManaCrystal()
         this.mana.PLAYER.refreshMana()
-        this.checkPlayable()
-        this.checkCanAttack()
         this.resetMinionsAttackState(this.board.OPPONENT)
         this.stateMachine.setState(BATTLE_STATES.PLAYER_DRAW_CARD)
       },
@@ -286,6 +284,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN,
       onEnter: () => {
+        this.checkPlayable()
         this.checkCanAttack()
       },
     })
