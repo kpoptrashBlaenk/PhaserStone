@@ -8,14 +8,12 @@ import { CARD_SCALE, PLAYER_BOARD_BOUNDS } from '../../utils/visual-configs'
 import { setOutline } from '../../common/outline'
 
 export class HandCard extends Card {
-  private owner: TargetKeys
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
   private isPlayable: boolean
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
-    super(scene, card)
-    this.owner = owner
+    super(scene, card, owner)
     this.isPlayable = false
 
     this.handSize()

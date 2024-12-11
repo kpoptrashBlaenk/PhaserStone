@@ -5,10 +5,8 @@ import { BattleScene } from '../../scenes/battle-scene'
 import { PREVIEW_CARD_PADDING } from '../../utils/visual-configs'
 
 export class Preview extends Card {
-  private owner: TargetKeys
-
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
-    super(scene, card)
+    super(scene, card, owner)
     this.owner = owner
 
     this.setPosition()

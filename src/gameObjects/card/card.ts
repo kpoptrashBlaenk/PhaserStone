@@ -1,5 +1,6 @@
 import { checkStats } from '../../common/check-stats'
 import { BattleScene } from '../../scenes/battle-scene'
+import { TargetKeys } from '../../utils/keys'
 import {
   CARD_ATTACK_POSITION,
   CARD_COST_POSITION,
@@ -14,6 +15,7 @@ import { CardData } from './card-keys'
 export class Card {
   protected originalCard: CardData
   protected card: CardData
+  protected owner: TargetKeys
   protected scene: BattleScene
   protected cardContainer: Phaser.GameObjects.Container
   protected cardImage: Phaser.GameObjects.Image
@@ -22,8 +24,9 @@ export class Card {
   protected cardHealthText: Phaser.GameObjects.Text
   protected cardNameText: Phaser.GameObjects.Text
 
-  constructor(scene: BattleScene, card: CardData) {
+  constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     this.scene = scene
+    this.owner = owner
     this.card = Object.assign({}, card)
     this.originalCard = Object.freeze({ ...card }) // Create copy so original won't change when card changes
 

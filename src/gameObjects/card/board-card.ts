@@ -16,14 +16,12 @@ import { setOutline } from '../../common/outline'
 
 export class BoardCard extends Card {
   private alreadyAttacked: boolean
-  private owner: TargetKeys
   private summoningSick: boolean
   private summoningSickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
   private cancelImage: Phaser.GameObjects.Image | undefined
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
-    super(scene, card)
-    this.owner = owner
+    super(scene, card, owner)
 
     this.boardSize()
 
