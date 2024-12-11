@@ -245,6 +245,8 @@ export class BattleScene extends BaseScene {
       card.setSummoningSick = false
       card.setAlreadyAttacked = false
     })
+    this.hero.PLAYER.alreadyAttacked = false
+    this.hero.OPPONENT.alreadyAttacked = false
   }
 
   /**
@@ -450,19 +452,7 @@ export class BattleScene extends BaseScene {
     // Battle States
     this.stateMachine.addState({
       name: BATTLE_STATES.ATTACKER_MINION_CHOSEN,
-      onEnter: (attackerMinion: BoardCard) => {
-        if (attackerMinion.isSummoningSick) {
-          this.warnMessage.showTurnMessage(WARNING_KEYS.SUMMONING_SICK)
-          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
-          return
-        }
-
-        if (attackerMinion.isAlreadyAttacked) {
-          this.warnMessage.showTurnMessage(WARNING_KEYS.ALREADY_ATTACKED)
-          this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
-          return
-        }
-
+      onEnter: (attackerMinion: BoardCard | Hero) => {
         this.chosenBattleMinions[BATTLE_TARGET_KEYS.ATTACKER] = attackerMinion
       },
     })
@@ -482,6 +472,11 @@ export class BattleScene extends BaseScene {
         const defender = this.chosenBattleMinions.DEFENDER
 
         if (attacker && defender) {
+          // Remove cancel if player selected this
+          if (attacker.player === TARGET_KEYS.PLAYER) {
+            attacker.removeCancel()
+          }
+
           this.board[attacker.player].depth = 1
           attacker?.attack(defender, () => {
             this.board[attacker.player].depth = 0

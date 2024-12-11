@@ -41,7 +41,7 @@
 - [x] Give summoning sickness and attack once per turn
 - [ ] Create Battlecry
 - [ ] Give minion portraits
-- [ ] Cancel Attacker Minion Chosen
+- [x] Cancel Attacker Minion Chosen
 
 ## Add Spells
 

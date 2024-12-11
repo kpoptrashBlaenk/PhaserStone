@@ -22,6 +22,7 @@ export class PreloadScene extends BaseScene {
     this.load.image(UI_ASSET_KEYS.MANA_CRYSTAL, `${boardAssetsPath}/mana-crystal.webp`)
     this.load.image(UI_ASSET_KEYS.HEALTH, `${boardAssetsPath}/health.png`)
     this.load.image(UI_ASSET_KEYS.ATTACK, `${boardAssetsPath}/health.png`)
+    this.load.image(UI_ASSET_KEYS.CANCEL, `${boardAssetsPath}/cancel.png`)
 
     // Card Assets
     this.load.image(CARD_ASSETS_KEYS.TEMPLATE, `${cardAssetsPath}/card-template.png`)

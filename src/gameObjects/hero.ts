@@ -1,7 +1,7 @@
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
 import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { BattleScene } from '../scenes/battle-scene'
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
 import { BoardCard } from './card/board-card'
 import { CARD_NUMBER_FONT_STYLE } from './card/card'
 import { OUTLINE_CONFIG } from './card/hand-card'
@@ -29,6 +29,7 @@ export class Hero {
   private attackText: Phaser.GameObjects.Text
   private attackContainer: Phaser.GameObjects.Container
   private cardBorder: OutlinePipelinePlugin | undefined
+  private cancelImage: Phaser.GameObjects.Image | undefined
 
   constructor(scene: BattleScene, owner: TargetKeys) {
     this.scene = scene
@@ -36,7 +37,7 @@ export class Hero {
 
     this.maxHealth = 30
     this.currentHealth = this.maxHealth
-    this.currentAttack = 0
+    this.currentAttack = 1
     this.alreadyAttacked = false
 
     this.createHero()
@@ -89,6 +90,13 @@ export class Hero {
       this.cardBorder.remove(this.heroImage, 'outline')
       this.cardBorder = undefined
     }
+  }
+
+  /**
+   * Remove cancel image when selection cancelled or fulfilled
+   */
+  public removeCancel(): void {
+    this.cancelImage?.setAlpha(0)
   }
 
   /**
@@ -262,10 +270,6 @@ export class Hero {
    */
   private setStats(): void {
     const changeAndCheck = (current: number, original: number, textObject: Phaser.GameObjects.Text): void => {
-      console.log(current)
-      console.log(original)
-      console.log(textObject)
-
       textObject.setText(String(current))
 
       if (current > original) {
@@ -276,9 +280,8 @@ export class Hero {
         textObject.setColor('#FFFFFF')
       }
     }
-
-    changeAndCheck(this.currentHealth, this.maxHealth, this.healthText)
     changeAndCheck(this.currentAttack, 0, this.attackText)
+    changeAndCheck(this.currentHealth, this.maxHealth, this.healthText)
   }
 
   /**
@@ -351,16 +354,33 @@ export class Hero {
     }
 
     if (this.owner === TARGET_KEYS.PLAYER) {
+      // Add cancel image for cancelling selection
+      this.cancelImage = this.scene.add.image(0, 0, UI_ASSET_KEYS.CANCEL).setScale(0.5).setAlpha(0)
+      this.heroContainer.add(this.cancelImage)
+
+      // Click
       this.heroContainer.on('pointerup', () => {
+        // If player turn and attack > 0, then check if already attacked then choose this for battle
         if (
           this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN &&
           this.currentAttack > 0
         ) {
+          if (this.alreadyAttacked) {
+            this.scene.warnMessage.showTurnMessage(WARNING_KEYS.ALREADY_ATTACKED)
+            return
+          }
+
           this.scene.stateMachine.setState(BATTLE_STATES.ATTACKER_MINION_CHOSEN, this)
+          this.cancelImage?.setAlpha(1)
+          return
+        }
+
+        // If attacker chosen state and this is selected, cancel
+        if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
+          this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN, this)
+          this.removeCancel()
         }
       })
-
-      return
     }
   }
 }

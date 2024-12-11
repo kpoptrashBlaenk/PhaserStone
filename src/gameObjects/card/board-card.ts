@@ -1,8 +1,8 @@
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../../utils/keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
-import { EFFECT_ASSET_KEYS } from '../../assets/asset-keys'
+import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../../assets/asset-keys'
 import { HAND_CARD_SIZE, OUTLINE_CONFIG } from './hand-card'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
 import { Hero } from '../hero'
@@ -13,11 +13,12 @@ const ZZZ_ANIMATION_POSITION = Object.freeze({
 })
 
 export class BoardCard extends Card {
+  private alreadyAttacked: boolean
   private owner: TargetKeys
   private summoningSick: boolean
-  private alreadyAttacked: boolean
   private summoningSickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
   private cardBorder: OutlinePipelinePlugin | undefined
+  private cancelImage: Phaser.GameObjects.Image | undefined
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card)
@@ -74,6 +75,13 @@ export class BoardCard extends Card {
    */
   public set setAlreadyAttacked(value: boolean) {
     this.alreadyAttacked = value
+  }
+
+  /**
+   * Remove cancel image when selection cancelled or fulfilled
+   */
+  public removeCancel(): void {
+    this.cancelImage?.setAlpha(0)
   }
 
   /**
@@ -272,9 +280,38 @@ export class BoardCard extends Card {
    * Add Click
    */
   private forPlayer(): void {
+    // Add cancel image for cancelling selection
+    this.cancelImage = this.scene.add
+      .image(
+        this.cardUI.width / 2 / this.cardUI.scale,
+        this.cardUI.height / 2 / this.cardUI.scale,
+        UI_ASSET_KEYS.CANCEL
+      )
+      .setScale(0.8)
+      .setAlpha(0)
+    this.cardUI.add(this.cancelImage)
+
     this.cardImage.on('pointerup', () => {
+      // If player turn, check if not sick and not attacked, choose this to attack
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN) {
+        if (this.summoningSick) {
+          this.scene.warnMessage.showTurnMessage(WARNING_KEYS.SUMMONING_SICK)
+          return
+        }
+        if (this.alreadyAttacked) {
+          this.scene.warnMessage.showTurnMessage(WARNING_KEYS.ALREADY_ATTACKED)
+          return
+        }
+
         this.scene.stateMachine.setState(BATTLE_STATES.ATTACKER_MINION_CHOSEN, this)
+        this.cancelImage?.setAlpha(1)
+        return
+      }
+
+      // If choose enemy and this selected, cancel
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
+        this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN, this)
+        this.removeCancel()
       }
     })
   }
