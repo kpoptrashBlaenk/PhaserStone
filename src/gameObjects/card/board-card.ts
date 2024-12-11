@@ -3,14 +3,17 @@ import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
 import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../../assets/asset-keys'
-import { HAND_CARD_SIZE, OUTLINE_CONFIG } from './hand-card'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
 import { Hero } from '../hero'
-
-const ZZZ_ANIMATION_POSITION = Object.freeze({
-  x: 220,
-  y: 90,
-})
+import {
+  ATTACK_CONFIGS,
+  CARD_SCALE,
+  DAMAGE_CONFIGS,
+  DEATH_CONFIGS,
+  OUTLINE_CONFIG,
+  SUMMONING_SICK_CONFIGS,
+  ZZZ_ANIMATION_POSITION,
+} from '../../utils/visual-configs'
 
 export class BoardCard extends Card {
   private alreadyAttacked: boolean
@@ -187,14 +190,14 @@ export class BoardCard extends Card {
 
     // x and y to shrink towards the center
     this.scene.tweens.add({
-      delay: 200,
+      delay: DEATH_CONFIGS.DELAY,
       targets: this.cardUI,
-      scale: 0,
-      alpha: 0,
+      scale: DEATH_CONFIGS.SCALE,
+      alpha: DEATH_CONFIGS.ALPHA,
       x: this.cardUI.width / 2 + this.cardUI.x,
       y: this.cardUI.height / 2 + this.cardUI.y,
-      duration: 500,
-      ease: 'Cubic.easeOut',
+      duration: DEATH_CONFIGS.DURATION,
+      ease: DEATH_CONFIGS.EASE,
       onComplete: () => {
         callback?.()
       },
@@ -212,17 +215,17 @@ export class BoardCard extends Card {
     // Card takes a step back
     this.scene.tweens.add({
       targets: this.cardUI,
-      y: startPosition.y + (this.owner === TARGET_KEYS.PLAYER ? 10 : -10),
-      duration: 150,
-      ease: 'Sine.easeOut',
+      y: startPosition.y + ATTACK_CONFIGS.STEP_BACK.Y[this.owner],
+      duration: ATTACK_CONFIGS.STEP_BACK.DURATION,
+      ease: ATTACK_CONFIGS.STEP_BACK.EASE,
       onComplete: () => {
         // Attack enemy
         this.scene.tweens.add({
           targets: this.cardUI,
           x: targetPosition.x,
           y: targetPosition.y,
-          duration: 200,
-          ease: 'Quad.easeOut',
+          duration: ATTACK_CONFIGS.ATTACK.DURATION,
+          ease: ATTACK_CONFIGS.ATTACK.EASE,
           onComplete: () => callback?.(),
         })
       },
@@ -236,10 +239,10 @@ export class BoardCard extends Card {
     // Flash effect
     this.scene.tweens.add({
       targets: this.cardUI,
-      alpha: 0,
-      duration: 50,
-      yoyo: true,
-      repeat: 2,
+      alpha: DAMAGE_CONFIGS.FLASH.ALPHA,
+      duration: DAMAGE_CONFIGS.FLASH.DURATION,
+      yoyo: DAMAGE_CONFIGS.FLASH.YOYO,
+      repeat: DAMAGE_CONFIGS.FLASH.REPEAT,
     })
 
     // Particle effect
@@ -248,16 +251,16 @@ export class BoardCard extends Card {
       this.cardUI.getBounds().centerY,
       EFFECT_ASSET_KEYS.SPARK,
       {
-        scale: 0.075,
-        speed: 100,
-        lifespan: 500,
-        gravityY: 100,
-        duration: 50,
+        scale: DAMAGE_CONFIGS.SPARK.SCALE,
+        speed: DAMAGE_CONFIGS.SPARK.SPEED,
+        lifespan: DAMAGE_CONFIGS.SPARK.LIFESPAN,
+        gravityY: DAMAGE_CONFIGS.SPARK.GRAVITY_Y,
+        duration: DAMAGE_CONFIGS.SPARK.DURATION,
       }
     )
 
     // Camera shake
-    this.scene.cameras.main.shake(100, 0.01)
+    this.scene.cameras.main.shake(DAMAGE_CONFIGS.CAMERA.DURATION, DAMAGE_CONFIGS.CAMERA.INTENSITY)
   }
 
   /**
@@ -268,8 +271,8 @@ export class BoardCard extends Card {
       targets: this.cardUI,
       x: position.x,
       y: position.y,
-      duration: 200,
-      ease: 'Quad.easeIn',
+      duration: ATTACK_CONFIGS.RETURN.DURATION,
+      ease: ATTACK_CONFIGS.RETURN.EASE,
       onComplete: () => {
         callback?.()
       },
@@ -344,7 +347,7 @@ export class BoardCard extends Card {
    * Resize Card to fit in hand
    */
   private boardSize(): void {
-    this.cardContainer.setScale(HAND_CARD_SIZE.scale)
+    this.cardContainer.setScale(CARD_SCALE)
     this.cardContainer.setSize(
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY
@@ -361,14 +364,14 @@ export class BoardCard extends Card {
         ZZZ_ANIMATION_POSITION.y,
         EFFECT_ASSET_KEYS.Z,
         {
-          scale: { start: 0.2, end: 0 },
-          speed: 50,
-          lifespan: 2000,
-          frequency: 1000,
-          angle: { min: -90, max: -90 },
-          gravityY: 10,
-          accelerationX: 50,
-          accelerationY: -50,
+          scale: { start: SUMMONING_SICK_CONFIGS.SCALE.START, end: SUMMONING_SICK_CONFIGS.SCALE.END },
+          speed: SUMMONING_SICK_CONFIGS.SPEED,
+          lifespan: SUMMONING_SICK_CONFIGS.LIFESPAN,
+          frequency: SUMMONING_SICK_CONFIGS.FREQUENCY,
+          angle: { min: SUMMONING_SICK_CONFIGS.ANGLE.MIN, max: SUMMONING_SICK_CONFIGS.ANGLE.MAX },
+          gravityY: SUMMONING_SICK_CONFIGS.GRAVITY_Y,
+          accelerationX: SUMMONING_SICK_CONFIGS.ACCELERATION_X,
+          accelerationY: SUMMONING_SICK_CONFIGS.ACCELERATION_Y,
         }
       )
 

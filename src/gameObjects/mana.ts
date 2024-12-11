@@ -1,22 +1,12 @@
 import { UI_ASSET_KEYS } from '../assets/asset-keys'
+import {
+  CARD_NUMBER_FONT_STYLE,
+  MANA_CONFIGS,
+  MANA_CRYSTAL_POSITION,
+  MANA_TEXT_POSITION,
+} from '../utils/visual-configs'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { CARD_NUMBER_FONT_STYLE } from './card/card'
-
-const MANA_TEXT_POSITION = Object.freeze({
-  PLAYER: {
-    x: 1300,
-    y: 910,
-  },
-  OPPONENT: {
-    x: 1265,
-    y: 80,
-  },
-})
-
-const MANA_CRYSTAL_POSITION = Object.freeze({
-  x: 1370,
-  y: 910,
-})
+import { MAX_MANA } from '../utils/configs'
 
 export class Mana {
   private scene: Phaser.Scene
@@ -32,7 +22,7 @@ export class Mana {
     this.owner = owner
     this.currentMana = 0
     this.maxMana = 0
-    this.manaLimit = 10
+    this.manaLimit = MAX_MANA
 
     this.createManaCrystals()
   }
@@ -83,7 +73,7 @@ export class Mana {
       let index = 0
       this.manaContainer?.iterate((manaCrystal: Phaser.GameObjects.Image) => {
         if (index >= this.currentMana) {
-          manaCrystal.setTint(0x555555)
+          manaCrystal.setTint(MANA_CONFIGS.TINT_EMPTY)
         }
         index++
       })
@@ -98,7 +88,7 @@ export class Mana {
     this.manaText.setText(`${this.currentMana}/${this.maxMana}`)
 
     this.manaContainer?.iterate((manaCrystal: Phaser.GameObjects.Image) => {
-      manaCrystal.setTint(0xffffff)
+      manaCrystal.setTint(MANA_CONFIGS.TINT_FULL)
     })
   }
 
@@ -117,7 +107,7 @@ export class Mana {
       .setScale(0.5)
 
     if (this.owner === TARGET_KEYS.PLAYER) {
-      this.manaContainer = this.scene.add.container(1370, 910)
+      this.manaContainer = this.scene.add.container(MANA_CRYSTAL_POSITION.x, MANA_CRYSTAL_POSITION.y)
     }
   }
 }

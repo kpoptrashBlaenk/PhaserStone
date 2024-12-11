@@ -1,40 +1,15 @@
-import { FONT_KEYS } from '../../assets/font-keys'
 import { BattleScene } from '../../scenes/battle-scene'
+import {
+  CARD_ATTACK_POSITION,
+  CARD_COST_POSITION,
+  CARD_HEALTH_POSITION,
+  CARD_NAME_FONT_STYLE_BIG,
+  CARD_NAME_FONT_STYLE_SMALL,
+  CARD_NAME_POSITION,
+  CARD_NUMBER_FONT_STYLE,
+  CARD_TEXT_COLOR,
+} from '../../utils/visual-configs'
 import { CardData } from './card-keys'
-
-export const CARD_NUMBER_FONT_STYLE = Object.freeze({
-  fontFamily: FONT_KEYS.HEARTHSTONE,
-  fontSize: '48px',
-  fontStyle: 'bold',
-  stroke: '#00000',
-  strokeThickness: 4,
-})
-
-const CARD_NAME_FONT_STYLE_BIG = Object.freeze({
-  ...CARD_NUMBER_FONT_STYLE,
-  fontSize: '26px',
-})
-
-const CARD_NAME_FONT_STYLE_SMALL = Object.freeze({
-  ...CARD_NUMBER_FONT_STYLE,
-  fontSize: '18px',
-})
-
-const CARD_COST_POSITION = {
-  x: 23,
-  y: 30,
-}
-const CARD_ATTACK_POSITION = {
-  x: 27,
-  y: 322,
-}
-const CARD_HEALTH_POSITION = {
-  x: 218,
-  y: 325,
-}
-const CARD_NAME_POSITION = {
-  y: 215,
-}
 
 export class Card {
   protected originalCard: CardData
@@ -90,11 +65,11 @@ export class Card {
       textObject.setText(String(current))
 
       if (current > original) {
-        textObject.setColor('#00FF00')
+        textObject.setColor(CARD_TEXT_COLOR.RED)
       } else if (current < original) {
-        textObject.setColor('#FF0000')
+        textObject.setColor(CARD_TEXT_COLOR.GREEN)
       } else {
-        textObject.setColor('#FFFFFF')
+        textObject.setColor(CARD_TEXT_COLOR.WHITE)
       }
     }
 

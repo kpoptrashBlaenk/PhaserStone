@@ -5,26 +5,7 @@ import { Coordinate } from '../../types/typedef'
 import { CARD_ASSETS_KEYS, CardAssetKeys } from '../../assets/asset-keys'
 import { BattleScene } from '../../scenes/battle-scene'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
-
-export const PLAYER_BOARD_BOUNDS = Object.freeze({
-  startX: 449,
-  endX: 1599,
-  startY: 487,
-  endY: 637,
-})
-
-export const HAND_CARD_SIZE = Object.freeze({
-  scale: 0.36,
-  height: 147.88,
-  width: 97.2,
-})
-
-export const OUTLINE_CONFIG = Object.freeze({
-  thickness: 3,
-  outlineColor: 0x00ff00,
-  quality: 0.1,
-  name: 'outline',
-})
+import { CARD_SCALE, OUTLINE_CONFIG, PLAYER_BOARD_BOUNDS } from '../../utils/visual-configs'
 
 export class HandCard extends Card {
   private owner: TargetKeys
@@ -176,7 +157,7 @@ export class HandCard extends Card {
    * Resize Card to fit in hand
    */
   private handSize(): void {
-    this.cardContainer.setScale(HAND_CARD_SIZE.scale)
+    this.cardContainer.setScale(CARD_SCALE)
     this.cardContainer.setSize(
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY

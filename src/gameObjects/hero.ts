@@ -3,18 +3,16 @@ import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { BattleScene } from '../scenes/battle-scene'
 import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
 import { BoardCard } from './card/board-card'
-import { CARD_NUMBER_FONT_STYLE } from './card/card'
-import { OUTLINE_CONFIG } from './card/hand-card'
-
-const HERO_CONFIGS = {
-  width: 150,
-  height: 150,
-  color: 0x0000ff,
-  y: {
-    PLAYER: 770,
-    OPPONENT: 210,
-  },
-}
+import {
+  ATTACK_CONFIGS,
+  CARD_NUMBER_FONT_STYLE,
+  CARD_TEXT_COLOR,
+  DEATH_CONFIGS,
+  HERO_CONFIGS,
+  OUTLINE_CONFIG,
+} from '../utils/visual-configs'
+import { MAX_HEALTH } from '../utils/configs'
+import { DAMAGE_CONFIGS } from '../utils/visual-configs'
 
 export class Hero {
   public alreadyAttacked: boolean
@@ -35,7 +33,7 @@ export class Hero {
     this.scene = scene
     this.owner = owner
 
-    this.maxHealth = 30
+    this.maxHealth = MAX_HEALTH
     this.currentHealth = this.maxHealth
     this.currentAttack = 0
     this.alreadyAttacked = false
@@ -103,16 +101,16 @@ export class Hero {
    * Death Animation: Shrink and fade out
    */
   public death(callback?: () => void): void {
-    this.heroImage.setTint(0xff0000)
+    this.heroImage.setTint(DEATH_CONFIGS.TINT)
 
     // Shrink
     this.scene.tweens.add({
-      delay: 200,
+      delay: DEATH_CONFIGS.DELAY,
       targets: this.heroContainer,
-      scale: 0,
-      alpha: 0,
-      duration: 500,
-      ease: 'Cubic.easeOut',
+      scale: DEATH_CONFIGS.SCALE,
+      alpha: DEATH_CONFIGS.ALPHA,
+      duration: DEATH_CONFIGS.DURATION,
+      ease: DEATH_CONFIGS.EASE,
       onComplete: () => {
         callback?.()
       },
@@ -182,17 +180,17 @@ export class Hero {
     // Card takes a step back
     this.scene.tweens.add({
       targets: this.heroContainer,
-      y: startPosition.y + (this.owner === TARGET_KEYS.PLAYER ? 10 : -10),
-      duration: 150,
-      ease: 'Sine.easeOut',
+      y: startPosition.y + ATTACK_CONFIGS.STEP_BACK.Y[this.owner],
+      duration: ATTACK_CONFIGS.STEP_BACK.DURATION,
+      ease: ATTACK_CONFIGS.STEP_BACK.EASE,
       onComplete: () => {
         // Attack enemy
         this.scene.tweens.add({
           targets: this.heroContainer,
           x: targetPosition.x,
           y: targetPosition.y,
-          duration: 200,
-          ease: 'Quad.easeOut',
+          duration: ATTACK_CONFIGS.ATTACK.DURATION,
+          ease: ATTACK_CONFIGS.ATTACK.EASE,
           onComplete: () => callback?.(),
         })
       },
@@ -225,8 +223,8 @@ export class Hero {
       targets: this.heroContainer,
       x: position.x,
       y: position.y,
-      duration: 200,
-      ease: 'Quad.easeIn',
+      duration: ATTACK_CONFIGS.RETURN.DURATION,
+      ease: ATTACK_CONFIGS.RETURN.EASE,
       onComplete: () => {
         callback?.()
       },
@@ -240,10 +238,10 @@ export class Hero {
     // Flash effect
     this.scene.tweens.add({
       targets: this.heroContainer,
-      alpha: 0,
-      duration: 50,
-      yoyo: true,
-      repeat: 2,
+      alpha: DAMAGE_CONFIGS.FLASH.ALPHA,
+      duration: DAMAGE_CONFIGS.FLASH.DURATION,
+      yoyo: DAMAGE_CONFIGS.FLASH.YOYO,
+      repeat: DAMAGE_CONFIGS.FLASH.REPEAT,
     })
 
     // Particle effect
@@ -252,16 +250,16 @@ export class Hero {
       this.heroContainer.getBounds().centerY,
       EFFECT_ASSET_KEYS.SPARK,
       {
-        scale: 0.075,
-        speed: 100,
-        lifespan: 500,
-        gravityY: 100,
-        duration: 50,
+        scale: DAMAGE_CONFIGS.SPARK.SCALE,
+        speed: DAMAGE_CONFIGS.SPARK.SPEED,
+        lifespan: DAMAGE_CONFIGS.SPARK.LIFESPAN,
+        gravityY: DAMAGE_CONFIGS.SPARK.GRAVITY_Y,
+        duration: DAMAGE_CONFIGS.SPARK.DURATION,
       }
     )
 
     // Camera shake
-    this.scene.cameras.main.shake(100, 0.01)
+    this.scene.cameras.main.shake(DAMAGE_CONFIGS.CAMERA.DURATION, DAMAGE_CONFIGS.CAMERA.INTENSITY)
   }
 
   /**
@@ -272,11 +270,11 @@ export class Hero {
       textObject.setText(String(current))
 
       if (current > original) {
-        textObject.setColor('#00FF00')
+        textObject.setColor(CARD_TEXT_COLOR.GREEN)
       } else if (current < original) {
-        textObject.setColor('#FF0000')
+        textObject.setColor(CARD_TEXT_COLOR.RED)
       } else {
-        textObject.setColor('#FFFFFF')
+        textObject.setColor(CARD_TEXT_COLOR.WHITE)
       }
     }
     changeAndCheck(this.currentAttack, 0, this.attackText)

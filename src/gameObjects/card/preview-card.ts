@@ -2,9 +2,7 @@ import { TARGET_KEYS, TargetKeys } from '../../utils/keys'
 import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
-
-// const CARD_NAME_PADDING_X = 10
-const PREVIEW_CARD_PADDING = 20
+import { PREVIEW_CARD_PADDING } from '../../utils/visual-configs'
 
 export class Preview extends Card {
   private owner: TargetKeys

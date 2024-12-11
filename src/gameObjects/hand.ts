@@ -1,8 +1,8 @@
 import { BattleScene } from '../scenes/battle-scene'
+import { BOARD_POSITION_Y, HAND_CARD_SIZE, HAND_CONFIGS } from '../utils/visual-configs'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { repositionContainer, resizeContainer } from '../utils/resize-container'
-import { BOARD_POSITION_Y } from './board'
-import { HAND_CARD_SIZE, HandCard } from './card/hand-card'
+import { HandCard } from './card/hand-card'
 
 export class Hand {
   private scene: BattleScene
@@ -53,8 +53,8 @@ export class Hand {
       targets: card.cardUI,
       x: newPositionX,
       y: newPositionY,
-      duration: 500,
-      ease: 'Sine.easeOut',
+      duration: HAND_CONFIGS.DECK_TO_HAND.DURATION,
+      ease: HAND_CONFIGS.DECK_TO_HAND.EASE,
       onComplete: () => {
         this.resizeHandContainer()
         callback()
@@ -91,8 +91,8 @@ export class Hand {
       targets: card.cardUI,
       x: this.scene.scale.width / 2 - card.cardUI.getBounds().x + card.cardUI.x,
       y: BOARD_POSITION_Y.OPPONENT - card.cardUI.getBounds().y + card.cardUI.y,
-      duration: 500,
-      ease: 'Sine.easeOut',
+      duration: HAND_CONFIGS.HAND_TO_BOARD.DURATION,
+      ease: HAND_CONFIGS.HAND_TO_BOARD.EASE,
       onComplete: () => {
         callback?.()
       },

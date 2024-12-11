@@ -1,14 +1,9 @@
 import { BattleScene } from '../scenes/battle-scene'
+import { BOARD_POSITION_Y, HAND_CARD_SIZE, BOARD_CONFIGS, RESIZE_CONFIGS } from '../utils/visual-configs'
 import { TargetKeys } from '../utils/keys'
 import { repositionContainer, resizeContainer } from '../utils/resize-container'
 import { BoardCard } from './card/board-card'
-import { CardData } from './card/card-keys'
-import { HAND_CARD_SIZE, HandCard } from './card/hand-card'
-
-export const BOARD_POSITION_Y = {
-  PLAYER: 500,
-  OPPONENT: 330,
-}
+import { HandCard } from './card/hand-card'
 
 export class Board {
   private owner: TargetKeys
@@ -75,8 +70,8 @@ export class Board {
       targets: cardPlayed.cardUI,
       x: newPositionX,
       y: newPositionY,
-      duration: 250,
-      ease: 'Sine.easeOut',
+      duration: BOARD_CONFIGS.HAND_TO_BOARD.DURATION,
+      ease: BOARD_CONFIGS.HAND_TO_BOARD.EASE,
       onComplete: () => {
         this.resizeBoardContainer()
       },
@@ -96,7 +91,7 @@ export class Board {
     })
 
     // Because callback needs to be passed through too many callbacks
-    setTimeout(() => callback?.(), 500)
+    setTimeout(() => callback?.(), RESIZE_CONFIGS.DURATION)
   }
 
   /**

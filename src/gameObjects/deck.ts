@@ -1,16 +1,9 @@
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { HAND_CARD_SIZE, HandCard } from './card/hand-card'
+import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { HandCard } from './card/hand-card'
 import { CardData } from './card/card-keys'
 import { BattleScene } from '../scenes/battle-scene'
 import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
-
-const DECK_POSITION = Object.freeze({
-  x: 1635,
-  y: {
-    PLAYER: 535,
-    OPPONENT: 275,
-  },
-})
+import { CARD_SCALE, DECK_CONFIGS, DECK_MAX_VISIBLE, DECK_POSITION } from '../utils/visual-configs'
 
 export class Deck {
   private scene: BattleScene
@@ -41,17 +34,18 @@ export class Deck {
     if (this.owner === TARGET_KEYS.PLAYER) {
       this.scene.tweens.add({
         targets: drawnCard.cardUI,
-        scaleX: 0,
-        duration: 300,
-        ease: 'Cubic.easeIn',
+        scaleX: DECK_CONFIGS.FLIP.SCALE_X,
+        duration: DECK_CONFIGS.FLIP.DURATION,
+        ease: DECK_CONFIGS.FLIP.EASE,
         onComplete: () => {
           drawnCard.cardImageAsset = drawnCard.cardData.assetKey
           drawnCard.showFrontSide()
+
           this.scene.tweens.add({
             targets: drawnCard.cardUI,
-            scaleX: HAND_CARD_SIZE.scale,
-            duration: 300,
-            ease: 'Cubic.easeOut',
+            scaleX: DECK_CONFIGS.DECK_TO_HAND.SCALE_X,
+            duration: DECK_CONFIGS.DECK_TO_HAND.DURATION,
+            ease: DECK_CONFIGS.DECK_TO_HAND.EASE,
             onComplete: () => {
               callback(drawnCard)
             },
@@ -73,7 +67,7 @@ export class Deck {
     for (let i = 0; i < this.deck.length; i++) {
       const card = this.deck[i]
       card.cardImageAsset = CARD_ASSETS_KEYS.CARD_BACK
-      card.cardUI.setPosition(0, Math.max(-i, -5) * cardSpacing) // Max 5 cards visible on deck stack
+      card.cardUI.setPosition(0, Math.max(-i, -DECK_MAX_VISIBLE) * cardSpacing) // Max 5 cards visible on deck stack
       card.showCard()
       deckContainer.add(card.cardUI)
     }
