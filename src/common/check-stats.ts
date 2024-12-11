@@ -4,9 +4,9 @@ export function checkStats(current: number, original: number, textObject: Phaser
   textObject.setText(String(current))
 
   if (current > original) {
-    textObject.setColor(CARD_TEXT_COLOR.RED)
-  } else if (current < original) {
     textObject.setColor(CARD_TEXT_COLOR.GREEN)
+  } else if (current < original) {
+    textObject.setColor(CARD_TEXT_COLOR.RED)
   } else {
     textObject.setColor(CARD_TEXT_COLOR.WHITE)
   }

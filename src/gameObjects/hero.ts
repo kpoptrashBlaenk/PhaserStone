@@ -33,7 +33,44 @@ export class Hero {
     this.alreadyAttacked = false
 
     this.createHero()
-    this.addClick()
+    if (this.owner === TARGET_KEYS.PLAYER) {
+      this.forPlayer()
+    } else {
+      this.forOpponent()
+    }
+  }
+
+  public get attackAmount(): number {
+    return this.currentAttack
+  }
+
+  public get healthAmount(): number {
+    return this.currentHealth
+  }
+
+  public set setAttackAmount(attack: number) {
+    this.currentAttack = attack
+    checkStats(this.currentAttack, 0, this.attackText)
+  }
+
+  public set setHealthAmount(health: number) {
+    this.currentHealth = health
+    checkStats(this.currentHealth, this.maxHealth, this.healthText)
+  }
+
+  public set setAlreadyAttacked(attacked: boolean) {
+    this.alreadyAttacked = attacked
+    if (attacked) {
+      this.removeOutline()
+    }
+  }
+
+  public get container(): Phaser.GameObjects.Container {
+    return this.heroContainer
+  }
+
+  public get image(): Phaser.GameObjects.Image {
+    return this.heroImage
   }
 
   /**
@@ -77,179 +114,6 @@ export class Hero {
    */
   public removeCancel(): void {
     this.cancelImage?.setAlpha(0)
-  }
-
-  /**
-   * Death Animation: Shrink and fade out
-   */
-  public death(callback?: () => void): void {
-    this.heroImage.setTint(DEATH_CONFIGS.TINT)
-
-    // Shrink
-    this.scene.tweens.add({
-      delay: DEATH_CONFIGS.DELAY,
-      targets: this.heroContainer,
-      scale: DEATH_CONFIGS.SCALE,
-      alpha: DEATH_CONFIGS.ALPHA,
-      duration: DEATH_CONFIGS.DURATION,
-      ease: DEATH_CONFIGS.EASE,
-      onComplete: () => {
-        callback?.()
-      },
-    })
-  }
-
-  /**
-   * Minion being attacking logic
-   */
-  public damageTaken(): void {
-    this.animateDamageTaken()
-
-    // Set stats and check changes
-    this.setStats()
-  }
-
-  /**
-   * Attacking Hero logic
-   */
-  public attack(opponent: BoardCard | Hero, callback?: () => void): void {
-    const startX = this.heroContainer.x
-    const startY = this.heroContainer.y
-    this.heroContainer.setDepth(1)
-
-    // Get target position based on opponent type
-    const target = this.getAttackTargetPosition(opponent)
-
-    // Attack animation
-    this.animateAttack({ x: startX, y: startY }, target, () => {
-      // Damage
-      this.applyDamage(opponent)
-      this.damageTaken()
-      opponent.damageTaken()
-
-      this.alreadyAttacked = true
-      this.removeOutline()
-
-      // Return to the original position
-      this.animateReturnToPosition({ x: startX, y: startY }, () => {
-        callback?.()
-        this.heroContainer.setDepth(0)
-      })
-    })
-  }
-
-  /**
-   * Get target position based on opponent type
-   */
-  private getAttackTargetPosition(opponent: BoardCard | Hero): { x: number; y: number } {
-    const opponentBounds =
-      opponent instanceof BoardCard ? opponent.cardUI.getBounds() : opponent.heroUI.getBounds()
-
-    const targetX = opponentBounds.centerX
-    const targetY = opponentBounds.centerY + this.heroContainer.height / 3
-
-    return { x: targetX, y: targetY }
-  }
-
-  /**
-   * Animates taking a step back and crashing into defending minion
-   */
-  private animateAttack(
-    startPosition: { x: number; y: number },
-    targetPosition: { x: number; y: number },
-    callback?: () => void
-  ): void {
-    // Card takes a step back
-    this.scene.tweens.add({
-      targets: this.heroContainer,
-      y: startPosition.y + ATTACK_CONFIGS.STEP_BACK.Y[this.owner],
-      duration: ATTACK_CONFIGS.STEP_BACK.DURATION,
-      ease: ATTACK_CONFIGS.STEP_BACK.EASE,
-      onComplete: () => {
-        // Attack enemy
-        this.scene.tweens.add({
-          targets: this.heroContainer,
-          x: targetPosition.x,
-          y: targetPosition.y,
-          duration: ATTACK_CONFIGS.ATTACK.DURATION,
-          ease: ATTACK_CONFIGS.ATTACK.EASE,
-          onComplete: () => callback?.(),
-        })
-      },
-    })
-  }
-
-  /**
-   * Apply damage to the opponent and update health values
-   */
-  private applyDamage(opponent: BoardCard | Hero): void {
-    const damageDealt = this.currentAttack
-
-    if (opponent instanceof BoardCard) {
-      opponent.cardData.health -= damageDealt
-      const damageTaken = opponent.cardData.attack
-      this.currentHealth -= damageTaken
-      return
-    }
-
-    if (opponent instanceof Hero) {
-      opponent.currentHealth -= damageDealt
-    }
-  }
-
-  /**
-   * Returns minion to original position
-   */
-  private animateReturnToPosition(position: { x: number; y: number }, callback?: () => void): void {
-    this.scene.tweens.add({
-      targets: this.heroContainer,
-      x: position.x,
-      y: position.y,
-      duration: ATTACK_CONFIGS.RETURN.DURATION,
-      ease: ATTACK_CONFIGS.RETURN.EASE,
-      onComplete: () => {
-        callback?.()
-      },
-    })
-  }
-
-  /**
-   * Flash, Particles and Camera Shake when damage taken
-   */
-  private animateDamageTaken(): void {
-    // Flash effect
-    this.scene.tweens.add({
-      targets: this.heroContainer,
-      alpha: DAMAGE_CONFIGS.FLASH.ALPHA,
-      duration: DAMAGE_CONFIGS.FLASH.DURATION,
-      yoyo: DAMAGE_CONFIGS.FLASH.YOYO,
-      repeat: DAMAGE_CONFIGS.FLASH.REPEAT,
-    })
-
-    // Particle effect
-    this.scene.add.particles(
-      this.heroContainer.getBounds().centerX,
-      this.heroContainer.getBounds().centerY,
-      EFFECT_ASSET_KEYS.SPARK,
-      {
-        scale: DAMAGE_CONFIGS.SPARK.SCALE,
-        speed: DAMAGE_CONFIGS.SPARK.SPEED,
-        lifespan: DAMAGE_CONFIGS.SPARK.LIFESPAN,
-        gravityY: DAMAGE_CONFIGS.SPARK.GRAVITY_Y,
-        duration: DAMAGE_CONFIGS.SPARK.DURATION,
-      }
-    )
-
-    // Camera shake
-    this.scene.cameras.main.shake(DAMAGE_CONFIGS.CAMERA.DURATION, DAMAGE_CONFIGS.CAMERA.INTENSITY)
-  }
-
-  /**
-   * Sets stats then check for changes and apply colors
-   */
-  private setStats(): void {
-    checkStats(this.currentAttack, 0, this.attackText)
-    checkStats(this.currentHealth, this.maxHealth, this.healthText)
   }
 
   /**
@@ -304,51 +168,43 @@ export class Hero {
     this.healthText = healthText
     this.attackText = healthText
     this.attackContainer = attackContainer
-    this.attack
   }
 
   /**
    * Enemy clickable for attack
    */
-  private addClick(): void {
-    if (this.owner === TARGET_KEYS.OPPONENT) {
-      this.heroContainer.on('pointerup', () => {
-        if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
-          this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, this)
-        }
-      })
+  private forPlayer(): void {
+    // Add cancel image for cancelling selection
+    this.cancelImage = this.scene.battleManager.addCancelImage(0, 0, 0.5)
+    this.heroContainer.add(this.cancelImage)
 
-      return
-    }
-
-    if (this.owner === TARGET_KEYS.PLAYER) {
-      // Add cancel image for cancelling selection
-      this.cancelImage = this.scene.add.image(0, 0, UI_ASSET_KEYS.CANCEL).setScale(0.5).setAlpha(0)
-      this.heroContainer.add(this.cancelImage)
-
-      // Click
-      this.heroContainer.on('pointerup', () => {
-        // If player turn and attack > 0, then check if already attacked then choose this for battle
-        if (
-          this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN &&
-          this.currentAttack > 0
-        ) {
-          if (this.alreadyAttacked) {
-            this.scene.warnMessage.showTurnMessage(WARNING_KEYS.ALREADY_ATTACKED)
-            return
-          }
-
-          this.scene.stateMachine.setState(BATTLE_STATES.ATTACKER_MINION_CHOSEN, this)
-          this.cancelImage?.setAlpha(1)
+    // Click
+    this.heroContainer.on('pointerup', () => {
+      // If player turn and attack > 0, then check if already attacked then choose this for battle
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN && this.currentAttack > 0) {
+        if (this.alreadyAttacked) {
+          this.scene.warnMessage.showTurnMessage(WARNING_KEYS.ALREADY_ATTACKED)
           return
         }
 
-        // If attacker chosen state and this is selected, cancel
-        if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
-          this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN, this)
-          this.removeCancel()
-        }
-      })
-    }
+        this.scene.stateMachine.setState(BATTLE_STATES.ATTACKER_MINION_CHOSEN, this)
+        this.cancelImage?.setAlpha(1)
+        return
+      }
+
+      // If attacker chosen state and this is selected, cancel
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
+        this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN, this)
+        this.removeCancel()
+      }
+    })
+  }
+
+  private forOpponent(): void {
+    this.heroContainer.on('pointerup', () => {
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
+        this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, this)
+      }
+    })
   }
 }

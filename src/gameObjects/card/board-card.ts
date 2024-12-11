@@ -40,11 +40,20 @@ export class BoardCard extends Card {
     this.setAlreadyAttacked = false
   }
 
-  /**
-   * Get card owner
-   */
-  public get player(): TargetKeys {
-    return this.owner
+  public get attackAmount(): number {
+    return this.card.attack
+  }
+
+  public get healthAmount(): number {
+    return this.card.health
+  }
+
+  public set setAttackAmount(attack: number) {
+    this.card.attack = attack
+  }
+
+  public set setHealthAmount(health: number) {
+    this.card.health = health
   }
 
   /**
@@ -72,15 +81,27 @@ export class BoardCard extends Card {
   /**
    * Sets if minion already attacked
    */
-  public set setAlreadyAttacked(value: boolean) {
-    this.alreadyAttacked = value
+  public set setAlreadyAttacked(attacked: boolean) {
+    this.alreadyAttacked = attacked
+
+    if (attacked) {
+      this.removeOutline()
+    }
+  }
+
+  public get container(): Phaser.GameObjects.Container {
+    return this.cardUI
+  }
+
+  public get image(): Phaser.GameObjects.Image {
+    return this.cardImage
   }
 
   /**
-   * Remove cancel image when selection cancelled or fulfilled
+   * Get card owner
    */
-  public removeCancel(): void {
-    this.cancelImage?.setAlpha(0)
+  public get player(): TargetKeys {
+    return this.owner
   }
 
   /**
@@ -99,171 +120,10 @@ export class BoardCard extends Card {
   }
 
   /**
-   * Attacking Minion logic
+   * Remove cancel image when selection cancelled or fulfilled
    */
-  public attack(opponent: BoardCard | Hero, callback?: () => void): void {
-    const startX = this.cardUI.x
-    const startY = this.cardUI.y
-    this.cardUI.setDepth(1)
-
-    // Get target position based on opponent type
-    const target = this.getAttackTargetPosition(opponent)
-
-    // Attack animation
-    this.animateAttack({ x: startX, y: startY }, target, () => {
-      // Damage
-      this.applyDamage(opponent)
-      this.damageTaken()
-      opponent.damageTaken()
-
-      this.alreadyAttacked = true
-      this.removeOutline()
-
-      // Return to the original position
-      this.animateReturnToPosition({ x: startX, y: startY }, () => {
-        callback?.()
-        this.cardUI.setDepth(0)
-      })
-    })
-  }
-
-  /**
-   * Minion being attacking logic
-   */
-  public damageTaken(): void {
-    this.animateDamageTaken()
-
-    // Set stats and check changes
-    this.setStats()
-  }
-
-  /**
-   * Get target position based on opponent type
-   */
-  private getAttackTargetPosition(opponent: BoardCard | Hero): { x: number; y: number } {
-    const opponentBounds =
-      opponent instanceof BoardCard ? opponent.cardUI.getBounds() : opponent.heroUI.getBounds()
-    const cardBounds = this.cardUI.getBounds()
-
-    const targetX = opponentBounds.centerX - cardBounds.centerX + this.cardUI.x
-    const targetY = opponentBounds.centerY - cardBounds.centerY + this.cardUI.height / 3
-
-    return { x: targetX, y: targetY }
-  }
-
-  /**
-   * Apply damage to the opponent and update health values
-   */
-  private applyDamage(opponent: BoardCard | Hero): void {
-    const damageDealt = this.card.attack
-
-    if (opponent instanceof BoardCard) {
-      opponent.card.health -= damageDealt
-      const damageTaken = opponent.card.attack
-      this.card.health -= damageTaken
-      return
-    }
-
-    if (opponent instanceof Hero) {
-      opponent.currentHealth -= damageDealt
-    }
-  }
-
-  /**
-   * Death Animation: Shrink and fade out
-   */
-  public death(callback?: () => void): void {
-    this.cardImage.setTint(0xff0000)
-
-    // x and y to shrink towards the center
-    this.scene.tweens.add({
-      delay: DEATH_CONFIGS.DELAY,
-      targets: this.cardUI,
-      scale: DEATH_CONFIGS.SCALE,
-      alpha: DEATH_CONFIGS.ALPHA,
-      x: this.cardUI.width / 2 + this.cardUI.x,
-      y: this.cardUI.height / 2 + this.cardUI.y,
-      duration: DEATH_CONFIGS.DURATION,
-      ease: DEATH_CONFIGS.EASE,
-      onComplete: () => {
-        callback?.()
-      },
-    })
-  }
-
-  /**
-   * Animates taking a step back and crashing into defending minion
-   */
-  private animateAttack(
-    startPosition: { x: number; y: number },
-    targetPosition: { x: number; y: number },
-    callback?: () => void
-  ): void {
-    // Card takes a step back
-    this.scene.tweens.add({
-      targets: this.cardUI,
-      y: startPosition.y + ATTACK_CONFIGS.STEP_BACK.Y[this.owner],
-      duration: ATTACK_CONFIGS.STEP_BACK.DURATION,
-      ease: ATTACK_CONFIGS.STEP_BACK.EASE,
-      onComplete: () => {
-        // Attack enemy
-        this.scene.tweens.add({
-          targets: this.cardUI,
-          x: targetPosition.x,
-          y: targetPosition.y,
-          duration: ATTACK_CONFIGS.ATTACK.DURATION,
-          ease: ATTACK_CONFIGS.ATTACK.EASE,
-          onComplete: () => callback?.(),
-        })
-      },
-    })
-  }
-
-  /**
-   * Flash, Particles and Camera Shake when damage taken
-   */
-  private animateDamageTaken(): void {
-    // Flash effect
-    this.scene.tweens.add({
-      targets: this.cardUI,
-      alpha: DAMAGE_CONFIGS.FLASH.ALPHA,
-      duration: DAMAGE_CONFIGS.FLASH.DURATION,
-      yoyo: DAMAGE_CONFIGS.FLASH.YOYO,
-      repeat: DAMAGE_CONFIGS.FLASH.REPEAT,
-    })
-
-    // Particle effect
-    this.scene.add.particles(
-      this.cardUI.getBounds().centerX,
-      this.cardUI.getBounds().centerY,
-      EFFECT_ASSET_KEYS.SPARK,
-      {
-        scale: DAMAGE_CONFIGS.SPARK.SCALE,
-        speed: DAMAGE_CONFIGS.SPARK.SPEED,
-        lifespan: DAMAGE_CONFIGS.SPARK.LIFESPAN,
-        gravityY: DAMAGE_CONFIGS.SPARK.GRAVITY_Y,
-        duration: DAMAGE_CONFIGS.SPARK.DURATION,
-      }
-    )
-
-    // Camera shake
-    this.scene.cameras.main.shake(DAMAGE_CONFIGS.CAMERA.DURATION, DAMAGE_CONFIGS.CAMERA.INTENSITY)
-  }
-
-  /**
-   * Returns minion to original position
-   */
-  private animateReturnToPosition(position: { x: number; y: number }, callback?: () => void): void {
-    this.scene.tweens.add({
-      targets: this.cardUI,
-      x: position.x,
-      y: position.y,
-      duration: ATTACK_CONFIGS.RETURN.DURATION,
-      ease: ATTACK_CONFIGS.RETURN.EASE,
-      onComplete: () => {
-        callback?.()
-      },
-    })
+  public removeCancel(): void {
+    this.cancelImage?.setAlpha(0)
   }
 
   /**
@@ -271,14 +131,11 @@ export class BoardCard extends Card {
    */
   private forPlayer(): void {
     // Add cancel image for cancelling selection
-    this.cancelImage = this.scene.add
-      .image(
-        this.cardUI.width / 2 / this.cardUI.scale,
-        this.cardUI.height / 2 / this.cardUI.scale,
-        UI_ASSET_KEYS.CANCEL
-      )
-      .setScale(0.8)
-      .setAlpha(0)
+    this.cancelImage = this.scene.battleManager.addCancelImage(
+      this.cardUI.width / 2 / this.cardUI.scale,
+      this.cardUI.height / 2 / this.cardUI.scale,
+      0.8
+    )
     this.cardUI.add(this.cancelImage)
 
     this.cardImage.on('pointerup', () => {
