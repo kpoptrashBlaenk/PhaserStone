@@ -1,3 +1,4 @@
+import { checkStats } from '../../common/check-stats'
 import { BattleScene } from '../../scenes/battle-scene'
 import {
   CARD_ATTACK_POSITION,
@@ -7,7 +8,6 @@ import {
   CARD_NAME_FONT_STYLE_SMALL,
   CARD_NAME_POSITION,
   CARD_NUMBER_FONT_STYLE,
-  CARD_TEXT_COLOR,
 } from '../../utils/visual-configs'
 import { CardData } from './card-keys'
 
@@ -61,21 +61,9 @@ export class Card {
    * Sets stats then check for changes and apply colors
    */
   protected setStats(): void {
-    const changeAndCheck = (current: number, original: number, textObject: Phaser.GameObjects.Text): void => {
-      textObject.setText(String(current))
-
-      if (current > original) {
-        textObject.setColor(CARD_TEXT_COLOR.RED)
-      } else if (current < original) {
-        textObject.setColor(CARD_TEXT_COLOR.GREEN)
-      } else {
-        textObject.setColor(CARD_TEXT_COLOR.WHITE)
-      }
-    }
-
-    changeAndCheck(this.card.attack, this.originalCard.attack, this.cardAttackText)
-    changeAndCheck(this.card.health, this.originalCard.health, this.cardHealthText)
-    changeAndCheck(this.card.cost, this.originalCard.cost, this.cardCostText)
+    checkStats(this.card.attack, this.originalCard.attack, this.cardAttackText)
+    checkStats(this.card.health, this.originalCard.health, this.cardHealthText)
+    checkStats(this.card.cost, this.originalCard.cost, this.cardCostText)
   }
 
   /**

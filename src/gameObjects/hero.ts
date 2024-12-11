@@ -6,13 +6,13 @@ import { BoardCard } from './card/board-card'
 import {
   ATTACK_CONFIGS,
   CARD_NUMBER_FONT_STYLE,
-  CARD_TEXT_COLOR,
   DEATH_CONFIGS,
   HERO_CONFIGS,
   OUTLINE_CONFIG,
 } from '../utils/visual-configs'
 import { MAX_HEALTH } from '../utils/configs'
 import { DAMAGE_CONFIGS } from '../utils/visual-configs'
+import { checkStats } from '../common/check-stats'
 
 export class Hero {
   public alreadyAttacked: boolean
@@ -266,19 +266,8 @@ export class Hero {
    * Sets stats then check for changes and apply colors
    */
   private setStats(): void {
-    const changeAndCheck = (current: number, original: number, textObject: Phaser.GameObjects.Text): void => {
-      textObject.setText(String(current))
-
-      if (current > original) {
-        textObject.setColor(CARD_TEXT_COLOR.GREEN)
-      } else if (current < original) {
-        textObject.setColor(CARD_TEXT_COLOR.RED)
-      } else {
-        textObject.setColor(CARD_TEXT_COLOR.WHITE)
-      }
-    }
-    changeAndCheck(this.currentAttack, 0, this.attackText)
-    changeAndCheck(this.currentHealth, this.maxHealth, this.healthText)
+    checkStats(this.currentAttack, 0, this.attackText)
+    checkStats(this.currentHealth, this.maxHealth, this.healthText)
   }
 
   /**
