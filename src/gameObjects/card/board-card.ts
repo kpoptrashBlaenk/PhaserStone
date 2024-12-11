@@ -36,7 +36,7 @@ export class BoardCard extends Card {
       this.forOpponent()
     }
 
-    this.setSummoningSick = false // true
+    this.setSummoningSick = true
     this.setAlreadyAttacked = false
   }
 

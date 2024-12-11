@@ -34,7 +34,7 @@ export class Hero {
     this.scene = scene
     this.owner = owner
 
-    this.maxHealth = 1
+    this.maxHealth = 30
     this.currentHealth = this.maxHealth
     this.currentAttack = 0
     this.alreadyAttacked = false
