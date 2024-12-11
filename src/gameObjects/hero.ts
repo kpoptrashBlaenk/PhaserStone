@@ -164,10 +164,9 @@ export class Hero {
   private getAttackTargetPosition(opponent: BoardCard | Hero): { x: number; y: number } {
     const opponentBounds =
       opponent instanceof BoardCard ? opponent.cardUI.getBounds() : opponent.heroUI.getBounds()
-    const cardBounds = this.heroContainer.getBounds()
 
-    const targetX = opponentBounds.centerX - cardBounds.centerX + this.heroContainer.x
-    const targetY = opponentBounds.centerY - cardBounds.centerY + this.heroContainer.height / 3
+    const targetX = opponentBounds.centerX
+    const targetY = opponentBounds.centerY + this.heroContainer.height / 3
 
     return { x: targetX, y: targetY }
   }
