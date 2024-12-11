@@ -3,24 +3,22 @@ import { CardData } from './card-keys'
 import { Card } from './card'
 import { BattleScene } from '../../scenes/battle-scene'
 import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../../assets/asset-keys'
-import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
 import { Hero } from '../hero'
 import {
   ATTACK_CONFIGS,
   CARD_SCALE,
   DAMAGE_CONFIGS,
   DEATH_CONFIGS,
-  OUTLINE_CONFIG,
   SUMMONING_SICK_CONFIGS,
   ZZZ_ANIMATION_POSITION,
 } from '../../utils/visual-configs'
+import { setOutline } from '../../common/outline'
 
 export class BoardCard extends Card {
   private alreadyAttacked: boolean
   private owner: TargetKeys
   private summoningSick: boolean
   private summoningSickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
-  private cardBorder: OutlinePipelinePlugin | undefined
   private cancelImage: Phaser.GameObjects.Image | undefined
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
@@ -91,24 +89,15 @@ export class BoardCard extends Card {
    * Check if not summoning sick and didn't attack and add or remove border
    */
   public checkCanAttack(): void {
-    if (!this.summoningSick && !this.alreadyAttacked) {
-      if (!this.cardBorder) {
-        this.cardBorder = this.scene.plugins.get('rexOutlinePipeline') as OutlinePipelinePlugin
-        this.cardBorder?.add(this.cardImage, OUTLINE_CONFIG)
-      }
-    } else {
-      this.removeBorder()
-    }
+    const canAttack = !this.summoningSick && !this.alreadyAttacked
+    setOutline(this.scene, canAttack, this.cardImage)
   }
 
   /**
-   * Remove Border
+   * Remove Outline
    */
-  public removeBorder(): void {
-    if (this.cardBorder) {
-      this.cardBorder.remove(this.cardImage, 'outline')
-      this.cardBorder = undefined
-    }
+  public removeOutline(): void {
+    setOutline(this.scene, false, this.cardImage)
   }
 
   /**
@@ -130,7 +119,7 @@ export class BoardCard extends Card {
       opponent.damageTaken()
 
       this.alreadyAttacked = true
-      this.removeBorder()
+      this.removeOutline()
 
       // Return to the original position
       this.animateReturnToPosition({ x: startX, y: startY }, () => {

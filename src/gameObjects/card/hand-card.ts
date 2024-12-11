@@ -4,14 +4,13 @@ import { Card } from './card'
 import { Coordinate } from '../../types/typedef'
 import { CARD_ASSETS_KEYS, CardAssetKeys } from '../../assets/asset-keys'
 import { BattleScene } from '../../scenes/battle-scene'
-import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
-import { CARD_SCALE, OUTLINE_CONFIG, PLAYER_BOARD_BOUNDS } from '../../utils/visual-configs'
+import { CARD_SCALE, PLAYER_BOARD_BOUNDS } from '../../utils/visual-configs'
+import { setOutline } from '../../common/outline'
 
 export class HandCard extends Card {
   private owner: TargetKeys
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
-  private cardBorder: OutlinePipelinePlugin | undefined
   private isPlayable: boolean
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
@@ -47,27 +46,17 @@ export class HandCard extends Card {
    * Compare cost to mana crystals to see if it's playable and add or remove border
    */
   public checkPlayable(currentMana: number): void {
-    if (currentMana >= this.card.cost) {
-      if (!this.cardBorder) {
-        this.cardBorder = this.scene.plugins.get('rexOutlinePipeline') as OutlinePipelinePlugin
-        this.cardBorder?.add(this.cardImage, OUTLINE_CONFIG)
-
-        this.isPlayable = true
-      }
-    } else {
-      this.removeBorder()
-    }
+    const canBePlayed = currentMana >= this.card.cost
+    setOutline(this.scene, canBePlayed, this.cardImage)
+    this.isPlayable = canBePlayed
   }
 
   /**
    * Remove Border
    */
-  public removeBorder(): void {
-    if (this.cardBorder) {
-      this.cardBorder.remove(this.cardImage, 'outline')
-      this.cardBorder = undefined
-      this.isPlayable = false
-    }
+  public removeOutline(): void {
+    setOutline(this.scene, false, this.cardImage)
+    this.isPlayable = false
   }
 
   /**

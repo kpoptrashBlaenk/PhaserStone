@@ -3,16 +3,11 @@ import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { BattleScene } from '../scenes/battle-scene'
 import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
 import { BoardCard } from './card/board-card'
-import {
-  ATTACK_CONFIGS,
-  CARD_NUMBER_FONT_STYLE,
-  DEATH_CONFIGS,
-  HERO_CONFIGS,
-  OUTLINE_CONFIG,
-} from '../utils/visual-configs'
+import { ATTACK_CONFIGS, CARD_NUMBER_FONT_STYLE, DEATH_CONFIGS, HERO_CONFIGS } from '../utils/visual-configs'
 import { MAX_HEALTH } from '../utils/configs'
 import { DAMAGE_CONFIGS } from '../utils/visual-configs'
 import { checkStats } from '../common/check-stats'
+import { setOutline } from '../common/outline'
 
 export class Hero {
   public alreadyAttacked: boolean
@@ -26,7 +21,6 @@ export class Hero {
   private maxHealth: number
   private attackText: Phaser.GameObjects.Text
   private attackContainer: Phaser.GameObjects.Container
-  private cardBorder: OutlinePipelinePlugin | undefined
   private cancelImage: Phaser.GameObjects.Image | undefined
 
   constructor(scene: BattleScene, owner: TargetKeys) {
@@ -35,7 +29,7 @@ export class Hero {
 
     this.maxHealth = MAX_HEALTH
     this.currentHealth = this.maxHealth
-    this.currentAttack = 0
+    this.currentAttack = 1
     this.alreadyAttacked = false
 
     this.createHero()
@@ -60,17 +54,8 @@ export class Hero {
    * Check if didn't attack and add or remove border
    */
   public checkCanAttack(): void {
-    if (this.currentAttack > 0 && !this.alreadyAttacked && this.owner === TARGET_KEYS.PLAYER) {
-      if (!this.cardBorder) {
-        this.cardBorder = this.scene.plugins.get('rexOutlinePipeline') as OutlinePipelinePlugin
-        this.cardBorder?.add(this.heroImage, OUTLINE_CONFIG)
-      }
-
-      this.attackContainer.setAlpha(1)
-      return
-    }
-
-    this.removeBorder()
+    const canAttack = this.currentAttack > 0 && !this.alreadyAttacked && this.owner === TARGET_KEYS.PLAYER
+    setOutline(this.scene, canAttack, this.heroImage)
 
     if (this.currentAttack > 0) {
       this.attackContainer.setAlpha(1)
@@ -81,13 +66,10 @@ export class Hero {
   }
 
   /**
-   * Remove Border
+   * Remove Outline
    */
-  public removeBorder(): void {
-    if (this.cardBorder) {
-      this.cardBorder.remove(this.heroImage, 'outline')
-      this.cardBorder = undefined
-    }
+  public removeOutline(): void {
+    setOutline(this.scene, false, this.heroImage)
   }
 
   /**
@@ -146,7 +128,7 @@ export class Hero {
       opponent.damageTaken()
 
       this.alreadyAttacked = true
-      this.removeBorder()
+      this.removeOutline()
 
       // Return to the original position
       this.animateReturnToPosition({ x: startX, y: startY }, () => {

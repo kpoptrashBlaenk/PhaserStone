@@ -221,12 +221,14 @@ export class BattleScene extends BaseScene {
    */
   private removeGreenBorders(): void {
     this.hand.PLAYER.handCards.forEach((card) => {
-      card.removeBorder()
+      card.removeOutline()
     })
 
     this.board.PLAYER.boardCards.forEach((card) => {
-      card.removeBorder()
+      card.removeOutline()
     })
+
+    this.hero.PLAYER.removeOutline()
   }
 
   /**
