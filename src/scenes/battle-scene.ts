@@ -291,7 +291,10 @@ export class BattleScene extends BaseScene {
             scale: 0.5,
             ease: 'Back.In',
             duration: 800,
-            onComplete: () => messageText.destroy(),
+            onComplete: () => {
+              messageText.destroy()
+              location.reload()
+            },
           })
         })
       },

@@ -37,7 +37,7 @@ export class Hero {
 
     this.maxHealth = 30
     this.currentHealth = this.maxHealth
-    this.currentAttack = 1
+    this.currentAttack = 0
     this.alreadyAttacked = false
 
     this.createHero()

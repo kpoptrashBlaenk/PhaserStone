@@ -89,7 +89,7 @@ export class Hand {
   private animateCardFromHandToBoard(card: HandCard, callback?: () => void): void {
     this.scene.tweens.add({
       targets: card.cardUI,
-      x: this.scene.scale.width / 2 - card.cardUI.getBounds().centerX + card.cardUI.x,
+      x: this.scene.scale.width / 2 - card.cardUI.getBounds().x + card.cardUI.x,
       y: BOARD_POSITION_Y.OPPONENT - card.cardUI.getBounds().y + card.cardUI.y,
       duration: 500,
       ease: 'Sine.easeOut',
