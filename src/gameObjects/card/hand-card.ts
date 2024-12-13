@@ -41,12 +41,19 @@ export class HandCard extends Card {
   }
 
   /**
-   * Compare cost to mana crystals to see if it's playable and add or remove border
+   * Compare cost to mana crystals and check board space to see if it's playable and add or remove border
    */
-  public checkPlayable(currentMana: number): void {
-    const canBePlayed = currentMana >= this.card.cost
-    setOutline(this.scene, canBePlayed, this.cardImage)
+  public checkPlayable(): boolean {
+    const canBePlayed = this.scene.board[this.owner].hasSpace
+      ? this.scene.mana[this.owner].getCurrentMana >= this.card.cost
+      : false
     this.isPlayable = canBePlayed
+
+    if (this.owner === TARGET_KEYS.PLAYER) {
+      setOutline(this.scene, canBePlayed, this.cardImage)
+    }
+
+    return canBePlayed
   }
 
   /**

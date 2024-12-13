@@ -1,9 +1,10 @@
 import { BattleScene } from '../scenes/battle-scene'
-import { TargetKeys } from '../utils/keys'
+import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { repositionContainer, resizeContainer } from '../common/resize-container'
 import { BOARD_CONFIGS, BOARD_POSITION_Y, HAND_CARD_SIZE, RESIZE_CONFIGS } from '../utils/visual-configs'
 import { BoardCard } from './card/board-card'
 import { HandCard } from './card/hand-card'
+import { MAX_BOARD } from '../utils/configs'
 
 export class Board {
   private owner: TargetKeys
@@ -25,6 +26,13 @@ export class Board {
    */
   public get boardCards(): BoardCard[] {
     return this.board
+  }
+
+  /**
+   * Checks if board has space (less than MAX_BOARD = 7)
+   */
+  public get hasSpace(): boolean {
+    return this.board.length < MAX_BOARD
   }
 
   /**

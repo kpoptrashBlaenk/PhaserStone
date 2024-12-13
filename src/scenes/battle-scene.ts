@@ -25,6 +25,14 @@ export class BattleScene extends BaseScene {
   public battleManager: BattleManager
   public playerPreview: Preview
   public warnMessage: WarnMessage
+  public board: {
+    PLAYER: Board
+    OPPONENT: Board
+  } = { PLAYER: null as any, OPPONENT: null as any }
+  public mana: {
+    PLAYER: Mana
+    OPPONENT: Mana
+  } = { PLAYER: null as any, OPPONENT: null as any }
   private opponentPreview: Preview
   private turnButton: TurnButton
   private opponentAI: OpponentAI
@@ -36,14 +44,6 @@ export class BattleScene extends BaseScene {
   private hand: {
     PLAYER: Hand
     OPPONENT: Hand
-  } = { PLAYER: null as any, OPPONENT: null as any }
-  private board: {
-    PLAYER: Board
-    OPPONENT: Board
-  } = { PLAYER: null as any, OPPONENT: null as any }
-  private mana: {
-    PLAYER: Mana
-    OPPONENT: Mana
   } = { PLAYER: null as any, OPPONENT: null as any }
   private hero: {
     PLAYER: Hero
@@ -85,6 +85,10 @@ export class BattleScene extends BaseScene {
     this.drawCard(TARGET_KEYS.OPPONENT)
     this.drawCard(TARGET_KEYS.OPPONENT)
     this.drawCard(TARGET_KEYS.OPPONENT)
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
+    this.drawCard(TARGET_KEYS.PLAYER)
     this.drawCard(TARGET_KEYS.PLAYER)
     this.drawCard(TARGET_KEYS.PLAYER)
     this.drawCard(TARGET_KEYS.PLAYER)
@@ -183,7 +187,7 @@ export class BattleScene extends BaseScene {
    * Sets up battle manager
    */
   private setupOpponentAI(): void {
-    this.opponentAI = new OpponentAI(this, this.mana.OPPONENT, this.hand.OPPONENT, this.board, this.hero.PLAYER)
+    this.opponentAI = new OpponentAI(this, this.hand.OPPONENT, this.board, this.hero.PLAYER)
   }
 
   /**
@@ -218,9 +222,14 @@ export class BattleScene extends BaseScene {
    * Checks what cards are playable
    */
   private checkPlayable(): void {
-    this.hand.PLAYER.handCards.forEach((card) => {
-      card.checkPlayable(this.mana.PLAYER.getCurrentMana)
-    })
+    if (this.board.PLAYER.hasSpace) {
+      this.hand.PLAYER.handCards.forEach((card) => {
+        card.checkPlayable()
+      })
+      return
+    }
+
+    this.removeHandOutline()
   }
 
   /**
@@ -235,18 +244,19 @@ export class BattleScene extends BaseScene {
     this.hero.OPPONENT.checkCanAttack()
   }
 
-  /**
-   * Remove all green borders, because opponent turn
-   */
-  private removeGreenBorders(): void {
+  private removeHandOutline(): void {
     this.hand.PLAYER.handCards.forEach((card) => {
       card.removeOutline()
     })
+  }
 
+  private removeBoardOutline(): void {
     this.board.PLAYER.boardCards.forEach((card) => {
       card.removeOutline()
     })
+  }
 
+  private removeHeroOutline(): void {
     this.hero.PLAYER.removeOutline()
   }
 
@@ -352,7 +362,9 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN_END,
       onEnter: () => {
-        this.removeGreenBorders()
+        this.removeHandOutline()
+        this.removeBoardOutline()
+        this.removeHeroOutline()
         this.turnButton.changeTurn()
       },
     })

@@ -9,7 +9,6 @@ import { BATTLE_STATES } from '../utils/keys'
 
 export class OpponentAI {
   private scene: BattleScene
-  private mana: Mana
   private hand: Hand
   private hero: Hero
   private board: {
@@ -19,7 +18,6 @@ export class OpponentAI {
 
   constructor(
     scene: BattleScene,
-    mana: Mana,
     hand: Hand,
     board: {
       PLAYER: Board
@@ -28,7 +26,6 @@ export class OpponentAI {
     hero: Hero
   ) {
     this.scene = scene
-    this.mana = mana
     this.hand = hand
     this.board = board
     this.hero = hero
@@ -50,7 +47,7 @@ export class OpponentAI {
 
     // Get all playable cards
     hand.forEach((card: HandCard) => {
-      if (card.manaAmount <= this.mana.getCurrentMana) {
+      if (card.checkPlayable()) {
         playableHand.push(card)
       }
     })

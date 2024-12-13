@@ -69,6 +69,8 @@ export class BattleManager {
   public afterBattleCheck(turn: TargetKeys): void {
     // Set turn state
     const setState = () => {
+      this.cleanup()
+
       if (turn === TARGET_KEYS.PLAYER) {
         this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
       } else {
@@ -95,10 +97,11 @@ export class BattleManager {
 
       if (this.dead.length > 0) {
         this.death(setState)
-      } else {
-        // If no minions died, set states immediately
-        setState()
+        return
       }
+
+      // If no minions died, set states immediately
+      setState()
     }
   }
 
@@ -266,5 +269,12 @@ export class BattleManager {
         },
       })
     })
+  }
+
+  /**
+   * Cleanup Battle Manager
+   */
+  private cleanup(): void {
+    this.dead = []
   }
 }
