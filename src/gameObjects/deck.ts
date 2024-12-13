@@ -24,9 +24,10 @@ export class Deck {
   /**
    * Remove top card and do flip animation then callback (draw card method in hand)
    */
-  public drawCard(callback: (card: HandCard) => void): void {
+  public drawCard(callback?: (card: HandCard | undefined) => void): void {
     const drawnCard = this.deck.pop()
     if (!drawnCard) {
+      callback?.(undefined)
       return
     }
 
@@ -47,13 +48,13 @@ export class Deck {
             duration: DECK_CONFIGS.DECK_TO_HAND.DURATION,
             ease: DECK_CONFIGS.DECK_TO_HAND.EASE,
             onComplete: () => {
-              callback(drawnCard)
+              callback?.(drawnCard)
             },
           })
         },
       })
     } else {
-      callback(drawnCard)
+      callback?.(drawnCard)
     }
   }
 

@@ -30,7 +30,12 @@ export class Hand {
   /**
    * Get original position of card on deck -> add to handContainer then resize container and get new position -> set to old position and animate movement to new position
    */
-  public drawCard(card: HandCard, callback: () => void): void {
+  public drawCard(card: HandCard | undefined, callback?: () => void): void {
+    if (!card) {
+      callback?.()
+      return
+    }
+
     this.hand.push(card)
 
     // Get original global position of card
@@ -57,7 +62,7 @@ export class Hand {
       ease: HAND_CONFIGS.DECK_TO_HAND.EASE,
       onComplete: () => {
         this.resizeHandContainer()
-        callback()
+        callback?.()
       },
     })
   }
