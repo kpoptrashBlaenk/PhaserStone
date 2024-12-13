@@ -1,35 +1,3 @@
 [
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 8,
-    "cardClass": "NEUTRAL",
-    "cost": 0,
-    "health": 8,
-    "id": 1,
-    "name": "Alexstraza",
-    "races": ["DRAGON"],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 8,
-    "cardClass": "NEUTRAL",
-    "cost": 0,
-    "health": 8,
-    "id": 2,
-    "name": "Alexstraza",
-    "races": ["DRAGON"],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 8,
-    "cardClass": "NEUTRAL",
-    "cost": 0,
-    "health": 8,
-    "id": 3,
-    "name": "Alexstraza",
-    "races": ["DRAGON"],
-    "type": "MINION"
-  }
+
 ]
