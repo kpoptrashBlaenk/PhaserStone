@@ -1,4 +1,4 @@
-import { checkStats } from '../../common/check-stats'
+import { checkStats } from '../../common/set-stats'
 import { BattleScene } from '../../scenes/battle-scene'
 import { TargetKeys } from '../../utils/keys'
 import {

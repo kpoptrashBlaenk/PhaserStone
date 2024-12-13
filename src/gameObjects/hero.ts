@@ -6,7 +6,7 @@ import { BoardCard } from './card/board-card'
 import { ATTACK_CONFIGS, CARD_NUMBER_FONT_STYLE, DEATH_CONFIGS, HERO_CONFIGS } from '../utils/visual-configs'
 import { MAX_HEALTH } from '../utils/configs'
 import { DAMAGE_CONFIGS } from '../utils/visual-configs'
-import { checkStats } from '../common/check-stats'
+import { checkStats } from '../common/set-stats'
 import { setOutline } from '../common/outline'
 
 export class Hero {
