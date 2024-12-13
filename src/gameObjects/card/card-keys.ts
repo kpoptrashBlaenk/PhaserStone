@@ -7,7 +7,11 @@ export type CardData = {
   cost: number
   health: number
   id: number
-  mechanics?: string[]
+  battlecry?: {
+    type: string
+    amount: number
+  }
+  text: string
   name: string
   races?: RaceKeys[]
   type: TypeKeys

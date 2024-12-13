@@ -6,8 +6,10 @@
     "cost": 1,
     "health": 1,
     "id": 1,
-    "mechanics": ["BATTLECRY"],
-    "effect": "DAMAGE_ENEMY",
+    "battlecry": {
+      "type": "DAMAGE_ANY",
+      "amount": 1
+    },
     "text": "<b>Battlecry:</b> Deal 1 damage.",
     "name": "Elven Archer",
     "races": [],

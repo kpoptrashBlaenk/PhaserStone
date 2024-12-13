@@ -127,6 +127,7 @@ export class BattleScene extends BaseScene {
       cost: 0,
       health: 9,
       id: 0,
+      text: '',
       name: 'Preview',
       type: TYPE_KEYS.MINION,
     }
