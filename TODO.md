@@ -27,7 +27,7 @@
 ## General
 
 - [x] Create Methods for Animations and give them callbacks
-- [ ] Loading Screen for Preload Scene
+- [x] Loading Screen for Preload Scene
 - [x] Create files for configs (like sizes, positions, timers...)
 
 ## Hero

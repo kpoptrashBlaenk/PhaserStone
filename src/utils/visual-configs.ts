@@ -226,3 +226,28 @@ export const HAND_CONFIGS = Object.freeze({
     EASE: 'Sine.easeOut',
   },
 })
+
+// Loading Screen
+export const LOADING_SCREEN = Object.freeze({
+  TITLE: {
+    ...BASIC_CARD_FONT_STYLE,
+    fontSize: '52px',
+  },
+  SUBTITLE: {
+    ...BASIC_CARD_FONT_STYLE,
+    fontSize: '32px',
+  },
+  BAR: {
+    WIDTH: 320,
+    HEIGHT: 40,
+    BACKGROUND_FILL: 0x222222,
+    FILL: 0xffffff,
+  },
+  ANIMATION: {
+    ORIGIN_ALPHA: 0.9,
+    ALPHA: 0.2,
+    YOYO: true,
+    REPEAT: -1,
+    DURATION: 500,
+  },
+})
