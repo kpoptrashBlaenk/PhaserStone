@@ -115,11 +115,11 @@ export class BattleManager {
 
     // Attack animation
     this.animateAttack({ x: startX, y: startY }, target, () => {
+      this.attacker.setAlreadyAttacked = true
+
       // Damage
       this.applyDamage()
       this.animateDamageTaken()
-
-      this.attacker.setAlreadyAttacked = true
 
       // Return to the original position
       this.animateReturnToPosition({ x: startX, y: startY }, () => {
@@ -239,6 +239,11 @@ export class BattleManager {
   private death(callback?: () => void): void {
     this.dead.forEach((card) => {
       card.image.setTint(DEATH_CONFIGS.TINT)
+
+      if (card instanceof BoardCard) {
+        card.template.setTint(DEATH_CONFIGS.TINT)
+      }
+
       const { x, y } = {
         x: card instanceof BoardCard ? card.container.x + card.container.width / 2 : card.container.x,
         y: card instanceof BoardCard ? card.container.y + card.container.height / 2 : card.container.y,

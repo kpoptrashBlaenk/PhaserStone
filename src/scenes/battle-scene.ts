@@ -75,24 +75,6 @@ export class BattleScene extends BaseScene {
     this.setupStateMachine()
 
     // Game Start
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.OPPONENT)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
-    this.drawCard(TARGET_KEYS.PLAYER)
     this.turnButton.changeTurn()
   }
 

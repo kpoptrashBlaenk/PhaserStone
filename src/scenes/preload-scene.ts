@@ -29,6 +29,8 @@ export class PreloadScene extends BaseScene {
     this.load.image(CARD_ASSETS_KEYS.TEMPLATE, `${cardAssetsPath}/card-template.png`)
     this.load.image(CARD_ASSETS_KEYS.CARD_BACK, `${cardAssetsPath}/card-back.webp`)
 
+    this.load.image(CARD_ASSETS_KEYS.ALEXSTRAZA, `${cardAssetsPath}/alexstraza.webp`)
+
     // Effect Assets
     this.load.image(EFFECT_ASSET_KEYS.SPARK, `${effectAssetsPath}/spark.png`)
     this.load.image(EFFECT_ASSET_KEYS.Z, `${effectAssetsPath}/z.png`)
@@ -37,7 +39,10 @@ export class PreloadScene extends BaseScene {
     this.load.json(DATA_ASSET_KEYS.CARDS, `${jsonAssetPath}/cards.json`)
 
     // Loading Screen
-    this.createLoading()
+    // this.createLoading()
+    this.load.on('complete', () => {
+      this.scene.start(SCENE_KEYS.BATTLE_SCENE)
+    })
   }
 
   /**

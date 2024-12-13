@@ -21,7 +21,7 @@ export class Mana {
     this.scene = scene
     this.owner = owner
     this.currentMana = 0
-    this.maxMana = 10
+    this.maxMana = 0
     this.manaLimit = MAX_MANA
 
     this.createManaCrystals()

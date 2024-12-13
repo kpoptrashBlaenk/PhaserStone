@@ -40,7 +40,7 @@
 - [x] Rework Card Name Sizes
 - [x] Give summoning sickness and attack once per turn
 - [ ] Create Battlecry
-- [ ] Give minion portraits
+- [x] Give minion portraits
 - [x] Cancel Attacker Minion Chosen
 
 ## Add Spells

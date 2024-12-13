@@ -27,6 +27,9 @@ export class Preview extends Card {
     this.cardHealthText.setText(String(card.health))
     this.setCardText(card.name)
 
+    this.handleImage()
+    this.cardImage.setY(this.cardImage.height / 2)
+
     this.setStats()
     this.showCard()
   }

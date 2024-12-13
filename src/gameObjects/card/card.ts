@@ -1,3 +1,4 @@
+import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
 import { checkStats } from '../../common/set-stats'
 import { BattleScene } from '../../scenes/battle-scene'
 import { TargetKeys } from '../../utils/keys'
@@ -19,6 +20,7 @@ export class Card {
   protected scene: BattleScene
   protected cardContainer: Phaser.GameObjects.Container
   protected cardImage: Phaser.GameObjects.Image
+  protected cardTemplate: Phaser.GameObjects.Image
   protected cardCostText: Phaser.GameObjects.Text
   protected cardAttackText: Phaser.GameObjects.Text
   protected cardHealthText: Phaser.GameObjects.Text
@@ -39,6 +41,10 @@ export class Card {
 
   public get image(): Phaser.GameObjects.Image {
     return this.cardImage
+  }
+
+  public get template(): Phaser.GameObjects.Image {
+    return this.cardTemplate
   }
 
   public get cardData(): CardData {
@@ -98,16 +104,24 @@ export class Card {
     this.cardNameText.setStyle(text.length < 15 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL)
   }
 
+  protected handleImage(): void {
+    this.cardImage.setScale(0.13)
+    this.cardImage.setSize(this.cardContainer.height, this.cardContainer.width)
+    this.cardImage.setY(this.cardContainer.height)
+  }
+
   /**
    * Create card object with: Image, Text, Cost, Attack, Health, Name
    */
   private createCardObject(card: CardData): Phaser.GameObjects.Container {
     // Image
-    this.cardImage = this.scene.add.image(0, 0, card.assetKey)
-    const cardContainer = this.scene.add
-      .container(0, 0, this.cardImage)
-      .setSize(this.cardImage.width, this.cardImage.height) // 270, 383
-    this.cardImage.setPosition(this.cardImage.width / 2, this.cardImage.height / 2)
+    this.cardTemplate = this.scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
+    this.cardTemplate.setPosition(this.cardTemplate.width / 2, this.cardTemplate.height / 2)
+
+    this.cardImage = this.scene.add
+      .image(0, 0, card.assetKey)
+      .setSize(this.cardTemplate.width / 2, this.cardTemplate.height / 2)
+      .setDepth(-1)
 
     // Cost
     this.cardCostText = this.scene.add.text(
@@ -133,14 +147,27 @@ export class Card {
     // Name
     this.cardNameText = this.scene.add
       .text(
-        this.cardImage.x,
+        this.cardTemplate.x,
         CARD_NAME_POSITION.y,
         card.name,
         card.name.length < 10 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL
       )
       .setOrigin(0.5)
 
-    cardContainer.add([this.cardCostText, this.cardAttackText, this.cardHealthText, this.cardNameText])
+    // Container
+    const cardContainer = this.scene.add
+      .container(0, 0)
+      .setSize(this.cardTemplate.width, this.cardTemplate.height) // 270, 383
+    this.cardImage.setPosition(this.cardTemplate.width / 2, this.cardTemplate.height / 2)
+
+    cardContainer.add([
+      this.cardImage,
+      this.cardTemplate,
+      this.cardCostText,
+      this.cardAttackText,
+      this.cardHealthText,
+      this.cardNameText,
+    ])
     return cardContainer
   }
 }

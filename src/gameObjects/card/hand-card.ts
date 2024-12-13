@@ -32,8 +32,10 @@ export class HandCard extends Card {
     this.cardAttackText.setAlpha(1)
     this.cardHealthText.setAlpha(1)
     this.cardNameText.setAlpha(1)
+    this.cardTemplate.setAlpha(1)
+    this.handleImage()
 
-    this.cardImage.setInteractive({
+    this.cardTemplate.setInteractive({
       cursor: 'pointer',
     })
     this.addHover()
@@ -50,7 +52,7 @@ export class HandCard extends Card {
     this.isPlayable = canBePlayed
 
     if (this.owner === TARGET_KEYS.PLAYER) {
-      setOutline(this.scene, canBePlayed, this.cardImage)
+      setOutline(this.scene, canBePlayed, this.cardTemplate)
     }
 
     return canBePlayed
@@ -60,7 +62,7 @@ export class HandCard extends Card {
    * Remove Border
    */
   public removeOutline(): void {
-    setOutline(this.scene, false, this.cardImage)
+    setOutline(this.scene, false, this.cardTemplate)
     this.isPlayable = false
   }
 
@@ -68,11 +70,11 @@ export class HandCard extends Card {
    * Add PreviewUI to hover and hide it on unhover
    */
   private addHover(): void {
-    this.cardImage.on('pointerover', () => {
+    this.cardTemplate.on('pointerover', () => {
       this.scene.playerPreview.modifyPreviewCardObjects(this.card, this.originalCard)
     })
 
-    this.cardImage.on('pointerout', () => {
+    this.cardTemplate.on('pointerout', () => {
       this.scene.playerPreview.hideCard()
     })
   }
@@ -85,7 +87,7 @@ export class HandCard extends Card {
    * Pointerup: If card on board, play it, if not return to hand
    */
   private addDrag(): void {
-    this.cardImage.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+    this.cardTemplate.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN && this.isPlayable) {
         this.cardContainer.setData('draggingFromHand', true).setDepth(1)
         this.pointerCheckpoint = {
@@ -109,7 +111,7 @@ export class HandCard extends Card {
       this.cardContainer.y = this.cardContainerCheckpoint.y + (pointer.y - this.pointerCheckpoint.y)
     })
 
-    this.cardImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
+    this.cardTemplate.on('pointerup', (pointer: Phaser.Input.Pointer) => {
       if (this.cardContainer.getData('draggingFromHand')) {
         this.cardContainer.setData('draggingFromHand', false).setDepth(0)
         // Check if card is placed on board
@@ -145,6 +147,8 @@ export class HandCard extends Card {
     this.cardAttackText.setAlpha(0)
     this.cardHealthText.setAlpha(0)
     this.cardNameText.setAlpha(0)
+    this.cardTemplate.setAlpha(0)
+    this.cardImage.setScale(1)
   }
 
   /**

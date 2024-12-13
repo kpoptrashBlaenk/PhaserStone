@@ -1,18 +1,10 @@
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../utils/keys'
-import { CardData } from './card-keys'
-import { Card } from './card'
-import { BattleScene } from '../../scenes/battle-scene'
-import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../../assets/asset-keys'
-import { Hero } from '../hero'
-import {
-  ATTACK_CONFIGS,
-  CARD_SCALE,
-  DAMAGE_CONFIGS,
-  DEATH_CONFIGS,
-  SUMMONING_SICK_CONFIGS,
-  ZZZ_ANIMATION_POSITION,
-} from '../../utils/visual-configs'
+import { EFFECT_ASSET_KEYS } from '../../assets/asset-keys'
 import { setOutline } from '../../common/outline'
+import { BattleScene } from '../../scenes/battle-scene'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../utils/keys'
+import { CARD_SCALE, SUMMONING_SICK_CONFIGS, ZZZ_ANIMATION_POSITION } from '../../utils/visual-configs'
+import { Card } from './card'
+import { CardData } from './card-keys'
 
 export class BoardCard extends Card {
   private alreadyAttacked: boolean
@@ -22,10 +14,9 @@ export class BoardCard extends Card {
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card, owner)
-
     this.boardSize()
 
-    this.cardImage.setInteractive({
+    this.cardTemplate.setInteractive({
       cursor: 'pointer',
     })
     this.addHover()
@@ -78,14 +69,14 @@ export class BoardCard extends Card {
    */
   public checkCanAttack(): void {
     const canAttack = !this.summoningSick && !this.alreadyAttacked
-    setOutline(this.scene, canAttack, this.cardImage)
+    setOutline(this.scene, canAttack, this.cardTemplate)
   }
 
   /**
    * Remove Outline
    */
   public removeOutline(): void {
-    setOutline(this.scene, false, this.cardImage)
+    setOutline(this.scene, false, this.cardTemplate)
   }
 
   /**
@@ -107,7 +98,7 @@ export class BoardCard extends Card {
     )
     this.cardContainer.add(this.cancelImage)
 
-    this.cardImage.on('pointerup', () => {
+    this.cardTemplate.on('pointerup', () => {
       // If player turn, check if not sick and not attacked, choose this to attack
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN) {
         if (this.summoningSick) {
@@ -136,7 +127,7 @@ export class BoardCard extends Card {
    * Add Click
    */
   private forOpponent(): void {
-    this.cardImage.on('pointerup', () => {
+    this.cardTemplate.on('pointerup', () => {
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
         this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, this)
       }
@@ -147,11 +138,11 @@ export class BoardCard extends Card {
    * Add PreviewUI to hover and hide it on unhover
    */
   private addHover(): void {
-    this.cardImage.on('pointerover', () => {
+    this.cardTemplate.on('pointerover', () => {
       this.scene.playerPreview.modifyPreviewCardObjects(this.card, this.originalCard)
     })
 
-    this.cardImage.on('pointerout', () => {
+    this.cardTemplate.on('pointerout', () => {
       this.scene.playerPreview.hideCard()
     })
   }
@@ -165,6 +156,7 @@ export class BoardCard extends Card {
       this.cardContainer.width * this.cardContainer.scaleX,
       this.cardContainer.height * this.cardContainer.scaleY
     )
+    this.handleImage()
   }
 
   /**
