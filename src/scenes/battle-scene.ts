@@ -195,6 +195,7 @@ export class BattleScene extends BaseScene {
    */
   private playCard(target: TargetKeys, card: HandCard, callback?: () => void): void {
     this.hand[target].playCard(card, () => {
+      this.mana[card.player].useMana(card.manaAmount)
       this.board[target].playCard(card)
       callback?.()
     })
@@ -387,7 +388,6 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_PLAY_CARD,
       onEnter: (card: HandCard) => {
-        this.mana.PLAYER.useMana(card.cardData.cost)
         this.playCard(TARGET_KEYS.PLAYER, card, () => {
           this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
         })
@@ -416,7 +416,6 @@ export class BattleScene extends BaseScene {
         this.playCard(TARGET_KEYS.OPPONENT, card)
         // Preview
         setTimeout(() => {
-          this.mana.OPPONENT.useMana(card.cardData.cost)
           this.opponentPreview.modifyPreviewCardObjects(card.cardData, card.cardData)
           // Delay after preview to resume turn
           setTimeout(() => {
