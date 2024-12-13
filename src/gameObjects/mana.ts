@@ -1,12 +1,12 @@
 import { UI_ASSET_KEYS } from '../assets/asset-keys'
+import { MAX_MANA } from '../utils/configs'
+import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import {
   CARD_NUMBER_FONT_STYLE,
   MANA_CONFIGS,
   MANA_CRYSTAL_POSITION,
   MANA_TEXT_POSITION,
 } from '../utils/visual-configs'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { MAX_MANA } from '../utils/configs'
 
 export class Mana {
   private scene: Phaser.Scene

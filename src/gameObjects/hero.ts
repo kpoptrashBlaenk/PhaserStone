@@ -1,13 +1,10 @@
-import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
-import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
-import { BattleScene } from '../scenes/battle-scene'
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
-import { BoardCard } from './card/board-card'
-import { ATTACK_CONFIGS, CARD_NUMBER_FONT_STYLE, DEATH_CONFIGS, HERO_CONFIGS } from '../utils/visual-configs'
-import { MAX_HEALTH } from '../utils/configs'
-import { DAMAGE_CONFIGS } from '../utils/visual-configs'
-import { checkStats } from '../common/set-stats'
+import { UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
+import { checkStats } from '../common/set-stats'
+import { BattleScene } from '../scenes/battle-scene'
+import { MAX_HEALTH } from '../utils/configs'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
+import { CARD_NUMBER_FONT_STYLE, HERO_CONFIGS } from '../utils/visual-configs'
 
 export class Hero {
   public alreadyAttacked: boolean
@@ -29,7 +26,7 @@ export class Hero {
 
     this.maxHealth = MAX_HEALTH
     this.currentHealth = this.maxHealth
-    this.currentAttack = 1
+    this.currentAttack = 0
     this.alreadyAttacked = false
 
     this.createHero()
@@ -78,13 +75,6 @@ export class Hero {
    */
   public get player(): TargetKeys {
     return this.owner
-  }
-
-  /**
-   * Get data (health only)
-   */
-  public get heroUI(): Phaser.GameObjects.Container {
-    return this.heroContainer
   }
 
   /**

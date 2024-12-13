@@ -40,22 +40,6 @@ export class BoardCard extends Card {
     this.setAlreadyAttacked = false
   }
 
-  public get attackAmount(): number {
-    return this.card.attack
-  }
-
-  public get healthAmount(): number {
-    return this.card.health
-  }
-
-  public set setAttackAmount(attack: number) {
-    this.card.attack = attack
-  }
-
-  public set setHealthAmount(health: number) {
-    this.card.health = health
-  }
-
   /**
    * Get if minion has is summoning sick
    */
@@ -89,23 +73,8 @@ export class BoardCard extends Card {
     }
   }
 
-  public get container(): Phaser.GameObjects.Container {
-    return this.cardUI
-  }
-
-  public get image(): Phaser.GameObjects.Image {
-    return this.cardImage
-  }
-
   /**
-   * Get card owner
-   */
-  public get player(): TargetKeys {
-    return this.owner
-  }
-
-  /**
-   * Check if not summoning sick and didn't attack and add or remove border
+   * Checks if minion is not summoning sick and has not already attacked, then draw outlines
    */
   public checkCanAttack(): void {
     const canAttack = !this.summoningSick && !this.alreadyAttacked
@@ -132,11 +101,11 @@ export class BoardCard extends Card {
   private forPlayer(): void {
     // Add cancel image for cancelling selection
     this.cancelImage = this.scene.battleManager.addCancelImage(
-      this.cardUI.width / 2 / this.cardUI.scale,
-      this.cardUI.height / 2 / this.cardUI.scale,
+      this.cardContainer.width / 2 / this.cardContainer.scale,
+      this.cardContainer.height / 2 / this.cardContainer.scale,
       0.8
     )
-    this.cardUI.add(this.cancelImage)
+    this.cardContainer.add(this.cancelImage)
 
     this.cardImage.on('pointerup', () => {
       // If player turn, check if not sick and not attacked, choose this to attack
@@ -219,7 +188,7 @@ export class BoardCard extends Card {
         }
       )
 
-      this.cardUI.add(this.summoningSickParticles)
+      this.cardContainer.add(this.summoningSickParticles)
       return
     }
 

@@ -1,22 +1,23 @@
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
-import { Background } from '../ui/board-background'
+import { FONT_KEYS } from '../assets/font-keys'
+import { Board } from '../gameObjects/board'
+import { BoardCard } from '../gameObjects/card/board-card'
 import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
+import { HandCard } from '../gameObjects/card/hand-card'
 import { Preview } from '../gameObjects/card/preview-card'
 import { Deck } from '../gameObjects/deck'
 import { Hand } from '../gameObjects/hand'
-import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { BaseScene } from './base-scene'
-import { SCENE_KEYS } from './scene-keys'
-import { Board } from '../gameObjects/board'
-import { HandCard } from '../gameObjects/card/hand-card'
-import { StateMachine } from '../utils/state-machine'
-import { BoardCard } from '../gameObjects/card/board-card'
+import { Hero } from '../gameObjects/hero'
+import { Mana } from '../gameObjects/mana'
+import { Background } from '../ui/board-background'
 import { TurnButton } from '../ui/turn-button'
 import { WarnMessage } from '../ui/warn-message'
-import { Mana } from '../gameObjects/mana'
-import { Hero } from '../gameObjects/hero'
-import { FONT_KEYS } from '../assets/font-keys'
 import { BattleManager } from '../utils/battle-manager'
+import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { StateMachine } from '../utils/state-machine'
+import { OPPONENT_PREVIEW } from '../utils/visual-configs'
+import { BaseScene } from './base-scene'
+import { SCENE_KEYS } from './scene-keys'
 
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
@@ -326,9 +327,9 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN_START,
       onEnter: () => {
+        this.resetMinionsAttackState(this.board.PLAYER)
         this.mana.OPPONENT.addManaCrystal()
         this.mana.OPPONENT.refreshMana()
-        this.resetMinionsAttackState(this.board.PLAYER)
         this.stateMachine.setState(BATTLE_STATES.OPPONENT_DRAW_CARD)
       },
     })
@@ -449,8 +450,8 @@ export class BattleScene extends BaseScene {
           setTimeout(() => {
             this.opponentPreview.hideCard()
             this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
-          }, 1500)
-        }, 250)
+          }, OPPONENT_PREVIEW.hide)
+        }, OPPONENT_PREVIEW.show)
       },
     })
 

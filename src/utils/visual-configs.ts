@@ -56,6 +56,11 @@ export const CARD_SCALE = 0.36
 // PREVIEW
 export const PREVIEW_CARD_PADDING = 20
 
+export const OPPONENT_PREVIEW = Object.freeze({
+  show: 250,
+  hide: 1500,
+})
+
 // MANA
 export const MANA_TEXT_POSITION = Object.freeze({
   PLAYER: {

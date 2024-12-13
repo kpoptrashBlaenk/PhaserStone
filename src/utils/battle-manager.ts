@@ -236,9 +236,15 @@ export class BattleManager {
   private death(callback?: () => void): void {
     this.dead.forEach((card) => {
       card.image.setTint(DEATH_CONFIGS.TINT)
+      const { x, y } = {
+        x: card instanceof BoardCard ? card.container.x + card.container.width / 2 : card.container.x,
+        y: card instanceof BoardCard ? card.container.y + card.container.height / 2 : card.container.y,
+      }
 
       // Shrink
       this.scene.tweens.add({
+        x: x,
+        y: y,
         delay: DEATH_CONFIGS.DELAY,
         targets: card.container,
         scale: DEATH_CONFIGS.SCALE,

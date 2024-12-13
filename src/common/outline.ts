@@ -1,6 +1,6 @@
+import OutlinePostFxPipeline from 'phaser3-rex-plugins/plugins/outlinepipeline'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin'
 import { OUTLINE_CONFIG } from '../utils/visual-configs'
-import OutlinePostFxPipeline from 'phaser3-rex-plugins/plugins/outlinepipeline'
 
 /**
  * After checking can, it checks if border exists or not to add/remove it

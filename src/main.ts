@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin.js'
-import { SCENE_KEYS } from './scenes/scene-keys'
 import { BattleScene } from './scenes/battle-scene'
 import { PreloadScene } from './scenes/preload-scene'
+import { SCENE_KEYS } from './scenes/scene-keys'
 
 // Launch game instance
 const game = new Phaser.Game({

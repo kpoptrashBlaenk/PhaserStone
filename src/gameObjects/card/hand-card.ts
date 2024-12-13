@@ -1,11 +1,11 @@
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../utils/keys'
-import { CardData } from './card-keys'
-import { Card } from './card'
-import { Coordinate } from '../../types/typedef'
 import { CARD_ASSETS_KEYS, CardAssetKeys } from '../../assets/asset-keys'
-import { BattleScene } from '../../scenes/battle-scene'
-import { CARD_SCALE, PLAYER_BOARD_BOUNDS } from '../../utils/visual-configs'
 import { setOutline } from '../../common/outline'
+import { BattleScene } from '../../scenes/battle-scene'
+import { Coordinate } from '../../types/typedef'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../utils/keys'
+import { CARD_SCALE, PLAYER_BOARD_BOUNDS } from '../../utils/visual-configs'
+import { Card } from './card'
+import { CardData } from './card-keys'
 
 export class HandCard extends Card {
   private pointerCheckpoint: Coordinate

@@ -1,9 +1,9 @@
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { HandCard } from './card/hand-card'
-import { CardData } from './card/card-keys'
-import { BattleScene } from '../scenes/battle-scene'
 import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
-import { CARD_SCALE, DECK_CONFIGS, DECK_MAX_VISIBLE, DECK_POSITION } from '../utils/visual-configs'
+import { BattleScene } from '../scenes/battle-scene'
+import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { DECK_CONFIGS, DECK_MAX_VISIBLE, DECK_POSITION } from '../utils/visual-configs'
+import { CardData } from './card/card-keys'
+import { HandCard } from './card/hand-card'
 
 export class Deck {
   private scene: BattleScene
@@ -33,7 +33,7 @@ export class Deck {
     // Flip Animation
     if (this.owner === TARGET_KEYS.PLAYER) {
       this.scene.tweens.add({
-        targets: drawnCard.cardUI,
+        targets: drawnCard.container,
         scaleX: DECK_CONFIGS.FLIP.SCALE_X,
         duration: DECK_CONFIGS.FLIP.DURATION,
         ease: DECK_CONFIGS.FLIP.EASE,
@@ -42,7 +42,7 @@ export class Deck {
           drawnCard.showFrontSide()
 
           this.scene.tweens.add({
-            targets: drawnCard.cardUI,
+            targets: drawnCard.container,
             scaleX: DECK_CONFIGS.DECK_TO_HAND.SCALE_X,
             duration: DECK_CONFIGS.DECK_TO_HAND.DURATION,
             ease: DECK_CONFIGS.DECK_TO_HAND.EASE,
@@ -67,9 +67,9 @@ export class Deck {
     for (let i = 0; i < this.deck.length; i++) {
       const card = this.deck[i]
       card.cardImageAsset = CARD_ASSETS_KEYS.CARD_BACK
-      card.cardUI.setPosition(0, Math.max(-i, -DECK_MAX_VISIBLE) * cardSpacing) // Max 5 cards visible on deck stack
+      card.container.setPosition(0, Math.max(-i, -DECK_MAX_VISIBLE) * cardSpacing) // Max 5 cards visible on deck stack
       card.showCard()
-      deckContainer.add(card.cardUI)
+      deckContainer.add(card.container)
     }
 
     return deckContainer

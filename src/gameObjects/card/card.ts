@@ -33,12 +33,41 @@ export class Card {
     this.cardContainer = this.createCardObject(this.card)
   }
 
-  public get cardUI(): Phaser.GameObjects.Container {
+  public get container(): Phaser.GameObjects.Container {
     return this.cardContainer
+  }
+
+  public get image(): Phaser.GameObjects.Image {
+    return this.cardImage
   }
 
   public get cardData(): CardData {
     return this.card
+  }
+
+  public get attackAmount(): number {
+    return this.card.attack
+  }
+
+  public get healthAmount(): number {
+    return this.card.health
+  }
+
+  public set setAttackAmount(attack: number) {
+    this.card.attack = attack
+    checkStats(this.card.attack, this.originalCard.attack, this.cardAttackText)
+  }
+
+  public set setHealthAmount(health: number) {
+    this.card.health = health
+    checkStats(this.card.health, this.originalCard.health, this.cardHealthText)
+  }
+
+  /**
+   * Get card owner
+   */
+  public get player(): TargetKeys {
+    return this.owner
   }
 
   /**
@@ -58,15 +87,6 @@ export class Card {
   protected setCardText(text: string): void {
     this.cardNameText.setText(text)
     this.cardNameText.setStyle(text.length < 15 ? CARD_NAME_FONT_STYLE_BIG : CARD_NAME_FONT_STYLE_SMALL)
-  }
-
-  /**
-   * Sets stats then check for changes and apply colors
-   */
-  protected setStats(): void {
-    checkStats(this.card.attack, this.originalCard.attack, this.cardAttackText)
-    checkStats(this.card.health, this.originalCard.health, this.cardHealthText)
-    checkStats(this.card.cost, this.originalCard.cost, this.cardCostText)
   }
 
   /**

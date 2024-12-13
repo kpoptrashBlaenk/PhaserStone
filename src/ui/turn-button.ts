@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
+import { FONT_KEYS } from '../assets/font-keys'
 import { BattleScene } from '../scenes/battle-scene'
 import { BATTLE_STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { FONT_KEYS } from '../assets/font-keys'
 
 const BUTTON_CONFIGS = Object.freeze({
   x: 1650,

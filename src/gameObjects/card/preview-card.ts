@@ -1,8 +1,9 @@
-import { TARGET_KEYS, TargetKeys } from '../../utils/keys'
-import { CardData } from './card-keys'
-import { Card } from './card'
+import { checkStats } from '../../common/set-stats'
 import { BattleScene } from '../../scenes/battle-scene'
+import { TARGET_KEYS, TargetKeys } from '../../utils/keys'
 import { PREVIEW_CARD_PADDING } from '../../utils/visual-configs'
+import { Card } from './card'
+import { CardData } from './card-keys'
 
 export class Preview extends Card {
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
@@ -28,6 +29,15 @@ export class Preview extends Card {
 
     this.setStats()
     this.showCard()
+  }
+
+  /**
+   * Sets stats then check for changes and apply colors
+   */
+  private setStats(): void {
+    checkStats(this.card.attack, this.originalCard.attack, this.cardAttackText)
+    checkStats(this.card.health, this.originalCard.health, this.cardHealthText)
+    checkStats(this.card.cost, this.originalCard.cost, this.cardCostText)
   }
 
   /**

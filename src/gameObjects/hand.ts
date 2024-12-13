@@ -1,7 +1,7 @@
 import { BattleScene } from '../scenes/battle-scene'
-import { BOARD_POSITION_Y, HAND_CARD_SIZE, HAND_CONFIGS } from '../utils/visual-configs'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { repositionContainer, resizeContainer } from '../utils/resize-container'
+import { BOARD_POSITION_Y, HAND_CARD_SIZE, HAND_CONFIGS } from '../utils/visual-configs'
 import { HandCard } from './card/hand-card'
 
 export class Hand {
@@ -34,23 +34,23 @@ export class Hand {
     this.hand.push(card)
 
     // Get original global position of card
-    const originalPositionX = card.cardUI.getBounds().x
-    const originalPositionY = card.cardUI.getBounds().y
+    const originalPositionX = card.container.getBounds().x
+    const originalPositionY = card.container.getBounds().y
 
-    this.handContainer.add(card.cardUI)
+    this.handContainer.add(card.container)
 
     // Place card to the right of container then resize
     const newPositionX = this.handContainer.width
     const newPositionY = 0
 
-    card.cardUI.setPosition(
+    card.container.setPosition(
       originalPositionX - this.handContainer.x,
       originalPositionY - this.handContainer.y
     )
 
     // Moving to Hand Animation
     this.scene.tweens.add({
-      targets: card.cardUI,
+      targets: card.container,
       x: newPositionX,
       y: newPositionY,
       duration: HAND_CONFIGS.DECK_TO_HAND.DURATION,
@@ -71,7 +71,7 @@ export class Hand {
       const index = this.hand.findIndex((handCard) => handCard === card)
       this.hand.splice(index, 1)
       callback?.()
-      this.handContainer.remove(card.cardUI, true)
+      this.handContainer.remove(card.container, true)
       this.resizeHandContainer()
     }
 
@@ -88,9 +88,9 @@ export class Hand {
    */
   private animateCardFromHandToBoard(card: HandCard, callback?: () => void): void {
     this.scene.tweens.add({
-      targets: card.cardUI,
-      x: this.scene.scale.width / 2 - card.cardUI.getBounds().x + card.cardUI.x,
-      y: BOARD_POSITION_Y.OPPONENT - card.cardUI.getBounds().y + card.cardUI.y,
+      targets: card.container,
+      x: this.scene.scale.width / 2 - card.container.getBounds().x + card.container.x,
+      y: BOARD_POSITION_Y.OPPONENT - card.container.getBounds().y + card.container.y,
       duration: HAND_CONFIGS.HAND_TO_BOARD.DURATION,
       ease: HAND_CONFIGS.HAND_TO_BOARD.EASE,
       onComplete: () => {
