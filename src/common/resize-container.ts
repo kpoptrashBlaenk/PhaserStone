@@ -1,4 +1,4 @@
-import { RESIZE_CONFIGS } from './visual-configs'
+import { RESIZE_CONFIGS } from '../utils/visual-configs'
 
 export function resizeContainer(container: Phaser.GameObjects.Container, callback?: () => void): void {
   const padding = 10
