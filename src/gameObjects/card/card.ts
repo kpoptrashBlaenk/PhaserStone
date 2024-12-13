@@ -53,6 +53,10 @@ export class Card {
     return this.card.health
   }
 
+  public get manaAmount(): number {
+    return this.card.cost
+  }
+
   public set setAttackAmount(attack: number) {
     this.card.attack = attack
     checkStats(this.card.attack, this.originalCard.attack, this.cardAttackText)
@@ -61,6 +65,11 @@ export class Card {
   public set setHealthAmount(health: number) {
     this.card.health = health
     checkStats(this.card.health, this.originalCard.health, this.cardHealthText)
+  }
+
+  public set setManaAmount(cost: number) {
+    this.card.cost = cost
+    checkStats(this.card.cost, this.originalCard.cost, this.cardHealthText)
   }
 
   /**

@@ -1,5 +1,6 @@
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { FONT_KEYS } from '../assets/font-keys'
+import { OpponentAI } from '../common/opponent-ai'
 import { Board } from '../gameObjects/board'
 import { BoardCard } from '../gameObjects/card/board-card'
 import { CLASS_KEYS, TYPE_KEYS } from '../gameObjects/card/card-keys'
@@ -26,6 +27,7 @@ export class BattleScene extends BaseScene {
   public warnMessage: WarnMessage
   private opponentPreview: Preview
   private turnButton: TurnButton
+  private opponentAI: OpponentAI
 
   private deck: {
     PLAYER: Deck
@@ -69,6 +71,7 @@ export class BattleScene extends BaseScene {
     this.setupPreviews()
     this.setupMana()
     this.setupHeroes()
+    this.setupOpponentAI()
     this.setupStateMachine()
 
     // Game Start
@@ -169,6 +172,13 @@ export class BattleScene extends BaseScene {
    */
   private setupBattleManager(): void {
     this.battleManager = new BattleManager(this, this.board)
+  }
+
+  /**
+   * Sets up battle manager
+   */
+  private setupOpponentAI(): void {
+    this.opponentAI = new OpponentAI(this, this.mana.OPPONENT, this.hand.OPPONENT, this.board)
   }
 
   /**
@@ -397,44 +407,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN,
       onEnter: () => {
-        // Play cards AI
-        const hand = this.hand.OPPONENT.handCards
-        let playableHand: HandCard[] = []
-
-        // Get all playable cards
-        hand.forEach((card: HandCard) => {
-          if (card.cardData.cost <= this.mana.OPPONENT.getCurrentMana) {
-            playableHand.push(card)
-          }
-        })
-
-        // If playable cards, play, if not attack
-        if (playableHand.length > 0) {
-          const card = playableHand[Math.floor(Math.random() * playableHand.length)]
-          this.stateMachine.setState(BATTLE_STATES.OPPONENT_PLAY_CARD, card)
-        } else {
-          // Opponent Attack AI
-          const opponentBoard = this.board.OPPONENT.boardCards
-          const playerBoard = this.board.PLAYER.boardCards
-          const notSickMinions: BoardCard[] = []
-
-          // Get all playable cards
-          opponentBoard.forEach((card: BoardCard) => {
-            if (!card.isSummoningSick && !card.isAlreadyAttacked) {
-              notSickMinions.push(card)
-            }
-          })
-
-          // If fighting cards and fightable cards, play, if not change turn
-          if (notSickMinions.length > 0 && playerBoard.length > 0) {
-            this.chosenBattleMinions.ATTACKER =
-              notSickMinions[Math.floor(Math.random() * notSickMinions.length)]
-            this.chosenBattleMinions.DEFENDER = playerBoard[Math.floor(Math.random() * playerBoard.length)]
-            this.stateMachine.setState(BATTLE_STATES.MINION_BATTLE)
-          } else {
-            this.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_END)
-          }
-        }
+        this.opponentAI.opponentTurn()
       },
     })
 
