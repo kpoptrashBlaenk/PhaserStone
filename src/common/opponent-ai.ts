@@ -2,6 +2,7 @@ import { Board } from '../gameObjects/board'
 import { BoardCard } from '../gameObjects/card/board-card'
 import { HandCard } from '../gameObjects/card/hand-card'
 import { Hand } from '../gameObjects/hand'
+import { Hero } from '../gameObjects/hero'
 import { Mana } from '../gameObjects/mana'
 import { BattleScene } from '../scenes/battle-scene'
 import { BATTLE_STATES } from '../utils/keys'
@@ -10,6 +11,7 @@ export class OpponentAI {
   private scene: BattleScene
   private mana: Mana
   private hand: Hand
+  private hero: Hero
   private board: {
     PLAYER: Board
     OPPONENT: Board
@@ -22,12 +24,14 @@ export class OpponentAI {
     board: {
       PLAYER: Board
       OPPONENT: Board
-    }
+    },
+    hero: Hero
   ) {
     this.scene = scene
     this.mana = mana
     this.hand = hand
     this.board = board
+    this.hero = hero
   }
 
   /**
@@ -55,9 +59,10 @@ export class OpponentAI {
     if (playableHand.length > 0) {
       const card = playableHand[Math.floor(Math.random() * playableHand.length)]
       this.scene.stateMachine.setState(BATTLE_STATES.OPPONENT_PLAY_CARD, card)
-    } else {
-      this.playBoard()
+      return
     }
+
+    this.playBoard()
   }
 
   /**
@@ -76,13 +81,22 @@ export class OpponentAI {
     })
 
     // If fighting cards and fightable cards, battle, if not change turn
-    if (notSickMinions.length > 0 && playerBoard.length > 0) {
+    if (notSickMinions.length > 0) {
       const attacker = notSickMinions[Math.floor(Math.random() * notSickMinions.length)]
       this.scene.stateMachine.setState(BATTLE_STATES.ATTACKER_MINION_CHOSEN, attacker)
-      const defender = playerBoard[Math.floor(Math.random() * playerBoard.length)]
+
+      // Attack minions, if not go face
+      if (playerBoard.length > 0) {
+        const defender = playerBoard[Math.floor(Math.random() * playerBoard.length)]
+        this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, defender)
+        return
+      }
+
+      const defender = this.hero
       this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, defender)
-    } else {
-      this.scene.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_END)
+      return
     }
+
+    this.scene.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN_END)
   }
 }

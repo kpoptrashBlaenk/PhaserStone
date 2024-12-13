@@ -178,7 +178,7 @@ export class BattleScene extends BaseScene {
    * Sets up battle manager
    */
   private setupOpponentAI(): void {
-    this.opponentAI = new OpponentAI(this, this.mana.OPPONENT, this.hand.OPPONENT, this.board)
+    this.opponentAI = new OpponentAI(this, this.mana.OPPONENT, this.hand.OPPONENT, this.board, this.hero.PLAYER)
   }
 
   /**
