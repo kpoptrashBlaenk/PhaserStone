@@ -1,3 +1,16 @@
 [
-
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "mechanics": ["BATTLECRY"],
+    "effect": "DAMAGE_ENEMY",
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
+    "races": [],
+    "type": "MINION"
+  }
 ]
