@@ -326,7 +326,6 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_TURN_START,
       onEnter: () => {
-        this.removeGreenBorders()
         this.mana.OPPONENT.addManaCrystal()
         this.mana.OPPONENT.refreshMana()
         this.resetMinionsAttackState(this.board.PLAYER)
@@ -337,6 +336,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.PLAYER_TURN_END,
       onEnter: () => {
+        this.removeGreenBorders()
         this.turnButton.changeTurn()
       },
     })
@@ -362,7 +362,6 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.PLAYER_DRAW_CARD,
       onEnter: () =>
         this.drawCard(TARGET_KEYS.PLAYER, () => {
-          this.checkPlayable()
           this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
         }),
     })
@@ -379,8 +378,6 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.PLAYER_PLAY_CARD,
       onEnter: (card: HandCard) => {
         this.mana.PLAYER.useMana(card.cardData.cost)
-        this.checkPlayable()
-        this.checkCanAttack()
         this.playCard(TARGET_KEYS.PLAYER, card, () => {
           this.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
         })
