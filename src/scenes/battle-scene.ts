@@ -173,7 +173,7 @@ export class BattleScene extends BaseScene {
    * Sets up effect manager
    */
   private setupBattlecry(): void {
-    this.battlecry = new Battlecry(this, this.board)
+    this.battlecry = new Battlecry(this, this.board, this.hero)
   }
 
   /**
@@ -205,10 +205,20 @@ export class BattleScene extends BaseScene {
    * Target plays card
    */
   private playCard(target: TargetKeys, card: HandCard, callback?: () => void): void {
-    this.hand[target].playCard(card, () => {
+    const afterPlayCard = () => {
       this.mana[card.player].useMana(card.manaAmount)
       this.board[target].playCard(card)
       callback?.()
+    }
+
+    this.hand[target].playCard(card, () => {
+      if (target === TARGET_KEYS.OPPONENT) {
+        this.battlecry.opponentEffect(card)
+        afterPlayCard()
+        return
+      }
+
+      afterPlayCard()
     })
   }
 
@@ -482,7 +492,7 @@ export class BattleScene extends BaseScene {
     this.stateMachine.addState({
       name: BATTLE_STATES.AFTER_EFFECT_CHECK,
       onEnter: () => {
-        this.battlecry.afterEffectCheck(this.turnButton.getCurrentTurn)
+        this.battlecry.afterEffectCheck()
       },
     })
   }

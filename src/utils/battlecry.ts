@@ -14,6 +14,10 @@ export class Battlecry {
     PLAYER: Board
     OPPONENT: Board
   }
+  private hero: {
+    PLAYER: Hero
+    OPPONENT: Hero
+  }
   private source: HandCard
   private target: BoardCard | Hero
   private effect: BattlecryMinion | undefined
@@ -22,10 +26,42 @@ export class Battlecry {
   private callback?: () => void
   private fallback?: () => void
 
-  constructor(scene: BattleScene, board: { PLAYER: Board; OPPONENT: Board }) {
+  constructor(
+    scene: BattleScene,
+    board: { PLAYER: Board; OPPONENT: Board },
+    hero: { PLAYER: Hero; OPPONENT: Hero }
+  ) {
     this.scene = scene
     this.board = board
+    this.hero = hero
     this.dead = []
+  }
+
+  public opponentEffect(card: HandCard, callback?: () => void) {
+    this.source = card
+    this.effect = card.cardData.battlecry
+    this.callback = callback
+
+    if (card.cardData.battlecry) {
+      this.targetType = card.cardData.battlecry?.target
+
+      const targets = this.searchTargets(this.effect?.type)
+
+      // No targets
+      if (targets.length === 0) {
+        this.callback?.()
+        return
+      }
+
+      this.target = targets[Math.floor(Math.random() * targets.length)]
+      if (this.effect?.type === 'DAMAGE') {
+        this.dealDamage(this.target)
+      }
+
+      return
+    }
+
+    this.callback?.()
   }
 
   public checkForEffect(card: HandCard, callback?: () => void, fallback?: () => void): void {
@@ -40,7 +76,11 @@ export class Battlecry {
       if (this.targetType === 'ANY') {
         this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_CHOOSE_TARGET)
       }
+
+      return
     }
+
+    this.callback?.()
   }
 
   public targetChosen(target: BoardCard | Hero) {
@@ -57,18 +97,7 @@ export class Battlecry {
     }
   }
 
-  public afterEffectCheck(turn: TargetKeys): void {
-    // Set turn state
-    const setState = () => {
-      this.cleanup()
-
-      if (turn === TARGET_KEYS.PLAYER) {
-        this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TURN)
-      } else {
-        this.scene.stateMachine.setState(BATTLE_STATES.OPPONENT_TURN)
-      }
-    }
-
+  public afterEffectCheck(): void {
     const defender = this.target
 
     if (defender) {
@@ -80,12 +109,16 @@ export class Battlecry {
       }
 
       if (this.dead.length > 0) {
-        this.death(setState)
+        this.death(() => {
+          this.callback?.()
+          this.cleanup()
+        })
+
         return
       }
 
-      // If no minions died, set states immediately
-      setState()
+      this.callback?.()
+      this.cleanup()
     }
   }
 
@@ -193,5 +226,22 @@ export class Battlecry {
    */
   private cleanup(): void {
     this.dead = []
+    this.callback = undefined
+    this.fallback = undefined
+  }
+
+  private searchTargets(context?: string): (BoardCard | Hero)[] {
+    const targets = []
+    const targetPlayer = context === 'DAMAGE' ? TARGET_KEYS.PLAYER : TARGET_KEYS.OPPONENT
+
+    if (this.targetType === 'ANY') {
+      this.board[targetPlayer].boardCards.forEach((card) => {
+        targets.push(card)
+      })
+
+      targets.push(this.hero[targetPlayer])
+    }
+
+    return targets
   }
 }
