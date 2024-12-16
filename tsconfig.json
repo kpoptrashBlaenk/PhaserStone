@@ -10,6 +10,6 @@
     "moduleResolution": "node", // Ensure module resolution is set to node
     "strictPropertyInitialization": false
   },
-  "include": ["public/**/*.ts", "src/**/*.ts"],
+  "include": ["public/**/*.ts", "Legacy/src/**/*.ts"],
   "exclude": ["node_modules"]
 }
