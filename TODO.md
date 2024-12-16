@@ -51,3 +51,9 @@
 
 - [x] Battle AI
 - [x] Improved Battle AI
+
+## Battlecry
+
+- [ ] Arrow for targeting
+- [ ] Opponent
+- [ ] Refactoring Repeated Logic

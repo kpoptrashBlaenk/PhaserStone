@@ -35,6 +35,8 @@ export class Hero {
     } else {
       this.forOpponent()
     }
+
+    this.addClick()
   }
 
   public get attackAmount(): number {
@@ -194,6 +196,14 @@ export class Hero {
     this.heroContainer.on('pointerup', () => {
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
         this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, this)
+      }
+    })
+  }
+
+  private addClick(): void {
+    this.heroContainer.on('pointerup', () => {
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_CHOOSE_TARGET) {
+        this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TARGET_CHOSEN, this)
       }
     })
   }

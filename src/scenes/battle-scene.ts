@@ -14,6 +14,7 @@ import { Background } from '../ui/board-background'
 import { TurnButton } from '../ui/turn-button'
 import { WarnMessage } from '../ui/warn-message'
 import { BattleManager } from '../utils/battle-manager'
+import { Battlecry } from '../utils/battlecry'
 import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { OPPONENT_PREVIEW } from '../utils/visual-configs'
@@ -23,6 +24,7 @@ import { SCENE_KEYS } from './scene-keys'
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
   public battleManager: BattleManager
+  public battlecry: Battlecry
   public playerPreview: Preview
   public warnMessage: WarnMessage
   public board: {
@@ -72,6 +74,7 @@ export class BattleScene extends BaseScene {
     this.setupMana()
     this.setupHeroes()
     this.setupOpponentAI()
+    this.setupBattlecry()
     this.setupStateMachine()
 
     // Game Start
@@ -164,6 +167,13 @@ export class BattleScene extends BaseScene {
    */
   private setupBattleManager(): void {
     this.battleManager = new BattleManager(this, this.board)
+  }
+
+  /**
+   * Sets up effect manager
+   */
+  private setupBattlecry(): void {
+    this.battlecry = new Battlecry(this, this.board)
   }
 
   /**
@@ -395,6 +405,18 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    this.stateMachine.addState({
+      name: BATTLE_STATES.PLAYER_CHOOSE_TARGET,
+      onEnter: () => {},
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.PLAYER_TARGET_CHOSEN,
+      onEnter: (target: BoardCard | Hero) => {
+        this.battlecry.targetChosen(target)
+      },
+    })
+
     // Opponent-Specific States
     this.stateMachine.addState({
       name: BATTLE_STATES.OPPONENT_DRAW_CARD,
@@ -454,6 +476,13 @@ export class BattleScene extends BaseScene {
       name: BATTLE_STATES.AFTER_BATTLE_CHECK,
       onEnter: () => {
         this.battleManager.afterBattleCheck(this.turnButton.getCurrentTurn)
+      },
+    })
+
+    this.stateMachine.addState({
+      name: BATTLE_STATES.AFTER_EFFECT_CHECK,
+      onEnter: () => {
+        this.battlecry.afterEffectCheck(this.turnButton.getCurrentTurn)
       },
     })
   }

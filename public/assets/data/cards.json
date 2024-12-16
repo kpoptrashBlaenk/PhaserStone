@@ -7,7 +7,8 @@
     "health": 1,
     "id": 1,
     "battlecry": {
-      "type": "DAMAGE_ANY",
+      "target": "ANY",
+      "type": "DAMAGE",
       "amount": 1
     },
     "text": "<b>Battlecry:</b> Deal 1 damage.",

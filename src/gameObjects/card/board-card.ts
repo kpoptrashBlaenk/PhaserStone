@@ -27,6 +27,8 @@ export class BoardCard extends Card {
       this.forOpponent()
     }
 
+    this.addClick()
+
     this.setSummoningSick = true
     this.setAlreadyAttacked = false
   }
@@ -130,6 +132,14 @@ export class BoardCard extends Card {
     this.cardTemplate.on('pointerup', () => {
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.ATTACKER_MINION_CHOSEN) {
         this.scene.stateMachine.setState(BATTLE_STATES.DEFENDER_MINION_CHOSEN, this)
+      }
+    })
+  }
+
+  private addClick(): void {
+    this.cardTemplate.on('pointerup', () => {
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_CHOOSE_TARGET) {
+        this.scene.stateMachine.setState(BATTLE_STATES.PLAYER_TARGET_CHOSEN, this)
       }
     })
   }

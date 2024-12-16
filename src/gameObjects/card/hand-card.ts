@@ -11,6 +11,7 @@ export class HandCard extends Card {
   private pointerCheckpoint: Coordinate
   private cardContainerCheckpoint: Coordinate
   private isPlayable: boolean
+  private cancelImage: Phaser.GameObjects.Image | undefined
 
   constructor(scene: BattleScene, card: CardData, owner: TargetKeys) {
     super(scene, card, owner)
@@ -87,7 +88,25 @@ export class HandCard extends Card {
    * Pointerup: If card on board, play it, if not return to hand
    */
   private addDrag(): void {
+    const callback = () => {
+      this.scene.stateMachine.setState(
+        this.owner === TARGET_KEYS.PLAYER ? BATTLE_STATES.PLAYER_PLAY_CARD : BATTLE_STATES.OPPONENT_PLAY_CARD,
+        this
+      )
+      this.removeCancel()
+    }
+
+    const fallback = () => {
+      this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
+      this.scene.stateMachine.setState(
+        this.owner === TARGET_KEYS.PLAYER ? BATTLE_STATES.PLAYER_TURN : BATTLE_STATES.OPPONENT_TURN
+      )
+      this.removeCancel()
+    }
+
+    // Click Down
     this.cardTemplate.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      // Draggable
       if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_TURN && this.isPlayable) {
         this.cardContainer.setData('draggingFromHand', true).setDepth(1)
         this.pointerCheckpoint = {
@@ -98,11 +117,19 @@ export class HandCard extends Card {
           x: this.cardContainer.x,
           y: this.cardContainer.y,
         }
-      } else {
-        this.scene.warnMessage.showTurnMessage(WARNING_KEYS.CANT_PLAY)
+        return
       }
+
+      // Cancellable
+      if (this.scene.stateMachine.currentStateName === BATTLE_STATES.PLAYER_CHOOSE_TARGET) {
+        fallback()
+        return
+      }
+
+      this.scene.warnMessage.showTurnMessage(WARNING_KEYS.CANT_PLAY)
     })
 
+    // Click Move
     this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
       if (!this.cardContainer.getData('draggingFromHand')) {
         return
@@ -111,6 +138,7 @@ export class HandCard extends Card {
       this.cardContainer.y = this.cardContainerCheckpoint.y + (pointer.y - this.pointerCheckpoint.y)
     })
 
+    // Click Up
     this.cardTemplate.on('pointerup', (pointer: Phaser.Input.Pointer) => {
       if (this.cardContainer.getData('draggingFromHand')) {
         this.cardContainer.setData('draggingFromHand', false).setDepth(0)
@@ -121,13 +149,18 @@ export class HandCard extends Card {
           pointer.y >= PLAYER_BOARD_BOUNDS.startY &&
           pointer.y <= PLAYER_BOARD_BOUNDS.endY
         ) {
-          // Play Card
-          this.scene.stateMachine.setState(
-            this.owner === TARGET_KEYS.PLAYER
-              ? BATTLE_STATES.PLAYER_PLAY_CARD
-              : BATTLE_STATES.OPPONENT_PLAY_CARD,
-            this
-          )
+          // Cancel Button´´
+          this.cancelImage = this.scene.battleManager
+            .addCancelImage(
+              this.cardContainer.width / 2 / this.cardContainer.scale,
+              this.cardContainer.height / 2 / this.cardContainer.scale,
+              0.8
+            )
+            .setAlpha(1)
+          this.cardContainer.add(this.cancelImage)
+
+          // Check Effects and play card (callback) or return (fallback)
+          this.scene.battlecry.checkForEffect(this, callback, fallback)
         } else {
           // Return to Hand
           this.cardContainer.setPosition(this.cardContainerCheckpoint.x, this.cardContainerCheckpoint.y)
@@ -136,6 +169,13 @@ export class HandCard extends Card {
         }
       }
     })
+  }
+
+  /**
+   * Remove cancel image when selection cancelled or fulfilled
+   */
+  private removeCancel(): void {
+    this.cancelImage?.destroy()
   }
 
   /**
