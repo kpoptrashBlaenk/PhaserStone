@@ -5,7 +5,7 @@ import { Hand } from '../gameObjects/hand'
 import { Hero } from '../gameObjects/hero'
 import { Mana } from '../gameObjects/mana'
 import { BattleScene } from '../scenes/battle-scene'
-import { BATTLE_STATES } from '../utils/keys'
+import { BATTLE_STATES } from '../../../src/utils/keys'
 
 export class OpponentAI {
   private scene: BattleScene

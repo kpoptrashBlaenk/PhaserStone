@@ -1,5 +1,5 @@
 import { BattleScene } from '../scenes/battle-scene'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { TARGET_KEYS, TargetKeys } from '../../../src/utils/keys'
 import { repositionContainer, resizeContainer } from '../common/resize-container'
 import { BOARD_POSITION_Y, HAND_CARD_SIZE, HAND_CONFIGS } from '../utils/visual-configs'
 import { HandCard } from './card/hand-card'

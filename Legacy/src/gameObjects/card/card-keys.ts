@@ -1,4 +1,4 @@
-import { CardAssetKeys } from '../../assets/asset-keys'
+import { CardAssetKeys } from '../../../../src/assets/asset-keys'
 
 export type BattlecryMinion = {
   target: string

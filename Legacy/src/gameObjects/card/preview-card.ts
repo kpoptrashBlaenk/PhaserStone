@@ -1,6 +1,6 @@
 import { checkStats } from '../../common/set-stats'
 import { BattleScene } from '../../scenes/battle-scene'
-import { TARGET_KEYS, TargetKeys } from '../../utils/keys'
+import { TARGET_KEYS, TargetKeys } from '../../../../src/utils/keys'
 import { PREVIEW_CARD_PADDING } from '../../utils/visual-configs'
 import { Card } from './card'
 import { CardData } from './card-keys'

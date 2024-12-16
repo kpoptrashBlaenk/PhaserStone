@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
-import { FONT_KEYS } from '../assets/font-keys'
+import { FONT_KEYS } from '../../../src/assets/font-keys'
 import { BattleScene } from '../scenes/battle-scene'
-import { WarningKeys } from '../utils/keys'
+import { WarningKeys } from '../../../src/utils/keys'
 
 export class WarnMessage {
   private scene: Phaser.Scene

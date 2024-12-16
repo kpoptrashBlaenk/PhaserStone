@@ -1,7 +1,7 @@
-import { CARD_ASSETS_KEYS } from '../../assets/asset-keys'
+import { CARD_ASSETS_KEYS } from '../../../../src/assets/asset-keys'
 import { checkStats } from '../../common/set-stats'
 import { BattleScene } from '../../scenes/battle-scene'
-import { TargetKeys } from '../../utils/keys'
+import { TargetKeys } from '../../../../src/utils/keys'
 import {
   CARD_ATTACK_POSITION,
   CARD_COST_POSITION,

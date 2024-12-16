@@ -1,4 +1,4 @@
-import { BattleStates } from './keys'
+import { BattleStates } from '../../../src/utils/keys'
 
 type State = {
   name: BattleStates

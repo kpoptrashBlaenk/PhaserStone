@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { UI_ASSET_KEYS } from '../assets/asset-keys'
+import { UI_ASSET_KEYS } from '../../../src/assets/asset-keys'
 
 export class Background {
   private scene: Phaser.Scene

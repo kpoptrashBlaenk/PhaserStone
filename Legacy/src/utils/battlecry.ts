@@ -1,11 +1,11 @@
-import { EFFECT_ASSET_KEYS } from '../assets/asset-keys'
+import { EFFECT_ASSET_KEYS } from '../../../src/assets/asset-keys'
 import { Board } from '../gameObjects/board'
 import { BoardCard } from '../gameObjects/card/board-card'
 import { BattlecryMinion } from '../gameObjects/card/card-keys'
 import { HandCard } from '../gameObjects/card/hand-card'
 import { Hero } from '../gameObjects/hero'
 import { BattleScene } from '../scenes/battle-scene'
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from './keys'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../../src/utils/keys'
 import { DAMAGE_CONFIGS, DEATH_CONFIGS } from './visual-configs'
 
 export class Battlecry {

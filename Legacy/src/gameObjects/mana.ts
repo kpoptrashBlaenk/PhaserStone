@@ -1,6 +1,6 @@
-import { UI_ASSET_KEYS } from '../assets/asset-keys'
-import { MAX_MANA } from '../utils/configs'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { UI_ASSET_KEYS } from '../../../src/assets/asset-keys'
+import { MAX_MANA } from '../../../src/utils/configs'
+import { TARGET_KEYS, TargetKeys } from '../../../src/utils/keys'
 import {
   CARD_NUMBER_FONT_STYLE,
   MANA_CONFIGS,

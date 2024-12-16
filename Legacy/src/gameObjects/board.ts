@@ -1,10 +1,10 @@
 import { BattleScene } from '../scenes/battle-scene'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { TARGET_KEYS, TargetKeys } from '../../../src/utils/keys'
 import { repositionContainer, resizeContainer } from '../common/resize-container'
 import { BOARD_CONFIGS, BOARD_POSITION_Y, HAND_CARD_SIZE, RESIZE_CONFIGS } from '../utils/visual-configs'
 import { BoardCard } from './card/board-card'
 import { HandCard } from './card/hand-card'
-import { MAX_BOARD } from '../utils/configs'
+import { MAX_BOARD } from '../../../src/utils/configs'
 
 export class Board {
   private owner: TargetKeys

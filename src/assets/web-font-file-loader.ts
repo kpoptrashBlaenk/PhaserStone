@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import * as WebFontLoader from '../../../MonsterTamer/src/lib/webfontloader'
+import * as WebFontLoader from './../lib/webfontloader'
 
 export class WebFontFileLoader extends Phaser.Loader.File {
   private readonly fontNames: string[]

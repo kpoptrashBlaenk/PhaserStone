@@ -1,6 +1,6 @@
-import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
+import { CARD_ASSETS_KEYS } from '../../../src/assets/asset-keys'
 import { BattleScene } from '../scenes/battle-scene'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { TARGET_KEYS, TargetKeys } from '../../../src/utils/keys'
 import { DECK_CONFIGS, DECK_MAX_VISIBLE, DECK_POSITION } from '../utils/visual-configs'
 import { CardData } from './card/card-keys'
 import { HandCard } from './card/hand-card'

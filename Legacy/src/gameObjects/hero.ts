@@ -1,9 +1,9 @@
-import { UI_ASSET_KEYS } from '../assets/asset-keys'
+import { UI_ASSET_KEYS } from '../../../src/assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { checkStats } from '../common/set-stats'
 import { BattleScene } from '../scenes/battle-scene'
-import { MAX_HEALTH } from '../utils/configs'
-import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
+import { MAX_HEALTH } from '../../../src/utils/configs'
+import { BATTLE_STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../../../src/utils/keys'
 import { CARD_NUMBER_FONT_STYLE, HERO_CONFIGS } from '../utils/visual-configs'
 
 export class Hero {

@@ -1,5 +1,5 @@
-import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
-import { FONT_KEYS } from '../assets/font-keys'
+import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../../../src/assets/asset-keys'
+import { FONT_KEYS } from '../../../src/assets/font-keys'
 import { OpponentAI } from '../common/opponent-ai'
 import { Board } from '../gameObjects/board'
 import { BoardCard } from '../gameObjects/card/board-card'
@@ -15,11 +15,11 @@ import { TurnButton } from '../ui/turn-button'
 import { WarnMessage } from '../ui/warn-message'
 import { BattleManager } from '../utils/battle-manager'
 import { Battlecry } from '../utils/battlecry'
-import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../../../src/utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { OPPONENT_PREVIEW } from '../utils/visual-configs'
 import { BaseScene } from './base-scene'
-import { SCENE_KEYS } from './scene-keys'
+import { SCENE_KEYS } from '../../../src/scenes/scene-keys'
 
 export class BattleScene extends BaseScene {
   public stateMachine: StateMachine
