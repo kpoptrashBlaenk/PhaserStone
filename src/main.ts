@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin.js'
-// import { BattleScene } from './scenes/battle-scene'
+import { BattleScene } from './scenes/battle-scene'
 import { PreloadScene } from './scenes/preload-scene'
 import { SCENE_KEYS } from './scenes/scene-keys'
 
@@ -27,6 +27,6 @@ const game = new Phaser.Game({
 })
 
 game.scene.add(SCENE_KEYS.PRELOAD_SCENE, PreloadScene)
-// game.scene.add(SCENE_KEYS.BATTLE_SCENE, BattleScene)
+game.scene.add(SCENE_KEYS.BATTLE_SCENE, BattleScene)
 
 game.scene.start(SCENE_KEYS.PRELOAD_SCENE)
