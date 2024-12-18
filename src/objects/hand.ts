@@ -1,4 +1,4 @@
-import { resizeContainer } from '../common/resize-container'
+import { repositionContainer, resizeContainer } from '../common/resize-container'
 import { AnimationManager } from '../utils/animation-manager'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { CARD_CONFIG } from '../utils/visual-configs'
@@ -36,6 +36,7 @@ export class Hand {
       callback?.()
       return
     }
+
     this.$hand.push(card)
     card.setContext('HAND')
 
@@ -74,12 +75,14 @@ export class Hand {
    * Resize container and reposition it
    */
   private $resizeContainer(): void {
-    resizeContainer(
-      this.$handContainer,
-      this.$scene.scale.width / 2 - Math.max(this.$handContainer.width, CARD_CONFIG.SIZE.WIDTH) / 2,
-      this.$owner === TARGET_KEYS.PLAYER
-        ? this.$scene.scale.height - Math.max(this.$handContainer.height, CARD_CONFIG.SIZE.HEIGHT)
-        : 0
+    resizeContainer(this.$handContainer, () =>
+      repositionContainer(
+        this.$handContainer,
+        this.$scene.scale.width / 2 - Math.max(this.$handContainer.width, CARD_CONFIG.SIZE.WIDTH) / 2,
+        this.$owner === TARGET_KEYS.PLAYER
+          ? this.$scene.scale.height - Math.max(this.$handContainer.height, CARD_CONFIG.SIZE.HEIGHT)
+          : 0
+      )
     )
   }
 }

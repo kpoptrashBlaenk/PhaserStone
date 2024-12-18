@@ -1,4 +1,4 @@
-import { resizeContainer } from '../common/resize-container'
+import { repositionContainer, resizeContainer } from '../common/resize-container'
 import { AnimationManager } from '../utils/animation-manager'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
@@ -49,10 +49,12 @@ export class Board {
    * Resize container and reposition it
    */
   private $resizeContainer(): void {
-    resizeContainer(
-      this.$boardContainer,
-      this.$scene.scale.width / 2 - Math.max(this.$boardContainer.width, CARD_CONFIG.SIZE.WIDTH) / 2,
-      BOARD_CONFIG.POSITION_Y[this.$owner]
+    resizeContainer(this.$boardContainer, () =>
+      repositionContainer(
+        this.$boardContainer,
+        this.$scene.scale.width / 2 - Math.max(this.$boardContainer.width, CARD_CONFIG.SIZE.WIDTH) / 2,
+        BOARD_CONFIG.POSITION_Y[this.$owner]
+      )
     )
   }
 }

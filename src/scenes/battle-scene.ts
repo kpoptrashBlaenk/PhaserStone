@@ -5,6 +5,7 @@ import { Deck } from '../objects/deck'
 import { Hand } from '../objects/hand'
 import { Mana } from '../objects/mana'
 import { Background } from '../ui/background'
+import { TurnButton } from '../ui/turn-button'
 import { AnimationManager } from '../utils/animation-manager'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
@@ -15,6 +16,7 @@ export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
   private $stateMachine: StateMachine
   private $enemyAI: EnemyAI
+  private $turnButton: TurnButton
 
   private $deck: { PLAYER: Deck; ENEMY: Deck } = { PLAYER: null as any, ENEMY: null as any }
   private $hand: { PLAYER: Hand; ENEMY: Hand } = { PLAYER: null as any, ENEMY: null as any }
@@ -45,6 +47,9 @@ export class BattleScene extends BaseScene {
 
     // Background
     new Background(this)
+
+    // Turn Button
+    this.$turnButton = new TurnButton(this, this.$stateMachine)
 
     // Deck
     this.$deck.PLAYER = new Deck(this, this.$stateMachine, TARGET_KEYS.PLAYER, this.$animationManager)
@@ -146,6 +151,20 @@ export class BattleScene extends BaseScene {
       onEnter: () => {
         this.$handleHand(TARGET_KEYS.ENEMY, 'PLAYABLE')
         this.$enemyAI.opponentTurn()
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_TURN_END,
+      onEnter: () => {
+        this.$stateMachine.setState(STATES.PLAYER_TURN_START)
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.ENEMY_TURN_END,
+      onEnter: () => {
+        this.$stateMachine.setState(STATES.ENEMY_TURN_START)
       },
     })
 

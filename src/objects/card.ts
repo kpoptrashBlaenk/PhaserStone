@@ -167,6 +167,63 @@ export class Card {
   }
 
   /**
+   * Creates preview objects
+   */
+  private $createPreview(): Phaser.GameObjects.Container {
+    // Image
+    const template = this.$scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
+    template.setPosition(template.width / 2, template.height / 2)
+
+    const portrait = this.$scene.add
+      .image(0, 0, this.$cardData.assetKey)
+      .setSize(template.width / 2, template.height / 2)
+      .setDepth(-1)
+      .setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
+
+    // Cost
+    const cost = this.$scene.add.text(
+      CARD_CONFIG.POSITION.COST.X,
+      CARD_CONFIG.POSITION.COST.Y,
+      String(this.$cardData.cost),
+      CARD_CONFIG.FONT_STYLE.NUMBER
+    )
+
+    // Attack
+    const attack = this.$scene.add.text(
+      CARD_CONFIG.POSITION.ATTACK.X,
+      CARD_CONFIG.POSITION.ATTACK.Y,
+      String(this.$cardData.attack),
+      CARD_CONFIG.FONT_STYLE.NUMBER
+    )
+
+    // Health
+    const health = this.$scene.add.text(
+      CARD_CONFIG.POSITION.HEALTH.X,
+      CARD_CONFIG.POSITION.HEALTH.Y,
+      String(this.$cardData.health),
+      CARD_CONFIG.FONT_STYLE.NUMBER
+    )
+
+    // Name
+    const name = this.$scene.add
+      .text(
+        template.x,
+        CARD_CONFIG.POSITION.NAME.Y,
+        this.$cardData.name,
+        this.$cardData.name.length < 10 ? CARD_CONFIG.FONT_STYLE.NAME.SMALL : CARD_CONFIG.FONT_STYLE.NAME.BIG
+      )
+      .setOrigin(0.5)
+
+    // Container
+    const container = this.$scene.add.container(0, 0).setSize(template.width, template.height)
+    portrait.setPosition(template.width / 2, template.height / 2)
+
+    container.add([portrait, template, cost, attack, health, name])
+
+    return container
+  }
+
+  /**
    * Resize card and card objects
    */
   private $resizeCard(container: Phaser.GameObjects.Container): void {
@@ -183,7 +240,7 @@ export class Card {
    */
   private $createHover(): void {
     this.$cardTemplateImage.on('pointerover', () => {
-      this.$previewContainer = this.$createCard()
+      this.$previewContainer = this.$createPreview()
       this.$resizeCard(this.$previewContainer)
       this.$previewContainer.setScale(1.5)
       const x = this.$cardContainer.getBounds().x - this.$cardContainer.x + 650

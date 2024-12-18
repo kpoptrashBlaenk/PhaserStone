@@ -135,10 +135,18 @@ export const OUTLINE_CONFIG = Object.freeze({
   NAME: 'outline',
 })
 
-// RESIZE CONFIG
+// RESIZE
 export const RESIZE_CONFIG = Object.freeze({
   DURATION: 500,
   EASE: 'Cubic.easeOut',
+})
+
+// BUTTON
+export const BUTTON_CONFIG = Object.freeze({
+  X: 1650,
+  Y: 470,
+  WIDTH: 200,
+  HEIGHT: 100,
 })
 
 // ANIMATION
