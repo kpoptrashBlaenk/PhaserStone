@@ -1,4 +1,4 @@
-import { CARD_ASSETS_KEYS, CardAssetKeys } from '../assets/asset-keys'
+import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
 import { CardData } from '../utils/card-keys'
 import { TargetKeys } from '../utils/keys'
 import { CARD_CONFIG } from '../utils/visual-configs'
@@ -15,15 +15,16 @@ export class Card {
   private $cardCostText: Phaser.GameObjects.Text
   private $cardAttackText: Phaser.GameObjects.Text
   private $cardHealthText: Phaser.GameObjects.Text
+  private $previewContainer: Phaser.GameObjects.Container
 
   constructor(scene: Phaser.Scene, cardData: CardData, owner: TargetKeys) {
     this.$scene = scene
-    this.$cardData = Object.assign({}, cardData)
+    this.$cardData = Object.freeze({ ...cardData })
     this.$originalData = Object.freeze({ ...cardData })
     this.$owner = owner
 
-    this.$createCard()
-    this.$resizeCard()
+    this.$cardContainer = this.$createCard()
+    this.$resizeCard(this.$cardContainer)
   }
 
   public get container(): Phaser.GameObjects.Container {
@@ -47,6 +48,10 @@ export class Card {
       this.$cardTemplateImage.setAlpha(1)
       this.$cardPortraitImage.setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
       this.$cardPortraitImage.setY(this.$cardTemplateImage.height / 3.3)
+      this.$cardTemplateImage.setInteractive({
+        cursor: 'pointer',
+      })
+      this.$createHover()
       return
     }
 
@@ -57,14 +62,12 @@ export class Card {
     this.$cardNameText.setAlpha(0)
     this.$cardTemplateImage.setAlpha(0)
     this.$cardPortraitImage.setScale(1)
-
-    // this.$cardPortraitImage.setY(0)
   }
 
   /**
    * Creates card objects
    */
-  private $createCard(): void {
+  private $createCard(): Phaser.GameObjects.Container {
     // Image
     this.$cardTemplateImage = this.$scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
     this.$cardTemplateImage.setPosition(this.$cardTemplateImage.width / 2, this.$cardTemplateImage.height / 2)
@@ -110,12 +113,12 @@ export class Card {
       .setOrigin(0.5)
 
     // Container
-    this.$cardContainer = this.$scene.add
+    const container = this.$scene.add
       .container(0, 0)
-      .setSize(this.$cardTemplateImage.width, this.$cardTemplateImage.height) // 270, 383
+      .setSize(this.$cardTemplateImage.width, this.$cardTemplateImage.height)
     this.$cardPortraitImage.setPosition(this.$cardTemplateImage.width / 2, this.$cardTemplateImage.height / 2)
 
-    this.$cardContainer.add([
+    container.add([
       this.$cardPortraitImage,
       this.$cardTemplateImage,
       this.$cardCostText,
@@ -123,16 +126,36 @@ export class Card {
       this.$cardHealthText,
       this.$cardNameText,
     ])
+
+    return container
   }
 
   /**
    * Resize card and card objects
    */
-  private $resizeCard(): void {
-    this.$cardContainer.setScale(CARD_CONFIG.SIZE.SCALE)
-    this.$cardContainer.setSize(
-      this.$cardTemplateImage.width * this.$cardContainer.scaleX,
-      this.$cardTemplateImage.height * this.$cardContainer.scaleY
+  private $resizeCard(container: Phaser.GameObjects.Container): void {
+    container.setScale(CARD_CONFIG.SIZE.SCALE)
+    container.setSize(
+      this.$cardTemplateImage.width * container.scaleX,
+      this.$cardTemplateImage.height * container.scaleY
     )
+  }
+
+  /**
+   * Pointerover: Create preview to right top
+   * Pointerout: Destroy hover
+   */
+  private $createHover(): void {
+    this.$cardTemplateImage.on('pointerover', () => {
+      this.$previewContainer = this.$createCard()
+      this.$resizeCard(this.$previewContainer)
+      this.$previewContainer.setScale(1.5)
+      const x = this.$cardContainer.getBounds().x - this.$cardContainer.x + 650
+      this.$previewContainer.setX(x)
+    })
+
+    this.$cardTemplateImage.on('pointerout', () => {
+      this.$previewContainer.destroy()
+    })
   }
 }
