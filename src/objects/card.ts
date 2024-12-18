@@ -1,4 +1,4 @@
-import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
+import { CARD_ASSETS_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
@@ -19,6 +19,7 @@ export class Card {
   private $cardAttackText: Phaser.GameObjects.Text
   private $cardHealthText: Phaser.GameObjects.Text
   private $previewContainer: Phaser.GameObjects.Container
+  private $cancelButton: Phaser.GameObjects.Image
   private $playable: boolean
 
   constructor(scene: Phaser.Scene, stateMachine: StateMachine, cardData: CardData, owner: TargetKeys) {
@@ -96,7 +97,19 @@ export class Card {
         this.$addClickHand()
         break
       case 'BOARD':
+        this.$addClickBoard()
         break
+    }
+  }
+
+  /**
+   * Mark or remove mark if this is a valid target
+   */
+  public setTarget(targeted: boolean): void {
+    if (targeted) {
+      this.$cardTemplateImage.setTint(0xff0000)
+    } else {
+      this.$cardTemplateImage.setTint(0xffffff)
     }
   }
 
@@ -257,7 +270,26 @@ export class Card {
    */
   private $addClickHand(): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
+      // Player Turn
       this.$cardTemplateImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
+        // Callback and Fallback for playing card
+        const playCardCallback = () => {
+          this.$removeCancel()
+          this.$stateMachine.setState(STATES.PLAYER_PLAY_CARD, this)
+        }
+        const playCardFallback = () => {
+          this.$cardContainer.setPosition(
+            this.$cardContainer.getData('position').container.x,
+            this.$cardContainer.getData('position').container.y
+          )
+          this.$removeCancel()
+        }
+        const cleanInteractions = () => {
+          this.$cardContainer.setData('draggingFromHand', false).setDepth(0)
+          this.$scene.input.removeListener('pointermove')
+          this.$previewContainer.destroy()
+        }
+
         if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$playable) {
           if (!this.$cardContainer.getData('draggingFromHand')) {
             // Dragging is false
@@ -298,20 +330,62 @@ export class Card {
             )
           ) {
             // Return to Hand
-            this.$cardContainer.setPosition(
-              this.$cardContainer.getData('position').container.x,
-              this.$cardContainer.getData('position').container.y
-            )
-            this.$scene.input.removeListener('pointermove')
-            this.$previewContainer.destroy()
+            playCardFallback()
+            cleanInteractions()
             return
           }
 
-          this.$stateMachine.setState(STATES.PLAYER_PLAY_CARD, this)
-          this.$scene.input.removeListener('pointermove')
-          this.$previewContainer.destroy()
+          // If battlecry, set state and pass what happens if battlecry passes or not
+          if (this.$cardData.battlecry) {
+            this.$addCancel()
+            this.$stateMachine.setState(STATES.PLAYER_BATTLECRY, {
+              card: this,
+              callback: playCardCallback,
+              fallback: playCardFallback,
+            })
+
+            cleanInteractions()
+            return
+          }
+
+          playCardCallback()
+          cleanInteractions()
+        }
+
+        // Cancel battlecry target clicked has cancel button
+        if (this.$stateMachine.currentStateName === STATES.PLAYER_CHOOSE_TARGET) {
+          if (this.$cancelButton) {
+            playCardFallback()
+            this.$stateMachine.setState(STATES.PLAYER_TURN)
+          }
         }
       })
+
+      return
+    }
+  }
+
+  private $addClickBoard(): void {
+    this.$cardTemplateImage.on('pointerup', () => {
+      if (this.$stateMachine.currentStateName === STATES.PLAYER_CHOOSE_TARGET) {
+        this.$stateMachine.setState(STATES.PLAYER_TARGET_CHOSEN, this)
+      }
+    })
+  }
+
+  private $addCancel(): void {
+    this.$cancelButton = this.$scene.add
+      .image(this.$cardTemplateImage.width / 2, this.$cardTemplateImage.height / 2, UI_ASSET_KEYS.CANCEL)
+      .setScale(0.8)
+      .setAlpha(1)
+      .setOrigin(0.5)
+
+    this.$cardContainer.add(this.$cancelButton)
+  }
+
+  private $removeCancel(): void {
+    if (this.$cancelButton) {
+      this.$cancelButton.destroy()
     }
   }
 }

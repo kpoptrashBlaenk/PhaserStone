@@ -11,9 +11,11 @@ import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
+import { BattlecryManager } from '../utils/battlecry-manager'
 
 export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
+  private $battlecryManager: BattlecryManager
   private $stateMachine: StateMachine
   private $enemyAI: EnemyAI
   private $turnButton: TurnButton
@@ -38,12 +40,13 @@ export class BattleScene extends BaseScene {
   create(): void {
     super.create()
 
-    // Managers
-    this.$animationManager = new AnimationManager(this)
-
     // State Machine
     this.$stateMachine = new StateMachine('battle', this)
     this.$createStateMachine()
+
+    // Managers
+    this.$animationManager = new AnimationManager(this)
+    this.$battlecryManager = new BattlecryManager(this, this.$stateMachine)
 
     // Background
     new Background(this)
@@ -116,6 +119,26 @@ export class BattleScene extends BaseScene {
           card.setPlayable(canBePlayed)
         })
         break
+    }
+  }
+
+  private $setTargets(target: string): void {
+    switch (target) {
+      case 'ANY':
+        this.$board.PLAYER.cards.forEach((card: Card) => {
+          card.setTarget(true)
+        })
+        this.$board.ENEMY.cards.forEach((card: Card) => {
+          card.setTarget(true)
+        })
+        break
+      case 'NONE':
+        this.$board.PLAYER.cards.forEach((card: Card) => {
+          card.setTarget(false)
+        })
+        this.$board.ENEMY.cards.forEach((card: Card) => {
+          card.setTarget(false)
+        })
     }
   }
 
@@ -203,6 +226,37 @@ export class BattleScene extends BaseScene {
         this.$playCard(TARGET_KEYS.ENEMY, card, () => {
           this.$stateMachine.setState(STATES.ENEMY_TURN)
         })
+      },
+    })
+
+    // Battlecry States
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_BATTLECRY,
+      onEnter: ({
+        card,
+        callback,
+        fallback,
+      }: {
+        card: Card
+        callback?: () => void
+        fallback?: () => void
+      }) => {
+        this.$battlecryManager.handleBattlecry(card, callback, fallback)
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_CHOOSE_TARGET,
+      onEnter: (target: string) => {
+        this.$setTargets(target)
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_TARGET_CHOSEN,
+      onEnter: (target: Card) => {
+        this.$setTargets('NONE')
+        this.$battlecryManager.targetChosen(target)
       },
     })
   }

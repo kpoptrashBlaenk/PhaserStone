@@ -21,6 +21,10 @@ export class Board {
     this.$resizeContainer()
   }
 
+  public get cards(): Card[] {
+    return this.$board
+  }
+
   /**
    * Play card
    */
