@@ -1,22 +1,46 @@
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
-import { TargetKeys } from '../utils/keys'
+import { AnimationManager } from '../utils/animation-manager'
+import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { DECK_CONFIG } from '../utils/visual-configs'
 import { Card } from './card'
 
 export class Deck {
   private $scene: Phaser.Scene
   private $owner: TargetKeys
+  private $animationManager: AnimationManager
   private $deck: Card[]
   private $deckContainer: Phaser.GameObjects.Container
 
-  constructor(scene: Phaser.Scene, owner: TargetKeys) {
+  constructor(scene: Phaser.Scene, owner: TargetKeys, animationManager: AnimationManager) {
     this.$scene = scene
     this.$owner = owner
+    this.$animationManager = animationManager
 
     this.$createDeck()
     this.$shuffle()
 
     this.$createContainer()
+  }
+
+  /**
+   * Remove card and flip
+   */
+  public drawCard(callback?: (card: Card | undefined) => void): Card | undefined {
+    const drawnCard = this.$deck.pop()
+    if (!drawnCard) {
+      callback?.(drawnCard)
+      return
+    }
+
+    // Flip Animation for player
+    if (this.$owner === TARGET_KEYS.PLAYER) {
+      this.$animationManager.flipCard(drawnCard, () => {
+        callback?.(drawnCard)
+      })
+      return
+    }
+
+    callback?.(drawnCard)
   }
 
   /**

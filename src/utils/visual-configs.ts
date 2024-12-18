@@ -59,7 +59,7 @@ export const CARD_CONFIG = Object.freeze({
 // PREVIEW
 export const PREVIEW_CONFIG = Object.freeze({
   PADDING: 20,
-  OPPONENT: {
+  ENEMY: {
     SHOW: 250,
     HIDE: 1500,
   },
@@ -72,7 +72,7 @@ export const MANA_CONFIG = Object.freeze({
       X: 1300,
       Y: 910,
     },
-    OPPONENT: {
+    ENEMY: {
       X: 1265,
       Y: 80,
     },
@@ -99,7 +99,7 @@ export const BOARD_CONFIG = Object.freeze({
   },
   POSITION_Y: {
     PLAYER: 500,
-    OPPONENT: 330,
+    ENEMY: 330,
   },
 })
 
@@ -110,7 +110,7 @@ export const HERO_CONFIG = {
   COLOR: 0x0000ff,
   Y: {
     PLAYER: 770,
-    OPPONENT: 210,
+    ENEMY: 210,
   },
 }
 
@@ -119,8 +119,8 @@ export const DECK_CONFIG = Object.freeze({
   POSITION: {
     X: 1635,
     Y: {
-      PLAYER: 575,
-      OPPONENT: 315,
+      PLAYER: 555,
+      ENEMY: 285,
     },
     SPACING: 2,
   },
@@ -133,6 +133,12 @@ export const OUTLINE_CONFIG = Object.freeze({
   OUTLINE_COLOR: 0x00ff00,
   QUALITY: 0.1,
   NAME: 'outline',
+})
+
+// RESIZE CONFIG
+export const RESIZE_CONFIG = Object.freeze({
+  DURATION: 500,
+  EASE: 'Cubic.easeOut',
 })
 
 // ANIMATION
@@ -164,7 +170,7 @@ export const ANIMATION_CONFIG = Object.freeze({
       DURATION: 150,
       Y: {
         PLAYER: 10,
-        OPPONENT: -10,
+        ENEMY: -10,
       },
       EASE: 'Sine.easeOut',
     },

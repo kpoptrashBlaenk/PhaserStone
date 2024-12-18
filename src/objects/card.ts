@@ -30,17 +30,24 @@ export class Card {
     return this.$cardContainer
   }
 
+  public get card(): CardData {
+    return this.$cardData
+  }
+
   /**
    * Show front or back
    */
   public setSide(side: 'FRONT' | 'BACK'): void {
     if (side === 'FRONT') {
+      this.$cardPortraitImage.setTexture(this.$cardData.assetKey)
       this.$cardCostText.setAlpha(1)
       this.$cardAttackText.setAlpha(1)
       this.$cardHealthText.setAlpha(1)
       this.$cardNameText.setAlpha(1)
       this.$cardTemplateImage.setAlpha(1)
       this.$cardPortraitImage.setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
+      this.$cardPortraitImage.setY(this.$cardTemplateImage.height / 3.3)
+      return
     }
 
     this.$cardPortraitImage.setTexture(CARD_ASSETS_KEYS.CARD_BACK)
@@ -50,6 +57,8 @@ export class Card {
     this.$cardNameText.setAlpha(0)
     this.$cardTemplateImage.setAlpha(0)
     this.$cardPortraitImage.setScale(1)
+
+    // this.$cardPortraitImage.setY(0)
   }
 
   /**
@@ -122,10 +131,8 @@ export class Card {
   private $resizeCard(): void {
     this.$cardContainer.setScale(CARD_CONFIG.SIZE.SCALE)
     this.$cardContainer.setSize(
-      this.$cardContainer.width * this.$cardContainer.scaleX,
-      this.$cardContainer.height * this.$cardContainer.scaleY
+      this.$cardTemplateImage.width * this.$cardContainer.scaleX,
+      this.$cardTemplateImage.height * this.$cardContainer.scaleY
     )
-
-    this.$cardPortraitImage.setY(this.$cardPortraitImage.height / 2)
   }
 }
