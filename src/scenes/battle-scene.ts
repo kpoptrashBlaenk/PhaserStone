@@ -80,18 +80,34 @@ export class BattleScene extends BaseScene {
     this.$stateMachine.addState({
       name: STATES.PLAYER_TURN_START,
       onEnter: () => {
-        this.$drawCard(TARGET_KEYS.PLAYER)
         this.$handleMana(TARGET_KEYS.PLAYER, 'ADD')
         this.$handleMana(TARGET_KEYS.PLAYER, 'REFRESH')
+        this.$stateMachine.setState(STATES.PLAYER_DRAW_CARD)
       },
     })
 
     this.$stateMachine.addState({
       name: STATES.ENEMY_TURN_START,
       onEnter: () => {
-        this.$drawCard(TARGET_KEYS.ENEMY)
         this.$handleMana(TARGET_KEYS.ENEMY, 'ADD')
         this.$handleMana(TARGET_KEYS.ENEMY, 'REFRESH')
+        this.$stateMachine.setState(STATES.ENEMY_DRAW_CARD)
+      },
+    })
+
+    // Player States
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_DRAW_CARD,
+      onEnter: () => {
+        this.$drawCard(TARGET_KEYS.PLAYER)
+      },
+    })
+
+    // Enemy States
+    this.$stateMachine.addState({
+      name: STATES.ENEMY_DRAW_CARD,
+      onEnter: () => {
+        this.$drawCard(TARGET_KEYS.ENEMY)
       },
     })
   }
