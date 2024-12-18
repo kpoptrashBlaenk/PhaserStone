@@ -4,12 +4,14 @@ import { Hand } from '../objects/hand'
 import { Mana } from '../objects/mana'
 import { Background } from '../ui/background'
 import { AnimationManager } from '../utils/animation-manager'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
 export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
+  private $stateMachine: StateMachine
 
   private $deck: { PLAYER: Deck; ENEMY: Deck } = { PLAYER: null as any, ENEMY: null as any }
   private $hand: { PLAYER: Hand; ENEMY: Hand } = { PLAYER: null as any, ENEMY: null as any }
@@ -24,7 +26,7 @@ export class BattleScene extends BaseScene {
   update(): void {
     super.update()
 
-    // this.stateMachine.update()
+    this.$stateMachine.update()
   }
 
   create(): void {
@@ -48,12 +50,49 @@ export class BattleScene extends BaseScene {
     this.$mana.PLAYER = new Mana(this, TARGET_KEYS.PLAYER)
     this.$mana.ENEMY = new Mana(this, TARGET_KEYS.ENEMY)
 
-    this.$drawCard(TARGET_KEYS.PLAYER)
+    // State Machine
+    this.$stateMachine = new StateMachine('battle', this)
+    this.$createStateMachine()
+
+    this.$stateMachine.setState(STATES.PLAYER_TURN_START)
   }
 
   private $drawCard(player: TargetKeys): void {
     this.$deck[player].drawCard((card: Card | undefined) => {
       this.$hand[player].drawCard(card)
+    })
+  }
+
+  private $handleMana(player: TargetKeys, context: 'ADD' | 'REFRESH'): void {
+    switch (context) {
+      case 'ADD':
+        this.$mana[player].addMana()
+        break
+
+      case 'REFRESH':
+        this.$mana[player].refreshMana()
+        break
+    }
+  }
+
+  private $createStateMachine(): void {
+    // Game Flow States
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_TURN_START,
+      onEnter: () => {
+        this.$drawCard(TARGET_KEYS.PLAYER)
+        this.$handleMana(TARGET_KEYS.PLAYER, 'ADD')
+        this.$handleMana(TARGET_KEYS.PLAYER, 'REFRESH')
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.ENEMY_TURN_START,
+      onEnter: () => {
+        this.$drawCard(TARGET_KEYS.ENEMY)
+        this.$handleMana(TARGET_KEYS.ENEMY, 'ADD')
+        this.$handleMana(TARGET_KEYS.ENEMY, 'REFRESH')
+      },
     })
   }
 }

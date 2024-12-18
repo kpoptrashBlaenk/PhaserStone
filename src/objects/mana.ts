@@ -1,3 +1,4 @@
+import { UI_ASSET_KEYS } from '../assets/asset-keys'
 import { MAX_MANA } from '../utils/configs'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { CARD_CONFIG, MANA_CONFIG } from '../utils/visual-configs'
@@ -19,6 +20,37 @@ export class Mana {
     this.$manaLimit = MAX_MANA
 
     this.$createMana()
+  }
+
+  /**
+   * Add a mana crystal if max mana is not reached
+   */
+  public addMana(): void {
+    if (this.$currentMana >= this.$manaLimit) {
+      return
+    }
+
+    this.$maxMana += 1
+
+    // If player, add crystal
+    if (this.$manaContainer) {
+      const manaCrystal = this.$scene.add.image(0, 0, UI_ASSET_KEYS.MANA_CRYSTAL).setScale(0.08).setOrigin(0)
+      const x = this.$manaContainer.list.length * manaCrystal.width * manaCrystal.scale
+      manaCrystal.setX(x)
+      this.$manaContainer.add(manaCrystal)
+    }
+  }
+
+  /**
+   * Refreshes mana to max
+   */
+  public refreshMana(): void {
+    this.$currentMana = this.$maxMana
+    this.$manaText.setText(`${this.$currentMana}/${this.$maxMana}`)
+
+    this.$manaContainer?.iterate((manaCrystal: Phaser.GameObjects.Image) => {
+      manaCrystal.setTint(MANA_CONFIG.CRYSTAL.TINT.TINT_FULL)
+    })
   }
 
   /**
