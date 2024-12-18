@@ -1,6 +1,4 @@
-import { CardAssetKeys } from '../assets/asset-keys'
-
-export type BattlecryMinion = {
+export type Battlecry = {
   target: string
   type: string
   amount: number
@@ -14,4 +12,5 @@ export type CardData = {
   attack: number
   health: number
   assetKey: string
+  battlecry?: Battlecry
 }

@@ -41,9 +41,19 @@ export class Card {
     return this.$cardData
   }
 
+  public get player(): TargetKeys {
+    return this.$owner
+  }
+
+  public get isPlayable(): boolean {
+    return this.$playable
+  }
+
   public setPlayable(playable: boolean): void {
     this.$playable = playable
-    setOutline(this.$scene, playable, this.$cardTemplateImage)
+    if (this.$owner === TARGET_KEYS.PLAYER) {
+      setOutline(this.$scene, playable, this.$cardTemplateImage)
+    }
   }
 
   /**
@@ -78,10 +88,14 @@ export class Card {
   /**
    * Set interactions for context
    */
-  public setContext(context: 'HAND'): void {
+  public setContext(context: 'HAND' | 'BOARD'): void {
+    this.$cardTemplateImage.removeListener('pointerup')
+
     switch (context) {
       case 'HAND':
         this.$addClickHand()
+        break
+      case 'BOARD':
         break
     }
   }
@@ -235,6 +249,10 @@ export class Card {
             this.$previewContainer.destroy()
             return
           }
+
+          this.$stateMachine.setState(STATES.PLAYER_PLAY_CARD, this)
+          this.$scene.input.removeListener('pointermove')
+          this.$previewContainer.destroy()
         }
       })
     }

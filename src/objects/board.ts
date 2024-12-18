@@ -22,6 +22,23 @@ export class Board {
   }
 
   /**
+   * Play card
+   */
+  public playCard(card: Card, callback?: () => void): void {
+    if (!card) {
+      callback?.()
+      return
+    }
+    this.$board.push(card)
+    card.setContext('BOARD')
+
+    this.$animationManager.addToContainer(card, this.$boardContainer, () => {
+      this.$resizeContainer()
+      callback?.()
+    })
+  }
+
+  /**
    * Create empty board container
    */
   private $createContainer(): void {

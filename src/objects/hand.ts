@@ -45,6 +45,24 @@ export class Hand {
     })
   }
 
+  public playCard(card: Card, callback?: () => void): void {
+    // Prepare remove card from hand function
+    const removeFromHand = () => {
+      const index = this.$hand.findIndex((handCard) => handCard === card)
+      this.$hand.splice(index, 1)
+      callback?.() // Play card on board
+      this.$handContainer.remove(card.container, true)
+      this.$resizeContainer()
+    }
+
+    // If player, execute function, if not, play PlayCardAnimation and then execute function
+    if (this.$owner === TARGET_KEYS.PLAYER) {
+      removeFromHand()
+      return
+    }
+    this.$animationManager.animateCardFromHandToBoard(card, removeFromHand)
+  }
+
   /**
    * Create empty hand container
    */

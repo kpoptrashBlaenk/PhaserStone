@@ -15,7 +15,13 @@ import { TurnButton } from '../ui/turn-button'
 import { WarnMessage } from '../ui/warn-message'
 import { BattleManager } from '../utils/battle-manager'
 import { Battlecry } from '../utils/battlecry'
-import { BATTLE_STATES, BATTLE_TARGET_KEYS, BattleTargetKeys, TARGET_KEYS, TargetKeys } from '../../../src/utils/keys'
+import {
+  BATTLE_STATES,
+  BATTLE_TARGET_KEYS,
+  BattleTargetKeys,
+  TARGET_KEYS,
+  TargetKeys,
+} from '../../../src/utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { OPPONENT_PREVIEW } from '../utils/visual-configs'
 import { BaseScene } from './base-scene'

@@ -22,9 +22,6 @@ export class Mana {
     this.$createMana()
   }
 
-  /**
-   *
-   */
   public get mana(): number {
     return this.$currentMana
   }
@@ -45,6 +42,28 @@ export class Mana {
       const x = this.$manaContainer.list.length * manaCrystal.width * manaCrystal.scale
       manaCrystal.setX(x)
       this.$manaContainer.add(manaCrystal)
+    }
+  }
+
+  /**
+   * Recalculate mana then change mana crystals color
+   */
+  public useMana(usedMana: number): void {
+    if (usedMana === 0) {
+      return
+    }
+
+    this.$currentMana -= usedMana
+    this.$manaText.setText(`${this.$currentMana}/${this.$maxMana}`)
+
+    if (this.$manaContainer) {
+      let index = 0
+      this.$manaContainer?.iterate((manaCrystal: Phaser.GameObjects.Image) => {
+        if (index >= this.$currentMana) {
+          manaCrystal.setTint(MANA_CONFIG.CRYSTAL.TINT.TINT_EMPTY)
+        }
+        index++
+      })
     }
   }
 

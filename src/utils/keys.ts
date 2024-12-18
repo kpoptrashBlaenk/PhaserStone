@@ -17,6 +17,8 @@ export const STATES = Object.freeze({
   ENEMY_TURN: 'ENEMY_TURN',
   PLAYER_DRAW_CARD: 'PLAYER_DRAW_CARD',
   ENEMY_DRAW_CARD: 'ENEMY_DRAW_CARD',
+  PLAYER_PLAY_CARD: 'PLAYER_PLAY_CARD',
+  ENEMY_PLAY_CARD: 'ENEMY_PLAY_CARD',
 })
 export type States = keyof typeof STATES
 
