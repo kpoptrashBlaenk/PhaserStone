@@ -1,6 +1,7 @@
 import { Card } from '../objects/card'
 import { Deck } from '../objects/deck'
 import { Hand } from '../objects/hand'
+import { Mana } from '../objects/mana'
 import { Background } from '../ui/background'
 import { AnimationManager } from '../utils/animation-manager'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
@@ -12,6 +13,7 @@ export class BattleScene extends BaseScene {
 
   private $deck: { PLAYER: Deck; ENEMY: Deck } = { PLAYER: null as any, ENEMY: null as any }
   private $hand: { PLAYER: Hand; ENEMY: Hand } = { PLAYER: null as any, ENEMY: null as any }
+  private $mana: { PLAYER: Mana; ENEMY: Mana } = { PLAYER: null as any, ENEMY: null as any }
 
   constructor() {
     super({
@@ -41,6 +43,10 @@ export class BattleScene extends BaseScene {
     // Hand
     this.$hand.PLAYER = new Hand(this, TARGET_KEYS.PLAYER, this.$animationManager)
     this.$hand.ENEMY = new Hand(this, TARGET_KEYS.ENEMY, this.$animationManager)
+
+    // Mana
+    this.$mana.PLAYER = new Mana(this, TARGET_KEYS.PLAYER)
+    this.$mana.ENEMY = new Mana(this, TARGET_KEYS.ENEMY)
 
     this.$drawCard(TARGET_KEYS.PLAYER)
   }
