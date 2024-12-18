@@ -23,6 +23,13 @@ export class Mana {
   }
 
   /**
+   *
+   */
+  public get mana(): number {
+    return this.$currentMana
+  }
+
+  /**
    * Add a mana crystal if max mana is not reached
    */
   public addMana(): void {

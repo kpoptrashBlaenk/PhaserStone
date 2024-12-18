@@ -22,6 +22,13 @@ export class Hand {
   }
 
   /**
+   * Return all cards in hand
+   */
+  public get cards(): Card[] {
+    return this.$hand
+  }
+
+  /**
    * Add card to hand and resize
    */
   public drawCard(card: Card | undefined, callback?: () => void): void {
@@ -31,7 +38,10 @@ export class Hand {
     }
     this.$hand.push(card)
 
-    this.$animationManager.addToContainer(card, this.$handContainer, () => this.$resizeContainer())
+    this.$animationManager.addToContainer(card, this.$handContainer, () => {
+      this.$resizeContainer()
+      callback?.()
+    })
   }
 
   /**

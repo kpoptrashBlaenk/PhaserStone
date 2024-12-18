@@ -1,4 +1,5 @@
 import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
+import { setOutline } from '../common/outline'
 import { CardData } from '../utils/card-keys'
 import { TargetKeys } from '../utils/keys'
 import { CARD_CONFIG } from '../utils/visual-configs'
@@ -16,12 +17,14 @@ export class Card {
   private $cardAttackText: Phaser.GameObjects.Text
   private $cardHealthText: Phaser.GameObjects.Text
   private $previewContainer: Phaser.GameObjects.Container
+  private $playable: boolean
 
   constructor(scene: Phaser.Scene, cardData: CardData, owner: TargetKeys) {
     this.$scene = scene
     this.$cardData = Object.freeze({ ...cardData })
     this.$originalData = Object.freeze({ ...cardData })
     this.$owner = owner
+    this.$playable = false
 
     this.$cardContainer = this.$createCard()
     this.$resizeCard(this.$cardContainer)
@@ -33,6 +36,11 @@ export class Card {
 
   public get card(): CardData {
     return this.$cardData
+  }
+
+  public setPlayable(playable: boolean): void {
+    this.$playable = playable
+    setOutline(this.$scene, playable, this.$cardTemplateImage)
   }
 
   /**

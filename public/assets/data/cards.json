@@ -20,7 +20,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 3,
     "cardClass": "NEUTRAL",
-    "cost": 3,
+    "cost": 1,
     "health": 3,
     "id": 2,
     "battlecry": {
@@ -37,7 +37,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 5,
     "cardClass": "NEUTRAL",
-    "cost": 7,
+    "cost": 1,
     "health": 6,
     "id": 3,
     "battlecry": {
@@ -54,7 +54,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 5,
     "cardClass": "NEUTRAL",
-    "cost": 7,
+    "cost": 1,
     "health": 6,
     "id": 4,
     "battlecry": {
@@ -71,7 +71,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 6,
     "cardClass": "NEUTRAL",
-    "cost": 6,
+    "cost": 1,
     "health": 6,
     "id": 5,
     "battlecry": {
@@ -88,7 +88,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 4,
     "cardClass": "NEUTRAL",
-    "cost": 6,
+    "cost": 1,
     "health": 5,
     "id": 6,
     "battlecry": {
@@ -105,7 +105,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 3,
     "cardClass": "NEUTRAL",
-    "cost": 2,
+    "cost": 1,
     "health": 1,
     "id": 7,
     "battlecry": {
@@ -122,7 +122,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 4,
     "cardClass": "NEUTRAL",
-    "cost": 2,
+    "cost": 1,
     "health": 3,
     "id": 8,
     "battlecry": {
@@ -139,7 +139,7 @@
     "assetKey": "ALEXSTRAZA",
     "attack": 3,
     "cardClass": "NEUTRAL",
-    "cost": 3,
+    "cost": 1,
     "health": 5,
     "id": 9,
     "battlecry": {

@@ -57,9 +57,9 @@ export class BattleScene extends BaseScene {
     this.$stateMachine.setState(STATES.PLAYER_TURN_START)
   }
 
-  private $drawCard(player: TargetKeys): void {
+  private $drawCard(player: TargetKeys, callback?: () => void): void {
     this.$deck[player].drawCard((card: Card | undefined) => {
-      this.$hand[player].drawCard(card)
+      this.$hand[player].drawCard(card, callback)
     })
   }
 
@@ -71,6 +71,17 @@ export class BattleScene extends BaseScene {
 
       case 'REFRESH':
         this.$mana[player].refreshMana()
+        break
+    }
+  }
+
+  private $handleHand(player: TargetKeys, context: 'PLAYABLE'): void {
+    switch (context) {
+      case 'PLAYABLE':
+        this.$hand[player].cards.forEach((card: Card) => {
+          const canBePlayed = this.$mana[player].mana >= card.card.cost
+          card.setPlayable(canBePlayed)
+        })
         break
     }
   }
@@ -95,11 +106,27 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_TURN,
+      onEnter: () => {
+        this.$handleHand(TARGET_KEYS.PLAYER, 'PLAYABLE')
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.ENEMY_TURN,
+      onEnter: () => {
+        this.$handleHand(TARGET_KEYS.ENEMY, 'PLAYABLE')
+      },
+    })
+
     // Player States
     this.$stateMachine.addState({
       name: STATES.PLAYER_DRAW_CARD,
       onEnter: () => {
-        this.$drawCard(TARGET_KEYS.PLAYER)
+        this.$drawCard(TARGET_KEYS.PLAYER, () => {
+          this.$stateMachine.setState(STATES.PLAYER_TURN)
+        })
       },
     })
 
@@ -107,7 +134,9 @@ export class BattleScene extends BaseScene {
     this.$stateMachine.addState({
       name: STATES.ENEMY_DRAW_CARD,
       onEnter: () => {
-        this.$drawCard(TARGET_KEYS.ENEMY)
+        this.$drawCard(TARGET_KEYS.ENEMY, () => {
+          this.$stateMachine.setState(STATES.ENEMY_TURN)
+        })
       },
     })
   }
