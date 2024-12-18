@@ -1,6 +1,6 @@
 import { repositionContainer, resizeContainer } from '../common/resize-container'
 import { AnimationManager } from '../utils/animation-manager'
-import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import {  TargetKeys } from '../utils/keys'
 import { BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
 import { Card } from './card'
 
@@ -43,6 +43,16 @@ export class Board {
   }
 
   /**
+   * Remove cardUI and card from board
+   */
+  public cardDies(card: Card, callback?: () => void): void {
+    const index = this.$board.findIndex((boardCard) => boardCard === card)
+    this.$board.splice(index, 1)
+    this.$boardContainer.remove(card.container, true)
+    this.$resizeContainer(callback)
+  }
+
+  /**
    * Create empty board container
    */
   private $createContainer(): void {
@@ -52,12 +62,13 @@ export class Board {
   /**
    * Resize container and reposition it
    */
-  private $resizeContainer(): void {
+  private $resizeContainer(callback?: () => void): void {
     resizeContainer(this.$boardContainer, () =>
       repositionContainer(
         this.$boardContainer,
         this.$scene.scale.width / 2 - Math.max(this.$boardContainer.width, CARD_CONFIG.SIZE.WIDTH) / 2,
-        BOARD_CONFIG.POSITION_Y[this.$owner]
+        BOARD_CONFIG.POSITION_Y[this.$owner],
+        callback
       )
     )
   }

@@ -1,4 +1,5 @@
 import { Card } from '../objects/card'
+import { AnimationManager } from './animation-manager'
 import { Battlecry } from './card-keys'
 import { STATES } from './keys'
 import { StateMachine } from './state-machine'
@@ -6,16 +7,18 @@ import { StateMachine } from './state-machine'
 export class BattlecryManager {
   private $scene: Phaser.Scene
   private $stateMachine: StateMachine
+  private $animationManager: AnimationManager
   private $source: Card
   private $effect: Battlecry
   private $targetType: string
   private $target: Card
-  private $callback?: () => void
+  private $callback?: () => void // Usually play the card
   private $fallback?: () => void
 
-  constructor(scene: Phaser.Scene, stateMachine: StateMachine) {
+  constructor(scene: Phaser.Scene, stateMachine: StateMachine, animationManager: AnimationManager) {
     this.$scene = scene
     this.$stateMachine = stateMachine
+    this.$animationManager = animationManager
   }
 
   public handleBattlecry(card: Card, callback?: () => void, fallback?: () => void): void {
@@ -58,7 +61,14 @@ export class BattlecryManager {
     return false
   }
 
-  private $dealDamage(target: Card) {
-    this.$callback?.()
+  private $dealDamage(target: Card): void {
+    this.$animationManager.battlecryProjectile(
+      this.$source,
+      target,
+      () => {
+        target.setHealth(target.card.health - this.$effect.amount)
+      },
+      this.$callback
+    )
   }
 }

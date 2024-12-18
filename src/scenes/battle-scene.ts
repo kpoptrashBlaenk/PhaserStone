@@ -12,10 +12,12 @@ import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 import { BattlecryManager } from '../utils/battlecry-manager'
+import { BattleManager } from '../utils/battle-manager'
 
 export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
   private $battlecryManager: BattlecryManager
+  private $battleManager: BattleManager
   private $stateMachine: StateMachine
   private $enemyAI: EnemyAI
   private $turnButton: TurnButton
@@ -46,7 +48,8 @@ export class BattleScene extends BaseScene {
 
     // Managers
     this.$animationManager = new AnimationManager(this)
-    this.$battlecryManager = new BattlecryManager(this, this.$stateMachine)
+    this.$battlecryManager = new BattlecryManager(this, this.$stateMachine, this.$animationManager)
+    this.$battleManager = new BattleManager(this, this.$stateMachine, this.$animationManager, this.$board)
 
     // Background
     new Background(this)
@@ -191,6 +194,13 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    this.$stateMachine.addState({
+      name: STATES.CHECK_BOARD,
+      onEnter: (callback?: () => void) => {
+        this.$battleManager.checkDead(callback)
+      },
+    })
+
     // Player States
     this.$stateMachine.addState({
       name: STATES.PLAYER_DRAW_CARD,
@@ -205,7 +215,9 @@ export class BattleScene extends BaseScene {
       name: STATES.PLAYER_PLAY_CARD,
       onEnter: (card: Card) => {
         this.$playCard(TARGET_KEYS.PLAYER, card, () => {
-          this.$stateMachine.setState(STATES.PLAYER_TURN)
+          this.$stateMachine.setState(STATES.CHECK_BOARD, () => {
+            this.$stateMachine.setState(STATES.PLAYER_TURN)
+          })
         })
       },
     })
@@ -224,7 +236,9 @@ export class BattleScene extends BaseScene {
       name: STATES.ENEMY_PLAY_CARD,
       onEnter: (card: Card) => {
         this.$playCard(TARGET_KEYS.ENEMY, card, () => {
-          this.$stateMachine.setState(STATES.ENEMY_TURN)
+          this.$stateMachine.setState(STATES.CHECK_BOARD, () => {
+            this.$stateMachine.setState(STATES.ENEMY_TURN)
+          })
         })
       },
     })

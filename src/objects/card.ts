@@ -25,7 +25,7 @@ export class Card {
   constructor(scene: Phaser.Scene, stateMachine: StateMachine, cardData: CardData, owner: TargetKeys) {
     this.$scene = scene
     this.$stateMachine = stateMachine
-    this.$cardData = Object.freeze({ ...cardData })
+    this.$cardData = cardData
     this.$originalData = Object.freeze({ ...cardData })
     this.$owner = owner
     this.$playable = false
@@ -38,6 +38,14 @@ export class Card {
     return this.$cardContainer
   }
 
+  public get portrait(): Phaser.GameObjects.Image {
+    return this.$cardPortraitImage
+  }
+
+  public get template(): Phaser.GameObjects.Image {
+    return this.$cardTemplateImage
+  }
+
   public get card(): CardData {
     return this.$cardData
   }
@@ -48,6 +56,10 @@ export class Card {
 
   public get isPlayable(): boolean {
     return this.$playable
+  }
+
+  public setHealth(newHealth: number): void {
+    this.$cardData.health = newHealth
   }
 
   public setPlayable(playable: boolean): void {
