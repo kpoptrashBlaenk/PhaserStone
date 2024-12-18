@@ -35,12 +35,16 @@ export class BattleScene extends BaseScene {
     // Managers
     this.$animationManager = new AnimationManager(this)
 
+    // State Machine
+    this.$stateMachine = new StateMachine('battle', this)
+    this.$createStateMachine()
+
     // Background
     new Background(this)
 
     // Deck
-    this.$deck.PLAYER = new Deck(this, TARGET_KEYS.PLAYER, this.$animationManager)
-    this.$deck.ENEMY = new Deck(this, TARGET_KEYS.ENEMY, this.$animationManager)
+    this.$deck.PLAYER = new Deck(this, this.$stateMachine, TARGET_KEYS.PLAYER, this.$animationManager)
+    this.$deck.ENEMY = new Deck(this, this.$stateMachine, TARGET_KEYS.ENEMY, this.$animationManager)
 
     // Hand
     this.$hand.PLAYER = new Hand(this, TARGET_KEYS.PLAYER, this.$animationManager)
@@ -49,10 +53,6 @@ export class BattleScene extends BaseScene {
     // Mana
     this.$mana.PLAYER = new Mana(this, TARGET_KEYS.PLAYER)
     this.$mana.ENEMY = new Mana(this, TARGET_KEYS.ENEMY)
-
-    // State Machine
-    this.$stateMachine = new StateMachine('battle', this)
-    this.$createStateMachine()
 
     this.$stateMachine.setState(STATES.PLAYER_TURN_START)
   }

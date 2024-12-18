@@ -1,18 +1,26 @@
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { AnimationManager } from '../utils/animation-manager'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { StateMachine } from '../utils/state-machine'
 import { DECK_CONFIG } from '../utils/visual-configs'
 import { Card } from './card'
 
 export class Deck {
   private $scene: Phaser.Scene
+  private $stateMachine: StateMachine
   private $owner: TargetKeys
   private $animationManager: AnimationManager
   private $deck: Card[]
   private $deckContainer: Phaser.GameObjects.Container
 
-  constructor(scene: Phaser.Scene, owner: TargetKeys, animationManager: AnimationManager) {
+  constructor(
+    scene: Phaser.Scene,
+    stateMachine: StateMachine,
+    owner: TargetKeys,
+    animationManager: AnimationManager
+  ) {
     this.$scene = scene
+    this.$stateMachine = stateMachine
     this.$owner = owner
     this.$animationManager = animationManager
 
@@ -53,7 +61,12 @@ export class Deck {
 
     for (let i = 0; i < allCards.length; i++) {
       const randomNumber = Math.floor(Math.random() * availableCards.length)
-      const card = new Card(this.$scene, availableCards.splice(randomNumber, 1)[0], this.$owner)
+      const card = new Card(
+        this.$scene,
+        this.$stateMachine,
+        availableCards.splice(randomNumber, 1)[0],
+        this.$owner
+      )
       //   card.hideCard()
       deck.push(card)
     }

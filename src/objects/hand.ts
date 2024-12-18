@@ -37,6 +37,7 @@ export class Hand {
       return
     }
     this.$hand.push(card)
+    card.setContext('HAND')
 
     this.$animationManager.addToContainer(card, this.$handContainer, () => {
       this.$resizeContainer()

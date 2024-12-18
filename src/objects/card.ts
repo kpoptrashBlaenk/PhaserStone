@@ -1,11 +1,13 @@
 import { CARD_ASSETS_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { CardData } from '../utils/card-keys'
-import { TargetKeys } from '../utils/keys'
-import { CARD_CONFIG } from '../utils/visual-configs'
+import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { StateMachine } from '../utils/state-machine'
+import { BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
 
 export class Card {
   private $scene: Phaser.Scene
+  private $stateMachine: StateMachine
   private $cardData: CardData
   private $originalData: CardData
   private $owner: TargetKeys
@@ -19,8 +21,9 @@ export class Card {
   private $previewContainer: Phaser.GameObjects.Container
   private $playable: boolean
 
-  constructor(scene: Phaser.Scene, cardData: CardData, owner: TargetKeys) {
+  constructor(scene: Phaser.Scene, stateMachine: StateMachine, cardData: CardData, owner: TargetKeys) {
     this.$scene = scene
+    this.$stateMachine = stateMachine
     this.$cardData = Object.freeze({ ...cardData })
     this.$originalData = Object.freeze({ ...cardData })
     this.$owner = owner
@@ -70,6 +73,17 @@ export class Card {
     this.$cardNameText.setAlpha(0)
     this.$cardTemplateImage.setAlpha(0)
     this.$cardPortraitImage.setScale(1)
+  }
+
+  /**
+   * Set interactions for context
+   */
+  public setContext(context: 'HAND'): void {
+    switch (context) {
+      case 'HAND':
+        this.$addClickHand()
+        break
+    }
   }
 
   /**
@@ -165,5 +179,64 @@ export class Card {
     this.$cardTemplateImage.on('pointerout', () => {
       this.$previewContainer.destroy()
     })
+  }
+
+  /**
+   * Pointerup: If not dragging -> drag. If dragging -> Check if on board -> Return to hand | Play card
+   */
+  private $addClickHand(): void {
+    if (this.$owner === TARGET_KEYS.PLAYER) {
+      this.$cardTemplateImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
+        if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$playable) {
+          if (!this.$cardContainer.getData('draggingFromHand')) {
+            // Dragging is false
+            this.$cardContainer.setData('draggingFromHand', true).setDepth(1)
+            this.$cardContainer.setData('position', {
+              container: {
+                x: this.$cardContainer.x,
+                y: this.$cardContainer.y,
+              },
+              pointer: {
+                x: pointer.x,
+                y: pointer.y,
+              },
+            })
+
+            // Add dragging
+            this.$scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+              this.$cardContainer.x =
+                this.$cardContainer.getData('position').container.x +
+                (pointer.x - this.$cardContainer.getData('position').pointer.x)
+              this.$cardContainer.y =
+                this.$cardContainer.getData('position').container.y +
+                (pointer.y - this.$cardContainer.getData('position').pointer.y)
+            })
+            return
+          }
+
+          // Dragging is true
+          this.$cardContainer.setData('draggingFromHand', false).setDepth(0)
+
+          // Check if on board
+          if (
+            !(
+              pointer.x >= BOARD_CONFIG.BOUNDS.START_X &&
+              pointer.x <= BOARD_CONFIG.BOUNDS.END_X &&
+              pointer.y >= BOARD_CONFIG.BOUNDS.START_Y &&
+              pointer.y <= BOARD_CONFIG.BOUNDS.END_Y
+            )
+          ) {
+            // Return to Hand
+            this.$cardContainer.setPosition(
+              this.$cardContainer.getData('position').container.x,
+              this.$cardContainer.getData('position').container.y
+            )
+            this.$scene.input.removeListener('pointermove')
+            this.$previewContainer.destroy()
+            return
+          }
+        }
+      })
+    }
   }
 }
