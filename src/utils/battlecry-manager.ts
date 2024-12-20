@@ -1,3 +1,4 @@
+import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { AnimationManager } from './animation-manager'
 import { Battlecry } from './card-keys'
@@ -8,6 +9,7 @@ export class BattlecryManager {
   private $scene: Phaser.Scene
   private $stateMachine: StateMachine
   private $animationManager: AnimationManager
+  private $board: { PLAYER: Board; ENEMY: Board }
   private $source: Card
   private $effect: Battlecry
   private $targetType: string
@@ -15,10 +17,16 @@ export class BattlecryManager {
   private $callback?: () => void // Usually play the card
   private $fallback?: () => void
 
-  constructor(scene: Phaser.Scene, stateMachine: StateMachine, animationManager: AnimationManager) {
+  constructor(
+    scene: Phaser.Scene,
+    stateMachine: StateMachine,
+    animationManager: AnimationManager,
+    board: { PLAYER: Board; ENEMY: Board }
+  ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$animationManager = animationManager
+    this.$board = board
   }
 
   public handleBattlecry(card: Card, callback?: () => void, fallback?: () => void): void {
@@ -31,7 +39,12 @@ export class BattlecryManager {
       this.$fallback = fallback
 
       if (this.$targetType === 'ANY') {
-        this.$stateMachine.setState(STATES.PLAYER_CHOOSE_TARGET, this.$targetType)
+        const hasTargets = this.$board.PLAYER.cards.length > 0 && this.$board.ENEMY.cards.length > 0
+        if (hasTargets) {
+          this.$stateMachine.setState(STATES.PLAYER_CHOOSE_TARGET, this.$targetType)
+          return
+        }
+        callback?.()
       }
       return
     }

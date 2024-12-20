@@ -46,10 +46,8 @@ export class BattleScene extends BaseScene {
     this.$stateMachine = new StateMachine('battle', this)
     this.$createStateMachine()
 
-    // Managers
+    // Animation Manager
     this.$animationManager = new AnimationManager(this)
-    this.$battlecryManager = new BattlecryManager(this, this.$stateMachine, this.$animationManager)
-    this.$battleManager = new BattleManager(this, this.$stateMachine, this.$animationManager, this.$board)
 
     // Background
     new Background(this)
@@ -73,9 +71,20 @@ export class BattleScene extends BaseScene {
     this.$board.PLAYER = new Board(this, TARGET_KEYS.PLAYER, this.$animationManager)
     this.$board.ENEMY = new Board(this, TARGET_KEYS.ENEMY, this.$animationManager)
 
+    // Battlecry Manager
+    this.$battlecryManager = new BattlecryManager(
+      this,
+      this.$stateMachine,
+      this.$animationManager,
+      this.$board
+    )
+
+    // Battle Manager
+    this.$battleManager = new BattleManager(this, this.$stateMachine, this.$animationManager, this.$board)
+
     this.$enemyAI = new EnemyAI(this, this.$stateMachine, this.$hand.ENEMY, this.$board)
 
-    this.$stateMachine.setState(STATES.ENEMY_TURN_START)
+    this.$stateMachine.setState(STATES.PLAYER_TURN_START)
   }
 
   private $drawCard(player: TargetKeys, callback?: () => void): void {
