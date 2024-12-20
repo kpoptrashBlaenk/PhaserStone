@@ -52,12 +52,12 @@ export class EnemyAI {
     // If playable cards, play, if not attack (board)
     if (playableHand.length > 0) {
       const card = playableHand[Math.floor(Math.random() * playableHand.length)]
-      this.$stateMachine.setState(STATES.ENEMY_PLAY_CARD, card)
+      this.$stateMachine.setState(STATES.TURN_BUTTON, card)
       return
     }
 
     this.$playBoard()
-    this.$stateMachine.setState(STATES.PLAYER_TURN_START)
+    this.$stateMachine.setState(STATES.TURN_BUTTON)
   }
 
   private $playBoard(): void {}

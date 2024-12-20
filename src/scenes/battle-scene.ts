@@ -84,7 +84,7 @@ export class BattleScene extends BaseScene {
 
     this.$enemyAI = new EnemyAI(this, this.$stateMachine, this.$hand.ENEMY, this.$board)
 
-    this.$stateMachine.setState(STATES.PLAYER_TURN_START)
+    this.$turnButton.changeTurn()
   }
 
   private $drawCard(player: TargetKeys, callback?: () => void): void {
@@ -126,12 +126,38 @@ export class BattleScene extends BaseScene {
     }
   }
 
-  private $handleHand(player: TargetKeys, context: 'PLAYABLE'): void {
+  private $handleHand(player: TargetKeys, context: 'PLAYABLE' | 'RESET'): void {
     switch (context) {
       case 'PLAYABLE':
         this.$hand[player].cards.forEach((card: Card) => {
           const canBePlayed = this.$mana[player].mana >= card.card.cost
           card.setPlayable(canBePlayed)
+        })
+        break
+      case 'RESET':
+        this.$hand[player].cards.forEach((card: Card) => {
+          card.setOutline(false)
+        })
+        break
+    }
+  }
+
+  private $handleBoard(player: TargetKeys, context: 'RESET' | 'ATTACKABLE'): void {
+    switch (context) {
+      case 'RESET':
+        this.$board[player].cards.forEach((card: Card) => {
+          card.setSick(false)
+        })
+        this.$board[player].cards.forEach((card: Card) => {
+          card.setAttacked(false)
+        })
+        this.$board[player].cards.forEach((card: Card) => {
+          card.setOutline(false)
+        })
+        break
+      case 'ATTACKABLE':
+        this.$board[player].cards.forEach((card: Card) => {
+          card.setOutline(card.canAttack)
         })
         break
     }
@@ -160,6 +186,13 @@ export class BattleScene extends BaseScene {
   private $createStateMachine(): void {
     // Game Flow States
     this.$stateMachine.addState({
+      name: STATES.TURN_BUTTON,
+      onEnter: () => {
+        this.$turnButton.changeTurn()
+      },
+    })
+
+    this.$stateMachine.addState({
       name: STATES.PLAYER_TURN_START,
       onEnter: () => {
         this.$handleMana(TARGET_KEYS.PLAYER, 'ADD')
@@ -181,6 +214,7 @@ export class BattleScene extends BaseScene {
       name: STATES.PLAYER_TURN,
       onEnter: () => {
         this.$handleHand(TARGET_KEYS.PLAYER, 'PLAYABLE')
+        this.$handleBoard(TARGET_KEYS.PLAYER, 'ATTACKABLE')
         this.$setTargets('NONE')
       },
     })
@@ -189,6 +223,7 @@ export class BattleScene extends BaseScene {
       name: STATES.ENEMY_TURN,
       onEnter: () => {
         this.$handleHand(TARGET_KEYS.ENEMY, 'PLAYABLE')
+        this.$handleBoard(TARGET_KEYS.ENEMY, 'ATTACKABLE')
         this.$enemyAI.opponentTurn()
       },
     })
@@ -196,14 +231,20 @@ export class BattleScene extends BaseScene {
     this.$stateMachine.addState({
       name: STATES.PLAYER_TURN_END,
       onEnter: () => {
-        this.$stateMachine.setState(STATES.PLAYER_TURN_START)
+        this.$handleHand(TARGET_KEYS.PLAYER, 'RESET')
+        this.$handleBoard(TARGET_KEYS.PLAYER, 'RESET')
+
+        this.$stateMachine.setState(STATES.ENEMY_TURN_START)
       },
     })
 
     this.$stateMachine.addState({
       name: STATES.ENEMY_TURN_END,
       onEnter: () => {
-        this.$stateMachine.setState(STATES.ENEMY_TURN_START)
+        this.$handleHand(TARGET_KEYS.ENEMY, 'RESET')
+        this.$handleBoard(TARGET_KEYS.ENEMY, 'RESET')
+
+        this.$stateMachine.setState(STATES.PLAYER_TURN_START)
       },
     })
 

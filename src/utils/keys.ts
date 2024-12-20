@@ -11,6 +11,7 @@ export const BATTLE_TARGET_KEYS = Object.freeze({
 export type BattleTargetKeys = keyof typeof BATTLE_TARGET_KEYS
 
 export const STATES = Object.freeze({
+  TURN_BUTTON: 'TURN_BUTTON',
   PLAYER_TURN_START: 'PLAYER_TURN_START',
   ENEMY_TURN_START: 'ENEMY_TURN_START',
   PLAYER_TURN: 'PLAYER_TURN',

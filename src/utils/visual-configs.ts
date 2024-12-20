@@ -151,7 +151,7 @@ export const BUTTON_CONFIG = Object.freeze({
 
 // ANIMATION
 export const ANIMATION_CONFIG = Object.freeze({
-  SUMMONING_SICKNESS: {
+  SICK: {
     POSITION: {
       X: 220,
       Y: 90,

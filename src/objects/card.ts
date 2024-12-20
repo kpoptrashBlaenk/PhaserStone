@@ -1,9 +1,9 @@
-import { CARD_ASSETS_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
+import { CARD_ASSETS_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
-import { BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
+import { ANIMATION_CONFIG, BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
 
 export class Card {
   private $scene: Phaser.Scene
@@ -20,7 +20,10 @@ export class Card {
   private $cardHealthText: Phaser.GameObjects.Text
   private $previewContainer: Phaser.GameObjects.Container
   private $cancelButton: Phaser.GameObjects.Image
+  private $sickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
   private $playable: boolean
+  private $attacked: boolean
+  private $sick: boolean
 
   constructor(scene: Phaser.Scene, stateMachine: StateMachine, cardData: CardData, owner: TargetKeys) {
     this.$scene = scene
@@ -28,7 +31,10 @@ export class Card {
     this.$cardData = cardData
     this.$originalData = Object.freeze({ ...cardData })
     this.$owner = owner
+
     this.$playable = false
+    this.$attacked = false
+    this.$sick = true
 
     this.$cardContainer = this.$createCard()
     this.$resizeCard(this.$cardContainer)
@@ -58,14 +64,41 @@ export class Card {
     return this.$playable
   }
 
+  public get canAttack(): boolean {
+    return !this.$attacked && !this.$sick
+  }
+
+  public setAttacked(attacked: boolean) {
+    this.$attacked = attacked
+    this.setOutline(this.canAttack)
+  }
+
+  public setSick(sick: boolean) {
+    this.$sick = sick
+    this.setOutline(this.canAttack)
+
+    if (sick) {
+      this.$sickParticles = this.$sickAnimation()
+      this.$cardContainer.add(this.$sickParticles)
+      this.setOutline(false)
+      return
+    }
+
+    this.$sickParticles?.destroy()
+  }
+
+  public setPlayable(activatable: boolean): void {
+    this.$playable = activatable
+    this.setOutline(activatable)
+  }
+
   public setHealth(newHealth: number): void {
     this.$cardData.health = newHealth
   }
 
-  public setPlayable(playable: boolean): void {
-    this.$playable = playable
+  public setOutline(value: boolean): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
-      setOutline(this.$scene, playable, this.$cardTemplateImage)
+      setOutline(this.$scene, value, this.$cardTemplateImage)
     }
   }
 
@@ -107,9 +140,11 @@ export class Card {
     switch (context) {
       case 'HAND':
         this.$addClickHand()
+        this.$handCard()
         break
       case 'BOARD':
         this.$addClickBoard()
+        this.$boardCard()
         break
     }
   }
@@ -377,12 +412,21 @@ export class Card {
     }
   }
 
+  private $handCard(): void {
+    this.$playable = false
+  }
+
   private $addClickBoard(): void {
     this.$cardTemplateImage.on('pointerup', () => {
       if (this.$stateMachine.currentStateName === STATES.PLAYER_CHOOSE_TARGET) {
         this.$stateMachine.setState(STATES.PLAYER_TARGET_CHOSEN, this)
       }
     })
+  }
+
+  private $boardCard(): void {
+    this.setAttacked(false)
+    this.setSick(true)
   }
 
   private $addCancel(): void {
@@ -399,5 +443,23 @@ export class Card {
     if (this.$cancelButton) {
       this.$cancelButton.destroy()
     }
+  }
+
+  private $sickAnimation(): Phaser.GameObjects.Particles.ParticleEmitter {
+    return this.$scene.add.particles(
+      ANIMATION_CONFIG.SICK.POSITION.X,
+      ANIMATION_CONFIG.SICK.POSITION.Y,
+      EFFECT_ASSET_KEYS.Z,
+      {
+        scale: { start: ANIMATION_CONFIG.SICK.SCALE.START, end: ANIMATION_CONFIG.SICK.SCALE.END },
+        speed: ANIMATION_CONFIG.SICK.SPEED,
+        lifespan: ANIMATION_CONFIG.SICK.LIFESPAN,
+        frequency: ANIMATION_CONFIG.SICK.FREQUENCY,
+        angle: { min: ANIMATION_CONFIG.SICK.ANGLE.MIN, max: ANIMATION_CONFIG.SICK.ANGLE.MAX },
+        gravityY: ANIMATION_CONFIG.SICK.GRAVITY_Y,
+        accelerationX: ANIMATION_CONFIG.SICK.ACCELERATION_X,
+        accelerationY: ANIMATION_CONFIG.SICK.ACCELERATION_Y,
+      }
+    )
   }
 }

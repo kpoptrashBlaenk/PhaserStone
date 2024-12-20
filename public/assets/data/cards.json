@@ -5,7 +5,7 @@
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 1,
+    "id": 6,
     "battlecry": {
       "target": "ANY",
       "type": "DAMAGE",
@@ -22,12 +22,43 @@
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
+    "id": 5,
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 4,
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 3,
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 2,
     "text": "<b>Battlecry:</b> Deal 1 damage.",
     "name": "Elven Archer",
     "races": [],
@@ -40,181 +71,6 @@
     "cost": 1,
     "health": 1,
     "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 1,
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
     "text": "<b>Battlecry:</b> Deal 1 damage.",
     "name": "Elven Archer",
     "races": [],

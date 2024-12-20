@@ -23,15 +23,15 @@ export class TurnButton {
    */
   public changeTurn(): void {
     if (this.$currentTurn === TARGET_KEYS.PLAYER) {
+      this.$stateMachine.setState(STATES.PLAYER_TURN_END)
       this.$currentTurn = TARGET_KEYS.ENEMY
-      this.$stateMachine.setState(STATES.ENEMY_TURN_START)
       return
     }
 
     if (this.$currentTurn === TARGET_KEYS.ENEMY) {
       this.$showTurnMessage()
+      this.$stateMachine.setState(STATES.ENEMY_TURN_END)
       this.$currentTurn = TARGET_KEYS.PLAYER
-      this.$stateMachine.setState(STATES.PLAYER_TURN_START)
       return
     }
 
@@ -58,11 +58,7 @@ export class TurnButton {
     })
 
     this.$button.on('pointerup', () => {
-      if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN) {
-        this.$stateMachine.setState(
-          this.$currentTurn === TARGET_KEYS.PLAYER ? STATES.PLAYER_TURN_END : STATES.ENEMY_TURN_END
-        )
-      }
+      this.$stateMachine.setState(STATES.TURN_BUTTON)
     })
   }
 
