@@ -169,6 +169,7 @@ export class BattleScene extends BaseScene {
       name: STATES.PLAYER_TURN,
       onEnter: () => {
         this.$handleHand(TARGET_KEYS.PLAYER, 'PLAYABLE')
+        this.$setTargets('NONE')
       },
     })
 
