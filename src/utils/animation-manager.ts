@@ -83,14 +83,18 @@ export class AnimationManager {
    * Animates opponent playing card from hand
    */
   public animateCardFromHandToBoard(card: Card, callback?: () => void): void {
+    card.setSide('FRONT')
     this.$scene.tweens.add({
       targets: card.container,
       x: this.$scene.scale.width / 2 - card.container.getBounds().centerX + card.container.x,
-      y: BOARD_CONFIG.POSITION_Y.ENEMY - card.container.getBounds().y + card.container.y,
+      y:
+        BOARD_CONFIG.POSITION_Y.ENEMY -
+        card.container.getBounds().y +
+        card.container.y -
+        card.container.height,
       duration: ANIMATION_CONFIG.HAND.HAND_TO_BOARD.DURATION,
       ease: ANIMATION_CONFIG.HAND.HAND_TO_BOARD.EASE,
       onComplete: () => {
-        card.setSide('FRONT')
         callback?.()
       },
     })

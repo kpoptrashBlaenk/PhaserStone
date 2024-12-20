@@ -43,7 +43,7 @@ export class BattlecryManager {
 
         if (targets.length > 0) {
           if (card.player === TARGET_KEYS.PLAYER) {
-            this.$stateMachine.setState(STATES.PLAYER_CHOOSE_TARGET, this.$targetType)
+            this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_CHOOSE_TARGET, this.$targetType)
             return
           }
 

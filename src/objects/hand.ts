@@ -69,7 +69,7 @@ export class Hand {
    * Create empty hand container
    */
   private $createContainer(): void {
-    this.$handContainer = this.$scene.add.container()
+    this.$handContainer = this.$scene.add.container().setDepth(1)
   }
 
   /**

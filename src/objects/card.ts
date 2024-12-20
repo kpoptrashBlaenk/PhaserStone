@@ -1,5 +1,6 @@
 import { CARD_ASSETS_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
+import { BattleScene } from '../scenes/battle-scene'
 import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
@@ -400,7 +401,7 @@ export class Card {
         }
 
         // Cancel battlecry target clicked has cancel button
-        if (this.$stateMachine.currentStateName === STATES.PLAYER_CHOOSE_TARGET) {
+        if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLECRY_CHOOSE_TARGET) {
           if (this.$cancelButton) {
             playCardFallback()
             this.$stateMachine.setState(STATES.PLAYER_TURN)
@@ -418,8 +419,27 @@ export class Card {
 
   private $addClickBoard(): void {
     this.$cardTemplateImage.on('pointerup', () => {
-      if (this.$stateMachine.currentStateName === STATES.PLAYER_CHOOSE_TARGET) {
-        this.$stateMachine.setState(STATES.PLAYER_TARGET_CHOSEN, this)
+      if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLECRY_CHOOSE_TARGET) {
+        this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_TARGET_CHOSEN, this)
+        return
+      }
+
+      if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$owner === TARGET_KEYS.PLAYER) {
+        this.$stateMachine.setState(STATES.PLAYER_BATTLE_CHOOSE_TARGET, this)
+        this.$addCancel()
+        return
+      }
+
+      if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLE_CHOOSE_TARGET) {
+        if (this.$cancelButton) {
+          this.$removeCancel()
+          this.$stateMachine.setState(STATES.PLAYER_TURN)
+          return
+        }
+
+        if (this.$owner === TARGET_KEYS.ENEMY) {
+          this.$stateMachine.setState(STATES.PLAYER_BATTLE_TARGET_CHOSEN, this)
+        }
       }
     })
   }

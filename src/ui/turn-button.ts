@@ -58,7 +58,12 @@ export class TurnButton {
     })
 
     this.$button.on('pointerup', () => {
-      this.$stateMachine.setState(STATES.TURN_BUTTON)
+      if (
+        this.$stateMachine.currentStateName === STATES.PLAYER_TURN ||
+        this.$stateMachine.currentStateName === STATES.ENEMY_TURN
+      ) {
+        this.$stateMachine.setState(STATES.TURN_BUTTON)
+      }
     })
   }
 

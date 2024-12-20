@@ -130,7 +130,8 @@ export class BattleScene extends BaseScene {
     switch (context) {
       case 'PLAYABLE':
         this.$hand[player].cards.forEach((card: Card) => {
-          const canBePlayed = this.$mana[player].mana >= card.card.cost
+          const canBePlayed =
+            this.$mana[player].mana >= card.card.cost && this.$board[player].cards.length < 7
           card.setPlayable(canBePlayed)
         })
         break
@@ -314,17 +315,33 @@ export class BattleScene extends BaseScene {
     })
 
     this.$stateMachine.addState({
-      name: STATES.PLAYER_CHOOSE_TARGET,
+      name: STATES.PLAYER_BATTLECRY_CHOOSE_TARGET,
       onEnter: (target: string) => {
         this.$setTargets(target)
       },
     })
 
     this.$stateMachine.addState({
-      name: STATES.PLAYER_TARGET_CHOSEN,
+      name: STATES.PLAYER_BATTLECRY_TARGET_CHOSEN,
       onEnter: (target: Card) => {
         this.$setTargets('NONE')
         this.$battlecryManager.targetChosen(target)
+      },
+    })
+
+    // Battle States
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_BATTLE_CHOOSE_TARGET,
+      onEnter: () => {
+        // this.$setTargets(target)
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.PLAYER_BATTLE_TARGET_CHOSEN,
+      onEnter: (target: Card) => {
+        // this.$setTargets('NONE')
+        // this.$battlecryManager.targetChosen(target)
       },
     })
   }
