@@ -46,14 +46,15 @@ export class Hand {
     })
   }
 
-  public playCard(card: Card, callback?: () => void): void {
+  public playCard(card: Card, callback?: (callback: () => void) => void): void {
     // Prepare remove card from hand function
     const removeFromHand = () => {
       const index = this.$hand.findIndex((handCard) => handCard === card)
       this.$hand.splice(index, 1)
-      callback?.() // Play card on board
-      this.$handContainer.remove(card.container, true)
-      this.$resizeContainer()
+      callback?.(() => {
+        this.$handContainer.remove(card.container, true)
+        this.$resizeContainer()
+      }) // Play card on board AFTER animations
     }
 
     // If player, execute function, if not, play PlayCardAnimation and then execute function

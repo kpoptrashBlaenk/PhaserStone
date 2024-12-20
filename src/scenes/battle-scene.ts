@@ -102,7 +102,10 @@ export class BattleScene extends BaseScene {
 
     this.$hand[target].playCard(card, () => {
       if (target === TARGET_KEYS.ENEMY) {
-        // Opponent battlecry ->
+        if (card.card.battlecry) {
+          this.$battlecryManager.handleBattlecry(card, afterPlayCard)
+          return
+        }
         afterPlayCard()
         return
       }

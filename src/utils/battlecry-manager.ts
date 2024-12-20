@@ -2,7 +2,7 @@ import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { AnimationManager } from './animation-manager'
 import { Battlecry } from './card-keys'
-import { STATES } from './keys'
+import { STATES, TARGET_KEYS } from './keys'
 import { StateMachine } from './state-machine'
 
 export class BattlecryManager {
@@ -39,9 +39,16 @@ export class BattlecryManager {
       this.$fallback = fallback
 
       if (this.$targetType === 'ANY') {
-        const hasTargets = this.$board.PLAYER.cards.length > 0 && this.$board.ENEMY.cards.length > 0
-        if (hasTargets) {
-          this.$stateMachine.setState(STATES.PLAYER_CHOOSE_TARGET, this.$targetType)
+        const targets = [...this.$board.PLAYER.cards, ...this.$board.ENEMY.cards]
+
+        if (targets.length > 0) {
+          if (card.player === TARGET_KEYS.PLAYER) {
+            this.$stateMachine.setState(STATES.PLAYER_CHOOSE_TARGET, this.$targetType)
+            return
+          }
+
+          const target = targets[Math.floor(Math.random() * targets.length)]
+          this.targetChosen(target)
           return
         }
         callback?.()
