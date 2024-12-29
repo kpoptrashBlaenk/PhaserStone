@@ -26,7 +26,13 @@ export class Card {
   private $attacked: boolean
   private $sick: boolean
 
-  constructor(scene: Phaser.Scene, stateMachine: StateMachine, cardData: CardData, owner: TargetKeys) {
+  constructor(
+    scene: Phaser.Scene,
+    stateMachine: StateMachine,
+    cardData: CardData,
+    owner: TargetKeys,
+    id: number
+  ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$cardData = cardData
@@ -38,6 +44,7 @@ export class Card {
     this.$sick = true
 
     this.$cardContainer = this.$createCard()
+    this.$cardContainer.setData('id', id) // avoid that card containers are the same
     this.$resizeCard(this.$cardContainer)
   }
 

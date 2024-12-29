@@ -1,5 +1,6 @@
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { AnimationManager } from '../utils/animation-manager'
+import { IdCounter } from '../utils/id-counter'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { DECK_CONFIG } from '../utils/visual-configs'
@@ -12,17 +13,20 @@ export class Deck {
   private $animationManager: AnimationManager
   private $deck: Card[]
   private $deckContainer: Phaser.GameObjects.Container
+  private $idCounter: IdCounter
 
   constructor(
     scene: Phaser.Scene,
     stateMachine: StateMachine,
     owner: TargetKeys,
-    animationManager: AnimationManager
+    animationManager: AnimationManager,
+    idCounter: IdCounter
   ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$owner = owner
     this.$animationManager = animationManager
+    this.$idCounter = idCounter
 
     this.$createDeck()
     this.$shuffle()
@@ -65,7 +69,8 @@ export class Deck {
         this.$scene,
         this.$stateMachine,
         availableCards.splice(randomNumber, 1)[0],
-        this.$owner
+        this.$owner,
+        this.$idCounter.id
       )
       //   card.hideCard()
       deck.push(card)
