@@ -57,8 +57,34 @@ export class EnemyAI {
     }
 
     this.$playBoard()
-    this.$stateMachine.setState(STATES.TURN_BUTTON)
   }
 
-  private $playBoard(): void {}
+  private $playBoard(): void {
+    let attackingCards: Card[] = []
+    const enemyBoard = this.$board.ENEMY.cards
+    const attackableCards = this.$board.PLAYER.cards
+
+    // Get all cards that can attack
+    enemyBoard.forEach((card: Card) => {
+      if (card.canAttack) {
+        attackingCards.push(card)
+      }
+    })
+
+    if (attackingCards.length > 0) {
+      this.$stateMachine.setState(
+        STATES.ENEMY_BATTLE_CHOOSE_TARGET,
+        attackingCards[Math.floor(Math.random() * attackingCards.length)]
+      )
+
+      this.$stateMachine.setState(
+        STATES.ENEMY_BATTLE_TARGET_CHOSEN,
+        attackableCards[Math.floor(Math.random() * attackableCards.length)]
+      )
+
+      return
+    }
+
+    this.$stateMachine.setState(STATES.TURN_BUTTON)
+  }
 }

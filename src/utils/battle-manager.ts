@@ -3,6 +3,7 @@ import { Card } from '../objects/card'
 import { AnimationManager } from './animation-manager'
 import { STATES, TARGET_KEYS } from './keys'
 import { StateMachine } from './state-machine'
+import { ANIMATION_CONFIG } from './visual-configs'
 
 export class BattleManager {
   private $scene: Phaser.Scene
@@ -40,21 +41,25 @@ export class BattleManager {
       }
     })
 
+    console.log(dead)
+
     if (dead.length > 0) {
       dead.forEach((card: Card) => {
         this.$animationManager.death(card, () => {
-          this.$board[card.player].cardDies(card, callback)
+          this.$board[card.player].cardDies(card)
         })
       })
-      return
     }
 
-    callback?.()
+    setTimeout(() => callback?.(), ANIMATION_CONFIG.DEATH.DURATION)
   }
 
-  public handleBattle(card: Card, cancelButton: Phaser.GameObjects.Image): void {
+  public handleBattle(card: Card, cancelButton?: Phaser.GameObjects.Image): void {
     this.$attacker = card
-    this.$callback = () => cancelButton.destroy()
+
+    if (cancelButton) {
+      this.$callback = () => cancelButton.destroy()
+    }
   }
 
   public targetChosen(target: Card): void {

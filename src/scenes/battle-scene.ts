@@ -61,8 +61,20 @@ export class BattleScene extends BaseScene {
     this.$turnButton = new TurnButton(this, this.$stateMachine)
 
     // Deck
-    this.$deck.PLAYER = new Deck(this, this.$stateMachine, TARGET_KEYS.PLAYER, this.$animationManager, this.$idCounter)
-    this.$deck.ENEMY = new Deck(this, this.$stateMachine, TARGET_KEYS.ENEMY, this.$animationManager, this.$idCounter)
+    this.$deck.PLAYER = new Deck(
+      this,
+      this.$stateMachine,
+      TARGET_KEYS.PLAYER,
+      this.$animationManager,
+      this.$idCounter
+    )
+    this.$deck.ENEMY = new Deck(
+      this,
+      this.$stateMachine,
+      TARGET_KEYS.ENEMY,
+      this.$animationManager,
+      this.$idCounter
+    )
 
     // Hand
     this.$hand.PLAYER = new Hand(this, TARGET_KEYS.PLAYER, this.$animationManager)
@@ -353,6 +365,20 @@ export class BattleScene extends BaseScene {
       name: STATES.PLAYER_BATTLE_TARGET_CHOSEN,
       onEnter: (target: Card) => {
         this.$setTargets('NONE')
+        this.$battleManager.targetChosen(target)
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.ENEMY_BATTLE_CHOOSE_TARGET,
+      onEnter: (card: Card) => {
+        this.$battleManager.handleBattle(card)
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.ENEMY_BATTLE_TARGET_CHOSEN,
+      onEnter: (target: Card) => {
         this.$battleManager.targetChosen(target)
       },
     })
