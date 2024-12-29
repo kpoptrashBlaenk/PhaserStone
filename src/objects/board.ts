@@ -25,6 +25,10 @@ export class Board {
     return this.$board
   }
 
+  public setDepth(value: number): void {
+    this.$boardContainer.depth = value
+  }
+
   /**
    * Play card
    */

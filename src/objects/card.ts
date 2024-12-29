@@ -424,9 +424,16 @@ export class Card {
         return
       }
 
-      if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$owner === TARGET_KEYS.PLAYER) {
-        this.$stateMachine.setState(STATES.PLAYER_BATTLE_CHOOSE_TARGET, this)
-        this.$addCancel()
+      if (
+        this.$stateMachine.currentStateName === STATES.PLAYER_TURN &&
+        this.$owner === TARGET_KEYS.PLAYER &&
+        this.canAttack
+      ) {
+        this.$addCancel() // add cancel before state, to make remove cancel work as callback
+        this.$stateMachine.setState(STATES.PLAYER_BATTLE_CHOOSE_TARGET, {
+          card: this,
+          cancelButton: this.$cancelButton,
+        })
         return
       }
 
@@ -437,9 +444,7 @@ export class Card {
           return
         }
 
-        if (this.$owner === TARGET_KEYS.ENEMY) {
-          this.$stateMachine.setState(STATES.PLAYER_BATTLE_TARGET_CHOSEN, this)
-        }
+        this.$stateMachine.setState(STATES.PLAYER_BATTLE_TARGET_CHOSEN, this)
       }
     })
   }

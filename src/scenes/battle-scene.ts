@@ -164,8 +164,16 @@ export class BattleScene extends BaseScene {
     }
   }
 
-  private $setTargets(target: string): void {
+  private $setTargets(target: 'NONE' | 'ANY' | 'ENEMY'): void {
     switch (target) {
+      case 'NONE':
+        this.$board.PLAYER.cards.forEach((card: Card) => {
+          card.setTarget(false)
+        })
+        this.$board.ENEMY.cards.forEach((card: Card) => {
+          card.setTarget(false)
+        })
+        break
       case 'ANY':
         this.$board.PLAYER.cards.forEach((card: Card) => {
           card.setTarget(true)
@@ -174,13 +182,11 @@ export class BattleScene extends BaseScene {
           card.setTarget(true)
         })
         break
-      case 'NONE':
-        this.$board.PLAYER.cards.forEach((card: Card) => {
-          card.setTarget(false)
-        })
+      case 'ENEMY':
         this.$board.ENEMY.cards.forEach((card: Card) => {
-          card.setTarget(false)
+          card.setTarget(true)
         })
+        break
     }
   }
 
@@ -316,7 +322,7 @@ export class BattleScene extends BaseScene {
 
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLECRY_CHOOSE_TARGET,
-      onEnter: (target: string) => {
+      onEnter: (target: 'NONE' | 'ANY' | 'ENEMY') => {
         this.$setTargets(target)
       },
     })
@@ -332,16 +338,17 @@ export class BattleScene extends BaseScene {
     // Battle States
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLE_CHOOSE_TARGET,
-      onEnter: () => {
-        // this.$setTargets(target)
+      onEnter: ({ card, cancelButton }: { card: Card; cancelButton: Phaser.GameObjects.Image }) => {
+        this.$setTargets('ENEMY')
+        this.$battleManager.handleBattle(card, cancelButton)
       },
     })
 
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLE_TARGET_CHOSEN,
       onEnter: (target: Card) => {
-        // this.$setTargets('NONE')
-        // this.$battlecryManager.targetChosen(target)
+        this.$setTargets('NONE')
+        this.$battleManager.targetChosen(target)
       },
     })
   }

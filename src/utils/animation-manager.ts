@@ -63,7 +63,10 @@ export class AnimationManager {
     card.portrait.setTint(ANIMATION_CONFIG.DEATH.TINT)
     card.template.setTint(ANIMATION_CONFIG.DEATH.TINT)
 
-    const { x, y } = { x: card.container.x, y: card.container.y }
+    const { x, y } = {
+      x: card.container.x + card.container.width / 2,
+      y: card.container.y + card.container.height / 2,
+    }
 
     // Shrink
     this.$scene.tweens.add({
@@ -125,7 +128,32 @@ export class AnimationManager {
     })
   }
 
-  private $flashEffect(container: Phaser.GameObjects.Container, callback?: () => void): void {
+  public attack(attacker: Card, defender: Card, damageHandler: () => void, callback?: () => void): void {
+    const startPosition = { x: attacker.container.x, y: attacker.container.y }
+    const targetPosition = {
+      x:
+        defender.container.getBounds().centerX -
+        attacker.container.getBounds().centerX +
+        attacker.container.x,
+      y:
+        defender.container.getBounds().centerY -
+        attacker.container.getBounds().centerY +
+        attacker.container.y,
+    }
+
+    this.$stepBack(attacker, startPosition, () =>
+      this.$crash(attacker.container, targetPosition, () => {
+        attacker.setAttacked(true)
+        damageHandler()
+        this.$flashEffect(defender.container)
+        this.$particleEffect(defender.container)
+        this.$shake()
+        this.$attackReturn(attacker.container, startPosition, callback)
+      })
+    )
+  }
+
+  private $flashEffect(container: Phaser.GameObjects.Container): void {
     this.$scene.tweens.add({
       targets: container,
       alpha: ANIMATION_CONFIG.DAMAGE.FLASH.ALPHA,
@@ -148,5 +176,52 @@ export class AnimationManager {
         duration: ANIMATION_CONFIG.DAMAGE.SPARK.DURATION,
       }
     )
+  }
+
+  private $shake(): void {
+    this.$scene.cameras.main.shake(
+      ANIMATION_CONFIG.DAMAGE.CAMERA.DURATION,
+      ANIMATION_CONFIG.DAMAGE.CAMERA.INTENSITY
+    )
+  }
+
+  private $stepBack(attacker: Card, start: { x: number; y: number }, callback?: () => void): void {
+    this.$scene.tweens.add({
+      targets: attacker.container,
+      y: start.y + ANIMATION_CONFIG.ATTACK.STEP_BACK.Y[attacker.player],
+      duration: ANIMATION_CONFIG.ATTACK.STEP_BACK.DURATION,
+      ease: ANIMATION_CONFIG.ATTACK.STEP_BACK.EASE,
+      onComplete: callback,
+    })
+  }
+
+  private $crash(
+    container: Phaser.GameObjects.Container,
+    target: { x: number; y: number },
+    callback?: () => void
+  ): void {
+    this.$scene.tweens.add({
+      targets: container,
+      x: target.x,
+      y: target.y,
+      duration: ANIMATION_CONFIG.ATTACK.ATTACK.DURATION,
+      ease: ANIMATION_CONFIG.ATTACK.ATTACK.EASE,
+      onComplete: callback,
+    })
+  }
+
+  private $attackReturn(
+    container: Phaser.GameObjects.Container,
+    position: { x: number; y: number },
+    callback?: () => void
+  ): void {
+    this.$scene.tweens.add({
+      targets: container,
+      x: position.x,
+      y: position.y,
+      duration: ANIMATION_CONFIG.ATTACK.RETURN.DURATION,
+      ease: ANIMATION_CONFIG.ATTACK.RETURN.EASE,
+      onComplete: callback,
+    })
   }
 }
