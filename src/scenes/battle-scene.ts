@@ -7,13 +7,12 @@ import { Mana } from '../objects/mana'
 import { Background } from '../ui/background'
 import { TurnButton } from '../ui/turn-button'
 import { AnimationManager } from '../utils/animation-manager'
+import { BattleManager } from '../utils/battle-manager'
+import { BattlecryManager } from '../utils/battlecry-manager'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
-import { BattlecryManager } from '../utils/battlecry-manager'
-import { BattleManager } from '../utils/battle-manager'
-import { IdCounter } from '../utils/id-counter'
 
 export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
@@ -22,7 +21,6 @@ export class BattleScene extends BaseScene {
   private $stateMachine: StateMachine
   private $enemyAI: EnemyAI
   private $turnButton: TurnButton
-  private $idCounter: IdCounter
 
   private $deck: { PLAYER: Deck; ENEMY: Deck } = { PLAYER: null as any, ENEMY: null as any }
   private $hand: { PLAYER: Hand; ENEMY: Hand } = { PLAYER: null as any, ENEMY: null as any }
@@ -51,9 +49,6 @@ export class BattleScene extends BaseScene {
     // Animation Manager
     this.$animationManager = new AnimationManager(this)
 
-    // Id Counter
-    this.$idCounter = new IdCounter()
-
     // Background
     new Background(this)
 
@@ -61,20 +56,8 @@ export class BattleScene extends BaseScene {
     this.$turnButton = new TurnButton(this, this.$stateMachine)
 
     // Deck
-    this.$deck.PLAYER = new Deck(
-      this,
-      this.$stateMachine,
-      TARGET_KEYS.PLAYER,
-      this.$animationManager,
-      this.$idCounter
-    )
-    this.$deck.ENEMY = new Deck(
-      this,
-      this.$stateMachine,
-      TARGET_KEYS.ENEMY,
-      this.$animationManager,
-      this.$idCounter
-    )
+    this.$deck.PLAYER = new Deck(this, this.$stateMachine, TARGET_KEYS.PLAYER, this.$animationManager)
+    this.$deck.ENEMY = new Deck(this, this.$stateMachine, TARGET_KEYS.ENEMY, this.$animationManager)
 
     // Hand
     this.$hand.PLAYER = new Hand(this, TARGET_KEYS.PLAYER, this.$animationManager)

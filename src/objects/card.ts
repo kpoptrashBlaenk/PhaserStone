@@ -1,6 +1,5 @@
 import { CARD_ASSETS_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
-import { BattleScene } from '../scenes/battle-scene'
 import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
@@ -31,11 +30,11 @@ export class Card {
     stateMachine: StateMachine,
     cardData: CardData,
     owner: TargetKeys,
-    id: number
+    id: string
   ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
-    this.$cardData = cardData
+    this.$cardData = { ...cardData }
     this.$originalData = Object.freeze({ ...cardData })
     this.$owner = owner
 
@@ -45,6 +44,7 @@ export class Card {
 
     this.$cardContainer = this.$createCard()
     this.$cardContainer.setData('id', id) // avoid that card containers are the same
+    this.$cardData.trackId = id // avoid that cards are the same
     this.$resizeCard(this.$cardContainer)
   }
 

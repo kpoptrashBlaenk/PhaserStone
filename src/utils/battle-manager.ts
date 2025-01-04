@@ -41,8 +41,6 @@ export class BattleManager {
       }
     })
 
-    console.log(dead)
-
     if (dead.length > 0) {
       dead.forEach((card: Card) => {
         this.$animationManager.death(card, () => {

@@ -6,6 +6,7 @@ export type Battlecry = {
 
 export type CardData = {
   id: number
+  trackId: string
   name: string
   text: string
   cost: number

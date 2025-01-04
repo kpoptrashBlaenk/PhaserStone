@@ -1,4 +1,4 @@
-import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS } from '../assets/asset-keys'
+import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { AnimationManager } from '../utils/animation-manager'
 import { IdCounter } from '../utils/id-counter'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
@@ -19,19 +19,24 @@ export class Deck {
     scene: Phaser.Scene,
     stateMachine: StateMachine,
     owner: TargetKeys,
-    animationManager: AnimationManager,
-    idCounter: IdCounter
+    animationManager: AnimationManager
   ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$owner = owner
     this.$animationManager = animationManager
-    this.$idCounter = idCounter
+    this.$idCounter = new IdCounter(`${this.$owner}-`)
 
     this.$createDeck()
     this.$shuffle()
 
     this.$createContainer()
+  }
+
+  public id() {
+    this.$deck.forEach((element) => {
+      console.log(element.card.trackId)
+    })
   }
 
   /**
@@ -60,7 +65,7 @@ export class Deck {
    */
   private $createDeck(): void {
     const deck = []
-    const allCards = this.$scene.cache.json.get(DATA_ASSET_KEYS.CARDS)
+    const allCards = [...this.$scene.cache.json.get(DATA_ASSET_KEYS.CARDS)]
     const availableCards = [...allCards]
 
     for (let i = 0; i < allCards.length; i++) {
@@ -72,7 +77,6 @@ export class Deck {
         this.$owner,
         this.$idCounter.id
       )
-      //   card.hideCard()
       deck.push(card)
     }
 
