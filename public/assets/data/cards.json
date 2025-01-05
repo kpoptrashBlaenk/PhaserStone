@@ -5,7 +5,8 @@
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 1,
+    "id": 6,
+    "trackId": "",
     "battlecry": {
       "target": "ANY",
       "type": "DAMAGE",
@@ -18,171 +19,66 @@
   },
   {
     "assetKey": "ALEXSTRAZA",
-    "attack": 3,
+    "attack": 1,
     "cardClass": "NEUTRAL",
-    "cost": 3,
-    "health": 3,
-    "id": 2,
-    "battlecry": {
-      "target": "ENEMY_MINION",
-      "type": "SET_ATTACK",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Change an enemy minion's Attack to 1.",
-    "name": "Aldor Peacekeeper",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 5,
-    "cardClass": "NEUTRAL",
-    "cost": 7,
-    "health": 6,
-    "id": 3,
-    "battlecry": {
-      "target": "FRIENDLY_HERO",
-      "type": "HEAL",
-      "amount": 6
-    },
-    "text": "<b>Battlecry:</b> Restore 6 Health to your hero.",
-    "name": "Guardian of Kings",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 5,
-    "cardClass": "NEUTRAL",
-    "cost": 7,
-    "health": 6,
-    "id": 4,
-    "battlecry": {
-      "target": "FRIENDLY_HERO",
-      "type": "HEAL",
-      "amount": 6
-    },
-    "text": "<b>Battlecry:</b> Restore 6 Health to your hero.",
-    "name": "Guardian of Kings",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 6,
-    "cardClass": "NEUTRAL",
-    "cost": 6,
-    "health": 6,
+    "cost": 1,
+    "health": 1,
     "id": 5,
-    "battlecry": {
-      "target": "FRIENDLY_MINION",
-      "type": "GIVE_HEALTH",
-      "amount": 3
-    },
-    "text": "<b>Battlecry:</b> Give a friendly minion +3 Health.",
-    "name": "Temple Enforcer",
+    "trackId": "",
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
     "races": [],
     "type": "MINION"
   },
   {
     "assetKey": "ALEXSTRAZA",
-    "attack": 4,
-    "cardClass": "NEUTRAL",
-    "cost": 6,
-    "health": 5,
-    "id": 6,
-    "battlecry": {
-      "target": "ENEMY_MINION",
-      "type": "TAKE_CONTROL",
-      "amount": 2
-    },
-    "text": "<b>Battlecry:</b> Take control of an enemy minion that has 2 or less Attack.",
-    "name": "Cabal Shadow Priest",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 3,
-    "cardClass": "NEUTRAL",
-    "cost": 2,
-    "health": 1,
-    "id": 7,
-    "battlecry": {
-      "target": "FRIENDLY_HERO",
-      "type": "DAMAGE",
-      "amount": 3
-    },
-    "text": "<b>Battlecry:</b> Deal 3 damage to your hero.",
-    "name": "Flame Imp",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 4,
-    "cardClass": "NEUTRAL",
-    "cost": 2,
-    "health": 3,
-    "id": 8,
-    "battlecry": {
-      "target": "FRIENDLY_HAND",
-      "type": "DISCARD",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Discard a random card.",
-    "name": "Felstalker",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 3,
-    "cardClass": "NEUTRAL",
-    "cost": 3,
-    "health": 5,
-    "id": 9,
-    "battlecry": {
-      "target": "FRIENDLY_MANA",
-      "type": "DESTROY",
-      "amount": 1
-    },
-    "text": "<b>Battlecry:</b> Destroy one of your Mana Crystals.",
-    "name": "Felguard",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 2,
+    "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 10,
-    "battlecry": {
-      "target": "MINION",
-      "type": "GIVE_ATTACK",
-      "amount": 2
-    },
-    "text": "<b>Battlecry:</b> Give a minion +2 Attack.",
-    "name": "Abusive Sergeant",
+    "id": 4,
+    "trackId": "",
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
     "races": [],
     "type": "MINION"
   },
   {
     "assetKey": "ALEXSTRAZA",
-    "attack": 2,
+    "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 11,
-    "battlecry": {
-      "target": "ANY",
-      "type": "HEAL",
-      "amount": 2
-    },
-    "text": "<b>Battlecry:</b> Restore 2 Health.",
-    "name": "Voodoo Doctor",
+    "id": 3,
+    "trackId": "",
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 2,
+    "trackId": "",
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "text": "<b>Battlecry:</b> Deal 1 damage.",
+    "name": "Elven Archer",
     "races": [],
     "type": "MINION"
   }

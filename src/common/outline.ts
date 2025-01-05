@@ -13,7 +13,12 @@ export function setOutline(scene: Phaser.Scene, can: boolean, image: Phaser.Game
 
   if (can) {
     if (!borderExists) {
-      border.add(image, OUTLINE_CONFIG)
+      border.add(image, {
+        name: OUTLINE_CONFIG.NAME,
+        quality: OUTLINE_CONFIG.QUALITY,
+        thickness: OUTLINE_CONFIG.THICKNESS,
+        outlineColor: OUTLINE_CONFIG.OUTLINE_COLOR,
+      })
     }
     return
   }

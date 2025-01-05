@@ -1,5 +1,8 @@
-import { RESIZE_CONFIGS } from '../utils/visual-configs'
+import { RESIZE_CONFIG } from '../utils/visual-configs'
 
+/**
+ * Resize the container
+ */
 export function resizeContainer(container: Phaser.GameObjects.Container, callback?: () => void): void {
   const padding = 10
   let newWidth = 0
@@ -10,8 +13,8 @@ export function resizeContainer(container: Phaser.GameObjects.Container, callbac
     container.scene.tweens.add({
       targets: child,
       x: child.width * index,
-      duration: RESIZE_CONFIGS.DURATION,
-      ease: RESIZE_CONFIGS.EASE,
+      duration: RESIZE_CONFIG.DURATION,
+      ease: RESIZE_CONFIG.EASE,
     })
 
     newWidth += child.width
@@ -25,12 +28,21 @@ export function resizeContainer(container: Phaser.GameObjects.Container, callbac
   callback?.()
 }
 
-export function repositionContainer(container: Phaser.GameObjects.Container, x: number, y: number): void {
+/**
+ * Reposition the container
+ */
+export function repositionContainer(
+  container: Phaser.GameObjects.Container,
+  x: number,
+  y: number,
+  callback?: () => void
+): void {
   container.scene.tweens.add({
     targets: container,
     x: x,
     y: y,
-    duration: RESIZE_CONFIGS.DURATION,
-    ease: RESIZE_CONFIGS.EASE,
+    duration: RESIZE_CONFIG.DURATION,
+    ease: RESIZE_CONFIG.EASE,
+    onComplete: callback,
   })
 }
