@@ -1,5 +1,6 @@
 import { EFFECT_ASSET_KEYS } from '../assets/asset-keys'
 import { Card } from '../objects/card'
+import { Hero } from '../objects/hero'
 import { ANIMATION_CONFIG, BOARD_CONFIG } from './visual-configs'
 
 export class AnimationManager {
@@ -128,7 +129,7 @@ export class AnimationManager {
     })
   }
 
-  public attack(attacker: Card, defender: Card, damageHandler: () => void, callback?: () => void): void {
+  public attack(attacker: Card | Hero, defender: Card | Hero, damageHandler: () => void, callback?: () => void): void {
     const startPosition = { x: attacker.container.x, y: attacker.container.y }
     const targetPosition = {
       x:
@@ -185,7 +186,7 @@ export class AnimationManager {
     )
   }
 
-  private $stepBack(attacker: Card, start: { x: number; y: number }, callback?: () => void): void {
+  private $stepBack(attacker: Card | Hero, start: { x: number; y: number }, callback?: () => void): void {
     this.$scene.tweens.add({
       targets: attacker.container,
       y: start.y + ANIMATION_CONFIG.ATTACK.STEP_BACK.Y[attacker.player],

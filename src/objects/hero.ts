@@ -1,4 +1,5 @@
 import { UI_ASSET_KEYS } from '../assets/asset-keys'
+import { setOutline } from '../common/outline'
 import { MAX_HEALTH } from '../utils/configs'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
@@ -23,17 +24,66 @@ export class Hero {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$owner = owner
+    this.$currentAttack = 0
     this.$maxHealth = MAX_HEALTH
     this.$currentHealth = this.$maxHealth
-    this.$currentAttack = 1
     this.$attacked = false
 
     this.$createHealth()
+    this.setAttack(1)
 
     if (this.$owner === TARGET_KEYS.PLAYER) {
       this.$addClickPlayer()
     } else {
       this.$addClickEnemy()
+    }
+  }
+
+  public get player(): TargetKeys {
+    return this.$owner
+  }
+
+  public get container(): Phaser.GameObjects.Container {
+    return this.$heroContainer
+  }
+
+  public get health(): number {
+    return this.$currentHealth
+  }
+
+  public get attack(): number {
+    return this.$currentAttack
+  }
+
+  public get canAttack(): boolean {
+    return !this.$attacked && this.$currentAttack > 0
+  }
+
+  public setHealth(newHealth: number): void {
+    this.$currentHealth = newHealth > this.$maxHealth ? this.$maxHealth : newHealth
+  }
+
+  public setAttack(newAttack: number): void {
+    this.$currentAttack = newAttack
+    this.$attackContainer.setAlpha(this.$currentAttack > 0 ? 1 : 0)
+  }
+
+  public setAttacked(attacked: boolean) {
+    this.$attacked = attacked
+    this.setOutline(!this.$attacked)
+  }
+
+  public setOutline(value: boolean): void {
+    if (this.$owner === TARGET_KEYS.PLAYER) {
+      setOutline(this.$scene, value, this.$heroImage)
+    }
+  }
+
+  public setTarget(targeted: boolean): void {
+    if (targeted) {
+      this.$heroImage.setTint(0xff0000)
+    } else {
+      this.$heroImage.setTint(0xffffff)
     }
   }
 
@@ -66,12 +116,10 @@ export class Hero {
       .setScale(2.5)
       .setOrigin(0.5)
     const attackContainer = this.$scene.add.container(0, 0, [attackImage, attackText]).setScale(0.25)
-    attackContainer
-      .setPosition(
-        -((attackImage.width * 4) / 3) * attackContainer.scale,
-        (attackImage.width / 3) * attackContainer.scale
-      )
-      .setAlpha(0)
+    attackContainer.setPosition(
+      -((attackImage.width * 4) / 3) * attackContainer.scale,
+      (attackImage.width / 3) * attackContainer.scale
+    )
 
     // Container
     this.$heroContainer = this.$scene.add
@@ -99,8 +147,11 @@ export class Hero {
           return
         }
 
-        this.$stateMachine.setState(STATES.PLAYER_BATTLE_CHOOSE_TARGET, this)
         this.$addCancel()
+        this.$stateMachine.setState(STATES.PLAYER_BATTLE_CHOOSE_TARGET, {
+          attacker: this,
+          cancelButton: this.$cancelButton,
+        })
         return
       }
 

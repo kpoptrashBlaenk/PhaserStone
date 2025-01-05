@@ -14,6 +14,7 @@ import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
+import { setOutline } from '../../Legacy/src/common/outline'
 
 export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
@@ -150,48 +151,72 @@ export class BattleScene extends BaseScene {
   }
 
   private $handleBoard(player: TargetKeys, context: 'RESET' | 'ATTACKABLE'): void {
+    const boardCards = this.$board[player].cards
+    const hero = this.$hero[player]
+
     switch (context) {
       case 'RESET':
-        this.$board[player].cards.forEach((card: Card) => {
+        boardCards.forEach((card: Card) => {
           card.setSick(false)
         })
-        this.$board[player].cards.forEach((card: Card) => {
+        boardCards.forEach((card: Card) => {
           card.setAttacked(false)
         })
-        this.$board[player].cards.forEach((card: Card) => {
+        boardCards.forEach((card: Card) => {
           card.setOutline(false)
         })
+
+        hero.setAttacked(false)
+        hero.setOutline(false)
         break
-      case 'ATTACKABLE':
-        this.$board[player].cards.forEach((card: Card) => {
+
+      case 'ATTACKABLE': // it's more "who can attack then set outline"
+        boardCards.forEach((card: Card) => {
           card.setOutline(card.canAttack)
         })
+
+        hero.setOutline(hero.canAttack)
         break
     }
   }
 
   private $setTargets(target: 'NONE' | 'ANY' | 'ENEMY'): void {
+    const playerBoard = this.$board.PLAYER.cards
+    const enemyBoard = this.$board.ENEMY.cards
+    const playerHero = this.$hero.PLAYER
+    const enemyHero = this.$hero.ENEMY
+
     switch (target) {
       case 'NONE':
-        this.$board.PLAYER.cards.forEach((card: Card) => {
+        playerBoard.forEach((card: Card) => {
           card.setTarget(false)
         })
-        this.$board.ENEMY.cards.forEach((card: Card) => {
+        enemyBoard.forEach((card: Card) => {
           card.setTarget(false)
         })
+
+        playerHero.setTarget(false)
+        enemyHero.setTarget(false)
         break
+
       case 'ANY':
-        this.$board.PLAYER.cards.forEach((card: Card) => {
+        playerBoard.forEach((card: Card) => {
           card.setTarget(true)
         })
-        this.$board.ENEMY.cards.forEach((card: Card) => {
+        enemyBoard.forEach((card: Card) => {
           card.setTarget(true)
         })
+
+        playerHero.setTarget(true)
+        enemyHero.setTarget(true)
         break
+
       case 'ENEMY':
-        this.$board.ENEMY.cards.forEach((card: Card) => {
+        enemyBoard.forEach((card: Card) => {
           card.setTarget(true)
         })
+
+        enemyHero.setTarget(true)
         break
     }
   }
@@ -344,9 +369,15 @@ export class BattleScene extends BaseScene {
     // Battle States
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLE_CHOOSE_TARGET,
-      onEnter: ({ card, cancelButton }: { card: Card; cancelButton: Phaser.GameObjects.Image }) => {
+      onEnter: ({
+        attacker,
+        cancelButton,
+      }: {
+        attacker: Card | Hero
+        cancelButton: Phaser.GameObjects.Image
+      }) => {
         this.$setTargets('ENEMY')
-        this.$battleManager.handleBattle(card, cancelButton)
+        this.$battleManager.handleBattle(attacker, cancelButton)
       },
     })
 

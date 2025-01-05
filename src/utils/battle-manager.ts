@@ -1,5 +1,6 @@
 import { Board } from '../objects/board'
 import { Card } from '../objects/card'
+import { Hero } from '../objects/hero'
 import { AnimationManager } from './animation-manager'
 import { STATES, TARGET_KEYS } from './keys'
 import { StateMachine } from './state-machine'
@@ -10,8 +11,8 @@ export class BattleManager {
   private $stateMachine: StateMachine
   private $animationManager: AnimationManager
   private $board: { PLAYER: Board; ENEMY: Board }
-  private $attacker: Card
-  private $defender: Card
+  private $attacker: Card | Hero
+  private $defender: Card | Hero
   private $callback?: () => void // remove cancel
 
   constructor(
@@ -52,15 +53,15 @@ export class BattleManager {
     setTimeout(() => callback?.(), ANIMATION_CONFIG.DEATH.DURATION)
   }
 
-  public handleBattle(card: Card, cancelButton?: Phaser.GameObjects.Image): void {
-    this.$attacker = card
+  public handleBattle(attacker: Card | Hero, cancelButton?: Phaser.GameObjects.Image): void {
+    this.$attacker = attacker
 
     if (cancelButton) {
       this.$callback = () => cancelButton.destroy()
     }
   }
 
-  public targetChosen(target: Card): void {
+  public targetChosen(target: Card | Hero): void {
     this.$defender = target
 
     if (!this.$checkValidTarget(target)) {
@@ -73,7 +74,7 @@ export class BattleManager {
     this.$battle()
   }
 
-  private $checkValidTarget(target: Card): boolean {
+  private $checkValidTarget(target: Card | Hero): boolean {
     if (!(this.$attacker.player === target.player)) {
       return true
     }
@@ -89,11 +90,16 @@ export class BattleManager {
       this.$attacker,
       this.$defender,
       () => {
-        const attackerHealth = this.$attacker.card.health - this.$defender.card.attack
-        this.$attacker.setHealth(attackerHealth)
+        const attacker = this.$attacker
+        const defender = this.$defender
 
-        const defenderHealth = this.$defender.card.health - this.$attacker.card.attack
-        this.$defender.setHealth(defenderHealth)
+        const attackerHealth = attacker instanceof Card ? attacker.card.health : attacker.health
+        const defenderHealth = defender instanceof Card ? defender.card.health : defender.health
+        const attackerAttack = attacker instanceof Card ? attacker.card.attack : attacker.attack
+        const defenderAttack = defender instanceof Card ? defender.card.attack : 0
+
+        this.$attacker.setHealth(attackerHealth - defenderAttack)
+        this.$defender.setHealth(defenderHealth - attackerAttack)
       },
       () => {
         this.$board[this.$attacker.player].setDepth(0)
