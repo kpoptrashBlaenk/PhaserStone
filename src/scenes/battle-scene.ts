@@ -14,7 +14,6 @@ import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
-import { setOutline } from '../../Legacy/src/common/outline'
 
 export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
