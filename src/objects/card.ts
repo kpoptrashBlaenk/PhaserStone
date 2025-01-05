@@ -1,5 +1,6 @@
 import { CARD_ASSETS_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
+import { colorStat } from '../common/stats-change'
 import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
@@ -102,6 +103,14 @@ export class Card {
 
   public setHealth(newHealth: number): void {
     this.$cardData.health = newHealth
+
+    colorStat(this.$cardData.health, this.$originalData.health, this.$cardHealthText)
+  }
+
+  public setAttack(newAttack: number): void {
+    this.$cardData.attack = newAttack
+
+    colorStat(this.$cardData.attack, this.$originalData.attack, this.$cardAttackText)
   }
 
   public setOutline(value: boolean): void {

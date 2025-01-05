@@ -1,5 +1,6 @@
 import { UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
+import { colorStat } from '../common/stats-change'
 import { MAX_HEALTH } from '../utils/configs'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
@@ -29,7 +30,7 @@ export class Hero {
     this.$currentHealth = this.$maxHealth
     this.$attacked = false
 
-    this.$createHealth()
+    this.$createHero()
     this.setAttack(1)
 
     if (this.$owner === TARGET_KEYS.PLAYER) {
@@ -61,11 +62,15 @@ export class Hero {
 
   public setHealth(newHealth: number): void {
     this.$currentHealth = newHealth > this.$maxHealth ? this.$maxHealth : newHealth
+
+    colorStat(this.$currentHealth, this.$maxHealth, this.$healthText)
   }
 
   public setAttack(newAttack: number): void {
     this.$currentAttack = newAttack
     this.$attackContainer.setAlpha(this.$currentAttack > 0 ? 1 : 0)
+
+    colorStat(this.$currentAttack, 0, this.$attackText)
   }
 
   public setAttacked(attacked: boolean) {
@@ -87,7 +92,7 @@ export class Hero {
     }
   }
 
-  private $createHealth(): void {
+  private $createHero(): void {
     const portrait = this.$scene.add.rectangle(0, 0, HERO_CONFIG.WIDTH, HERO_CONFIG.HEIGHT, HERO_CONFIG.COLOR)
 
     // Health
@@ -135,7 +140,7 @@ export class Hero {
 
     this.$heroImage = healthImage // place hero image when it becomes an actual image
     this.$healthText = healthText
-    this.$attackText = healthText
+    this.$attackText = attackText
     this.$attackContainer = attackContainer
   }
 
