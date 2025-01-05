@@ -95,7 +95,7 @@ export class BattlecryManager {
       this.$source,
       target,
       () => {
-        const newHealth = target instanceof Card ? target.card.health : target.health - this.$effect.amount
+        const newHealth = (target instanceof Card ? target.card.health : target.health) - this.$effect.amount
         target.setHealth(newHealth)
       },
       this.$callback

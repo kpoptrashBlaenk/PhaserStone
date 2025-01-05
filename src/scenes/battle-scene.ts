@@ -90,7 +90,7 @@ export class BattleScene extends BaseScene {
     // Battle Manager
     this.$battleManager = new BattleManager(this, this.$stateMachine, this.$animationManager, this.$board)
 
-    this.$enemyAI = new EnemyAI(this, this.$stateMachine, this.$hand.ENEMY, this.$board)
+    this.$enemyAI = new EnemyAI(this, this.$stateMachine, this.$hand.ENEMY, this.$board, this.$hero)
 
     this.$turnButton.changeTurn()
   }
@@ -392,14 +392,14 @@ export class BattleScene extends BaseScene {
 
     this.$stateMachine.addState({
       name: STATES.ENEMY_BATTLE_CHOOSE_TARGET,
-      onEnter: (card: Card) => {
+      onEnter: (card: Card | Hero) => {
         this.$battleManager.handleBattle(card)
       },
     })
 
     this.$stateMachine.addState({
       name: STATES.ENEMY_BATTLE_TARGET_CHOSEN,
-      onEnter: (target: Card) => {
+      onEnter: (target: Card | Hero) => {
         this.$battleManager.targetChosen(target)
       },
     })

@@ -1,6 +1,7 @@
 import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { Hand } from '../objects/hand'
+import { Hero } from '../objects/hero'
 import { STATES } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 
@@ -8,24 +9,21 @@ export class EnemyAI {
   private $scene: Phaser.Scene
   private $stateMachine: StateMachine
   private $hand: Hand
-  private $board: {
-    PLAYER: Board
-    ENEMY: Board
-  }
+  private $board: { PLAYER: Board; ENEMY: Board }
+  private $hero: { PLAYER: Hero; ENEMY: Hero }
 
   constructor(
     scene: Phaser.Scene,
     stateMachine: StateMachine,
     hand: Hand,
-    board: {
-      PLAYER: Board
-      ENEMY: Board
-    }
+    board: { PLAYER: Board; ENEMY: Board },
+    hero: { PLAYER: Hero; ENEMY: Hero }
   ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$hand = hand
     this.$board = board
+    this.$hero = hero
   }
 
   /**
@@ -60,12 +58,12 @@ export class EnemyAI {
   }
 
   private $playBoard(): void {
-    let attackingCards: Card[] = []
-    const enemyBoard = this.$board.ENEMY.cards
-    const attackableCards = this.$board.PLAYER.cards
+    let attackingCards: (Card | Hero)[] = []
+    const enemyBoard = [...this.$board.ENEMY.cards, this.$hero.ENEMY]
+    const attackableCards = [...this.$board.PLAYER.cards, this.$hero.PLAYER]
 
     // Get all cards that can attack
-    enemyBoard.forEach((card: Card) => {
+    enemyBoard.forEach((card: Card | Hero) => {
       if (card.canAttack) {
         attackingCards.push(card)
       }
