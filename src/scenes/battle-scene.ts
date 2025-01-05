@@ -83,7 +83,8 @@ export class BattleScene extends BaseScene {
       this,
       this.$stateMachine,
       this.$animationManager,
-      this.$board
+      this.$board,
+      this.$hero
     )
 
     // Battle Manager
@@ -339,15 +340,15 @@ export class BattleScene extends BaseScene {
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLECRY,
       onEnter: ({
-        card,
+        source,
         callback,
         fallback,
       }: {
-        card: Card
+        source: Card
         callback?: () => void
         fallback?: () => void
       }) => {
-        this.$battlecryManager.handleBattlecry(card, callback, fallback)
+        this.$battlecryManager.handleBattlecry(source, callback, fallback)
       },
     })
 
@@ -360,7 +361,7 @@ export class BattleScene extends BaseScene {
 
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLECRY_TARGET_CHOSEN,
-      onEnter: (target: Card) => {
+      onEnter: (target: Card | Hero) => {
         this.$setTargets('NONE')
         this.$battlecryManager.targetChosen(target)
       },

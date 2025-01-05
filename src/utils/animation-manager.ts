@@ -104,7 +104,7 @@ export class AnimationManager {
     })
   }
 
-  public battlecryProjectile(source: Card, target: Card, impact?: () => void, callback?: () => void): void {
+  public battlecryProjectile(source: Card, target: Card | Hero, impact?: () => void, callback?: () => void): void {
     const sourceBounds = source.container.getBounds()
     const targetBounds = target.container.getBounds()
 

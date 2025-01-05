@@ -31,13 +31,9 @@ export class Hero {
     this.$attacked = false
 
     this.$createHero()
-    this.setAttack(1)
+    this.setAttack(0)
 
-    if (this.$owner === TARGET_KEYS.PLAYER) {
-      this.$addClickPlayer()
-    } else {
-      this.$addClickEnemy()
-    }
+    this.$addClick()
   }
 
   public get player(): TargetKeys {
@@ -144,33 +140,43 @@ export class Hero {
     this.$attackContainer = attackContainer
   }
 
-  private $addClickPlayer(): void {
+  private $addClick(): void {
     this.$heroContainer.on('pointerup', () => {
-      if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$currentAttack > 0) {
-        if (this.$attacked) {
-          // warn, already attacked
-          return
-        }
-
-        this.$addCancel()
-        this.$stateMachine.setState(STATES.PLAYER_BATTLE_CHOOSE_TARGET, {
-          attacker: this,
-          cancelButton: this.$cancelButton,
-        })
+      // Battlecry
+      if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLECRY_CHOOSE_TARGET) {
+        this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_TARGET_CHOSEN, this)
         return
       }
 
-      if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLE_CHOOSE_TARGET) {
-        this.$stateMachine.setState(STATES.PLAYER_TURN, this)
-        this.$removeCancel()
-      }
-    })
-  }
+      // Player
+      if (this.$owner === TARGET_KEYS.PLAYER) {
+        if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$currentAttack > 0) {
+          if (this.$attacked) {
+            // warn, already attacked
+            return
+          }
 
-  private $addClickEnemy(): void {
-    this.$heroContainer.on('pointerup', () => {
-      if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLE_CHOOSE_TARGET) {
-        this.$stateMachine.setState(STATES.PLAYER_BATTLE_TARGET_CHOSEN, this)
+          this.$addCancel()
+          this.$stateMachine.setState(STATES.PLAYER_BATTLE_CHOOSE_TARGET, {
+            attacker: this,
+            cancelButton: this.$cancelButton,
+          })
+          return
+        }
+
+        if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLE_CHOOSE_TARGET) {
+          this.$stateMachine.setState(STATES.PLAYER_TURN, this)
+          this.$removeCancel()
+        }
+
+        return
+      }
+
+      // Enemy
+      if (this.$owner === TARGET_KEYS.ENEMY) {
+        if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLE_CHOOSE_TARGET) {
+          this.$stateMachine.setState(STATES.PLAYER_BATTLE_TARGET_CHOSEN, this)
+        }
       }
     })
   }

@@ -403,7 +403,7 @@ export class Card {
           if (this.$cardData.battlecry) {
             this.$addCancel()
             this.$stateMachine.setState(STATES.PLAYER_BATTLECRY, {
-              card: this,
+              source: this,
               callback: playCardCallback,
               fallback: playCardFallback,
             })

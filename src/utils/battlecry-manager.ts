@@ -1,5 +1,6 @@
 import { Board } from '../objects/board'
 import { Card } from '../objects/card'
+import { Hero } from '../objects/hero'
 import { AnimationManager } from './animation-manager'
 import { Battlecry } from './card-keys'
 import { STATES, TARGET_KEYS } from './keys'
@@ -10,10 +11,11 @@ export class BattlecryManager {
   private $stateMachine: StateMachine
   private $animationManager: AnimationManager
   private $board: { PLAYER: Board; ENEMY: Board }
+  private $hero: { PLAYER: Hero; ENEMY: Hero }
   private $source: Card
   private $effect: Battlecry
   private $targetType: string
-  private $target: Card
+  private $target: Card | Hero
   private $callback?: () => void // Usually play the card
   private $fallback?: () => void
 
@@ -21,12 +23,14 @@ export class BattlecryManager {
     scene: Phaser.Scene,
     stateMachine: StateMachine,
     animationManager: AnimationManager,
-    board: { PLAYER: Board; ENEMY: Board }
+    board: { PLAYER: Board; ENEMY: Board },
+    hero: { PLAYER: Hero; ENEMY: Hero }
   ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$animationManager = animationManager
     this.$board = board
+    this.$hero = hero
   }
 
   public handleBattlecry(card: Card, callback?: () => void, fallback?: () => void): void {
@@ -39,7 +43,12 @@ export class BattlecryManager {
       this.$fallback = fallback
 
       if (this.$targetType === 'ANY') {
-        const targets = [...this.$board.PLAYER.cards, ...this.$board.ENEMY.cards]
+        const targets = [
+          ...this.$board.PLAYER.cards,
+          ...this.$board.ENEMY.cards,
+          this.$hero.PLAYER,
+          this.$hero.ENEMY,
+        ]
 
         if (targets.length > 0) {
           if (card.player === TARGET_KEYS.PLAYER) {
@@ -59,7 +68,7 @@ export class BattlecryManager {
     callback?.()
   }
 
-  public targetChosen(target: Card): void {
+  public targetChosen(target: Card | Hero): void {
     if (!this.$checkValidTarget(target)) {
       // Warn this is wrong target
       this.$fallback?.()
@@ -73,7 +82,7 @@ export class BattlecryManager {
     }
   }
 
-  private $checkValidTarget(target: Card): boolean {
+  private $checkValidTarget(target: Card | Hero): boolean {
     if (this.$targetType === 'ANY') {
       return true
     }
@@ -81,12 +90,13 @@ export class BattlecryManager {
     return false
   }
 
-  private $dealDamage(target: Card): void {
+  private $dealDamage(target: Card | Hero): void {
     this.$animationManager.battlecryProjectile(
       this.$source,
       target,
       () => {
-        target.setHealth(target.card.health - this.$effect.amount)
+        const newHealth = target instanceof Card ? target.card.health : target.health - this.$effect.amount
+        target.setHealth(newHealth)
       },
       this.$callback
     )
