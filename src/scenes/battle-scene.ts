@@ -3,6 +3,7 @@ import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { Deck } from '../objects/deck'
 import { Hand } from '../objects/hand'
+import { Hero } from '../objects/hero'
 import { Mana } from '../objects/mana'
 import { Background } from '../ui/background'
 import { TurnButton } from '../ui/turn-button'
@@ -26,6 +27,7 @@ export class BattleScene extends BaseScene {
   private $hand: { PLAYER: Hand; ENEMY: Hand } = { PLAYER: null as any, ENEMY: null as any }
   private $mana: { PLAYER: Mana; ENEMY: Mana } = { PLAYER: null as any, ENEMY: null as any }
   private $board: { PLAYER: Board; ENEMY: Board } = { PLAYER: null as any, ENEMY: null as any }
+  private $hero: { PLAYER: Hero; ENEMY: Hero } = { PLAYER: null as any, ENEMY: null as any }
 
   constructor() {
     super({
@@ -66,6 +68,10 @@ export class BattleScene extends BaseScene {
     // Mana
     this.$mana.PLAYER = new Mana(this, TARGET_KEYS.PLAYER)
     this.$mana.ENEMY = new Mana(this, TARGET_KEYS.ENEMY)
+
+    // Hero
+    this.$hero.PLAYER = new Hero(this, this.$stateMachine, TARGET_KEYS.PLAYER)
+    this.$hero.ENEMY = new Hero(this, this.$stateMachine, TARGET_KEYS.ENEMY)
 
     // Board
     this.$board.PLAYER = new Board(this, TARGET_KEYS.PLAYER, this.$animationManager)
