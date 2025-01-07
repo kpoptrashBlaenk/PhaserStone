@@ -132,7 +132,7 @@ export class Card {
       this.$cardNameText.setAlpha(1)
       this.$cardTemplateImage.setAlpha(1)
       this.$cardPortraitImage.setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
-      this.$cardPortraitImage.setY(this.$cardTemplateImage.height / 3.3)
+      this.$cardPortraitImage.setY(this.$cardTemplateImage.height / 3)
       this.$cardTemplateImage.setInteractive({
         cursor: 'pointer',
       })
@@ -294,7 +294,7 @@ export class Card {
 
     // Container
     const container = this.$scene.add.container(0, 0).setSize(template.width, template.height)
-    portrait.setPosition(template.width / 2, template.height / 2)
+    portrait.setPosition(template.width / 2, template.height / 3)
 
     container.add([portrait, template, cost, attack, health, name])
 
