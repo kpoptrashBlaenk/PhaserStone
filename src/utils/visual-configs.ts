@@ -3,8 +3,7 @@ import { FONT_KEYS } from '../assets/font-keys'
 // FONTS
 export const BASIC_CARD_FONT_STYLE = Object.freeze({
   fontFamily: FONT_KEYS.HEARTHSTONE,
-  fontStyle: 'bold',
-  stroke: '#00000',
+  stroke: '#000000',
   strokeThickness: 4,
 })
 
@@ -24,6 +23,13 @@ export const CARD_CONFIG = Object.freeze({
         ...BASIC_CARD_FONT_STYLE,
         fontSize: '18px',
       },
+    },
+    BODY: {
+      fontFamily: FONT_KEYS.HEARTHSTONE,
+      fontSize: '15px',
+      color: 'black',
+      wordWrap: { width: 185 },
+      align: 'center',
     },
   },
   COLOR: {
@@ -46,6 +52,10 @@ export const CARD_CONFIG = Object.freeze({
     },
     NAME: {
       Y: 215,
+    },
+    BODY: {
+      X: 50,
+      Y: 260,
     },
   },
   SIZE: {

@@ -1,3 +1,4 @@
+import BBCodeText from 'phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText'
 import { CARD_ASSETS_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { colorStat } from '../common/stats-change'
@@ -6,6 +7,7 @@ import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { ANIMATION_CONFIG, BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
+import { FONT_KEYS } from '../assets/font-keys'
 
 export class Card {
   private $scene: Phaser.Scene
@@ -20,6 +22,7 @@ export class Card {
   private $cardCostText: Phaser.GameObjects.Text
   private $cardAttackText: Phaser.GameObjects.Text
   private $cardHealthText: Phaser.GameObjects.Text
+  private $cardBodyText: Phaser.GameObjects.Text | BBCodeText
   private $previewContainer: Phaser.GameObjects.Container
   private $cancelButton: Phaser.GameObjects.Image
   private $sickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
@@ -134,6 +137,7 @@ export class Card {
       this.$cardAttackText.setAlpha(1)
       this.$cardHealthText.setAlpha(1)
       this.$cardNameText.setAlpha(1)
+      this.$cardBodyText.setAlpha(1)
       this.$cardTemplateImage.setAlpha(1)
       this.$cardPortraitImage.setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
       this.$cardPortraitImage.setY(this.$cardTemplateImage.height / 3)
@@ -149,6 +153,7 @@ export class Card {
     this.$cardAttackText.setAlpha(0)
     this.$cardHealthText.setAlpha(0)
     this.$cardNameText.setAlpha(0)
+    this.$cardBodyText.setAlpha(0)
     this.$cardTemplateImage.setAlpha(0)
     this.$cardPortraitImage.setScale(1)
   }
@@ -232,9 +237,22 @@ export class Card {
         this.$cardTemplateImage.x,
         CARD_CONFIG.POSITION.NAME.Y,
         this.$cardData.name,
-        this.$cardData.name.length < 10 ? CARD_CONFIG.FONT_STYLE.NAME.SMALL : CARD_CONFIG.FONT_STYLE.NAME.BIG
+        this.$cardData.name.length > 10 ? CARD_CONFIG.FONT_STYLE.NAME.SMALL : CARD_CONFIG.FONT_STYLE.NAME.BIG
       )
       .setOrigin(0.5)
+
+    // Body Text
+    this.$cardBodyText = new BBCodeText(
+      this.$scene,
+      CARD_CONFIG.POSITION.BODY.X,
+      CARD_CONFIG.POSITION.BODY.Y,
+      this.$cardData.text,
+      //@ts-ignore
+      CARD_CONFIG.FONT_STYLE.BODY
+    )
+
+    this.$cardBodyText.setX(CARD_CONFIG.POSITION.BODY.X + (185 - this.$cardBodyText.getBounds().width) / 2)
+    this.$cardBodyText.setY(this.$cardBodyText.y + (45 - this.$cardBodyText.height))
 
     // Container
     const container = this.$scene.add
@@ -249,8 +267,9 @@ export class Card {
       this.$cardAttackText,
       this.$cardHealthText,
       this.$cardNameText,
+      this.$cardBodyText,
     ])
-
+    container.add(this.$cardBodyText)
     return container
   }
 
@@ -298,15 +317,28 @@ export class Card {
         template.x,
         CARD_CONFIG.POSITION.NAME.Y,
         this.$cardData.name,
-        this.$cardData.name.length < 10 ? CARD_CONFIG.FONT_STYLE.NAME.SMALL : CARD_CONFIG.FONT_STYLE.NAME.BIG
+        this.$cardData.name.length > 10 ? CARD_CONFIG.FONT_STYLE.NAME.SMALL : CARD_CONFIG.FONT_STYLE.NAME.BIG
       )
       .setOrigin(0.5)
+
+    // Body Text
+    const cardBodyText = new BBCodeText(
+      this.$scene,
+      CARD_CONFIG.POSITION.BODY.X,
+      CARD_CONFIG.POSITION.BODY.Y,
+      this.$cardData.text,
+      //@ts-ignore
+      CARD_CONFIG.FONT_STYLE.BODY
+    )
+
+    cardBodyText.setX(CARD_CONFIG.POSITION.BODY.X + (185 - cardBodyText.getBounds().width) / 2)
+    cardBodyText.setY(cardBodyText.y + (60 - cardBodyText.height))
 
     // Container
     const container = this.$scene.add.container(0, 0).setSize(template.width, template.height)
     portrait.setPosition(template.width / 2, template.height / 3)
 
-    container.add([portrait, template, cost, attack, health, name])
+    container.add([portrait, template, cost, attack, health, name, cardBodyText])
 
     return container
   }
