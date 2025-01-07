@@ -260,9 +260,11 @@ export class BattleScene extends BaseScene {
     this.$stateMachine.addState({
       name: STATES.ENEMY_TURN,
       onEnter: () => {
-        this.$handleHand(TARGET_KEYS.ENEMY, 'PLAYABLE')
-        this.$handleBoard(TARGET_KEYS.ENEMY, 'ATTACKABLE')
-        this.$enemyAI.opponentTurn()
+        setTimeout(() => {
+          this.$handleHand(TARGET_KEYS.ENEMY, 'PLAYABLE')
+          this.$handleBoard(TARGET_KEYS.ENEMY, 'ATTACKABLE')
+          this.$enemyAI.opponentTurn()
+        }, 200)
       },
     })
 

@@ -178,6 +178,12 @@ export class Card {
     }
   }
 
+  public die(): void {
+    if (this.$previewContainer) {
+      this.$previewContainer.destroy()
+    }
+  }
+
   /**
    * Creates card objects
    */
@@ -348,6 +354,7 @@ export class Card {
             this.$cardContainer.getData('position').container.y
           )
           this.$removeCancel()
+          this.$stateMachine.setState(STATES.PLAYER_TURN)
         }
         const cleanInteractions = () => {
           this.$cardContainer.setData('draggingFromHand', false).setDepth(0)

@@ -52,6 +52,7 @@ export class Board {
   public cardDies(card: Card, callback?: () => void): void {
     const index = this.$board.findIndex((boardCard) => boardCard === card)
     this.$board.splice(index, 1)
+    card.die()
     this.$boardContainer.remove(card.container, true)
     this.$resizeContainer(callback)
   }

@@ -13,7 +13,7 @@
       "amount": 1
     },
     "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
+    "name": "any",
     "races": [],
     "type": "MINION"
   },
@@ -25,8 +25,13 @@
     "health": 1,
     "id": 5,
     "trackId": "",
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
+    "battlecry": {
+      "target": "RANDOM_ENEMY",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Deal 1 damage to a random enemy.",
+    "name": "random enemy",
     "races": [],
     "type": "MINION"
   },
@@ -38,8 +43,13 @@
     "health": 1,
     "id": 4,
     "trackId": "",
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Deal 1 damage to a random enemy minion.",
+    "name": "random enemy minion",
     "races": [],
     "type": "MINION"
   },
@@ -51,8 +61,13 @@
     "health": 1,
     "id": 3,
     "trackId": "",
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Deal 1 damage to a random friendly character.",
+    "name": "random friendly",
     "races": [],
     "type": "MINION"
   },
@@ -64,8 +79,13 @@
     "health": 1,
     "id": 2,
     "trackId": "",
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY_MINION",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Deal 1 damage to a random friendly minion.",
+    "name": "random friendly minion",
     "races": [],
     "type": "MINION"
   },
@@ -77,8 +97,31 @@
     "health": 1,
     "id": 1,
     "trackId": "",
-    "text": "<b>Battlecry:</b> Deal 1 damage.",
-    "name": "Elven Archer",
+    "battlecry": {
+      "target": "ENEMY_HERO",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Deal 1 damage to the enemy hero.",
+    "name": "enemy hero",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "battlecry": {
+      "target": "FRIENDLY_HERO",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Deal 1 damage to your hero.",
+    "name": "friendly hero",
     "races": [],
     "type": "MINION"
   }

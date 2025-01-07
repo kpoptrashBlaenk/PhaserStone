@@ -62,7 +62,107 @@ export class BattlecryManager {
           return
         }
         callback?.()
+        return
       }
+
+      if (this.$targetType === 'RANDOM_ENEMY') {
+        let targets = []
+        this.$source.player === TARGET_KEYS.PLAYER
+          ? (targets = [...this.$board.ENEMY.cards, this.$hero.ENEMY])
+          : (targets = [...this.$board.PLAYER.cards, this.$hero.PLAYER])
+
+        if (targets.length > 0) {
+          const target = targets[Math.floor(Math.random() * targets.length)]
+          this.targetChosen(target)
+          return
+        }
+
+        callback?.()
+        return
+      }
+
+      if (this.$targetType === 'RANDOM_FRIENDLY') {
+        let targets = []
+        this.$source.player === TARGET_KEYS.PLAYER
+          ? (targets = [...this.$board.PLAYER.cards, this.$hero.PLAYER])
+          : (targets = [...this.$board.ENEMY.cards, this.$hero.ENEMY])
+
+        if (targets.length > 0) {
+          const target = targets[Math.floor(Math.random() * targets.length)]
+          this.targetChosen(target)
+          return
+        }
+
+        callback?.()
+        return
+      }
+
+      if (this.$targetType === 'RANDOM_ENEMY_MINION') {
+        let targets = []
+        this.$source.player === TARGET_KEYS.PLAYER
+          ? (targets = [...this.$board.ENEMY.cards])
+          : (targets = [...this.$board.PLAYER.cards])
+
+        if (targets.length > 0) {
+          const target = targets[Math.floor(Math.random() * targets.length)]
+          this.targetChosen(target)
+          return
+        }
+
+        callback?.()
+        return
+      }
+
+      if (this.$targetType === 'RANDOM_FRIENDLY_MINION') {
+        let targets = []
+        this.$source.player === TARGET_KEYS.PLAYER
+          ? (targets = [...this.$board.PLAYER.cards])
+          : (targets = [...this.$board.ENEMY.cards])
+
+        if (targets.length > 0) {
+          const target = targets[Math.floor(Math.random() * targets.length)]
+          this.targetChosen(target)
+          return
+        }
+
+        callback?.()
+        return
+      }
+
+      if (this.$targetType === 'ENEMY_HERO') {
+        let targets = []
+        this.$source.player === TARGET_KEYS.PLAYER
+          ? (targets = [this.$hero.ENEMY])
+          : (targets = [this.$hero.PLAYER])
+
+        if (targets.length > 0) {
+          const target = targets[Math.floor(Math.random() * targets.length)]
+          this.targetChosen(target)
+          return
+        }
+
+        callback?.()
+        return
+      }
+
+      if (this.$targetType === 'FRIENDLY_HERO') {
+        let targets = []
+        this.$source.player === TARGET_KEYS.PLAYER
+          ? (targets = [this.$hero.PLAYER])
+          : (targets = [this.$hero.ENEMY])
+
+        if (targets.length > 0) {
+          const target = targets[Math.floor(Math.random() * targets.length)]
+          this.targetChosen(target)
+          return
+        }
+
+        callback?.()
+        return
+      }
+
+      // Exhausted
+      console.error(`[BattlecryManager:handleBattlecry] - No case for ${this.$targetType}`)
       return
     }
 
@@ -84,7 +184,21 @@ export class BattlecryManager {
   }
 
   private $checkValidTarget(target: Card | Hero): boolean {
-    if (this.$targetType === 'ANY') {
+    const targetType = this.$targetType
+
+    // No target to choose manually
+    if (
+      targetType === 'RANDOM_ENEMY' ||
+      targetType === 'RANDOM_FRIENDLY' ||
+      targetType === 'RANDOM_ENEMY_MINION' ||
+      targetType === 'RANDOM_FRIENDLY_MINION' ||
+      targetType === 'ENEMY_HERO' ||
+      targetType === 'FRIENDLY_HERO'
+    ) {
+      return true
+    }
+
+    if (targetType === 'ANY') {
       return true
     }
 
