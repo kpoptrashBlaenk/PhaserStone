@@ -1,7 +1,7 @@
-import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
-import { BUTTON_CONFIG } from '../utils/visual-configs'
-import { StateMachine } from '../utils/state-machine'
 import { FONT_KEYS } from '../assets/font-keys'
+import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { StateMachine } from '../utils/state-machine'
+import { BUTTON_CONFIG } from '../utils/visual-configs'
 
 export class TurnButton {
   private $scene: Phaser.Scene

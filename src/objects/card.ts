@@ -1,8 +1,9 @@
 import { CARD_ASSETS_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { colorStat } from '../common/stats-change'
+import { warningMessage } from '../common/warning'
 import { CardData } from '../utils/card-keys'
-import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
+import { STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { ANIMATION_CONFIG, BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
 
@@ -414,6 +415,7 @@ export class Card {
 
           playCardCallback()
           cleanInteractions()
+          return
         }
 
         // Cancel battlecry target clicked has cancel button
@@ -422,7 +424,12 @@ export class Card {
             playCardFallback()
             this.$stateMachine.setState(STATES.PLAYER_TURN)
           }
+
+          return
         }
+
+        // Exhausted
+        warningMessage(this.$scene, WARNING_KEYS.CANT_PLAY)
       })
 
       return
@@ -440,6 +447,17 @@ export class Card {
         return
       }
 
+      if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLE_CHOOSE_TARGET) {
+        if (this.$cancelButton) {
+          this.$removeCancel()
+          this.$stateMachine.setState(STATES.PLAYER_TURN)
+          return
+        }
+
+        this.$stateMachine.setState(STATES.PLAYER_BATTLE_TARGET_CHOSEN, this)
+        return
+      }
+
       if (
         this.$stateMachine.currentStateName === STATES.PLAYER_TURN &&
         this.$owner === TARGET_KEYS.PLAYER &&
@@ -453,15 +471,8 @@ export class Card {
         return
       }
 
-      if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLE_CHOOSE_TARGET) {
-        if (this.$cancelButton) {
-          this.$removeCancel()
-          this.$stateMachine.setState(STATES.PLAYER_TURN)
-          return
-        }
-
-        this.$stateMachine.setState(STATES.PLAYER_BATTLE_TARGET_CHOSEN, this)
-      }
+      // Exhausted
+      warningMessage(this.$scene, WARNING_KEYS.CANT_BE_SELECTED)
     })
   }
 

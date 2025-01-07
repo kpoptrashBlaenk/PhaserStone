@@ -1,9 +1,10 @@
+import { warningMessage } from '../common/warning'
 import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
 import { AnimationManager } from './animation-manager'
 import { Battlecry } from './card-keys'
-import { STATES, TARGET_KEYS } from './keys'
+import { STATES, TARGET_KEYS, WARNING_KEYS } from './keys'
 import { StateMachine } from './state-machine'
 
 export class BattlecryManager {
@@ -87,6 +88,7 @@ export class BattlecryManager {
       return true
     }
 
+    warningMessage(this.$scene, WARNING_KEYS.NOT_VALID_TARGET)
     return false
   }
 
