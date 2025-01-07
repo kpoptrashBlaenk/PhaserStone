@@ -124,5 +124,41 @@
     "name": "friendly hero",
     "races": [],
     "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "battlecry": {
+      "target": "FRIENDLY",
+      "type": "HEAL",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Heal 1 health to your hero.",
+    "name": "friendly",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "battlecry": {
+      "target": "ENEMY",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "<b>Battlecry:</b> Heal 1 health to your hero.",
+    "name": "enemy",
+    "races": [],
+    "type": "MINION"
   }
 ]

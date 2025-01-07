@@ -50,11 +50,20 @@ export class BattlecryManager {
     const board = this.$board
     const hero = this.$hero
     const player = this.$source.player
+    const targetType = this.$targetType
 
     const getTargets = (type: BattlecryTarget): (Card | Hero)[] => {
       switch (type) {
         case 'ANY':
           return [...board.PLAYER.cards, ...board.ENEMY.cards, hero.PLAYER, hero.ENEMY]
+
+        case 'ENEMY':
+          return player === TARGET_KEYS.PLAYER
+            ? [...board.ENEMY.cards, hero.ENEMY]
+            : [...board.PLAYER.cards, hero.PLAYER]
+
+        case 'FRIENDLY':
+          return [...board[player].cards, hero[player]]
 
         case 'RANDOM_ENEMY':
           return player === TARGET_KEYS.PLAYER
@@ -82,11 +91,14 @@ export class BattlecryManager {
       }
     }
 
-    const targets = getTargets(this.$targetType)
+    const targets = getTargets(targetType)
 
     if (targets.length > 0) {
-      if (this.$targetType === 'ANY' && card.player === TARGET_KEYS.PLAYER) {
-        this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_CHOOSE_TARGET, this.$targetType)
+      if (
+        (targetType === 'ANY' || targetType === 'ENEMY' || targetType === 'FRIENDLY') &&
+        card.player === TARGET_KEYS.PLAYER
+      ) {
+        this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_CHOOSE_TARGET, targetType)
         return
       }
 
@@ -136,6 +148,24 @@ export class BattlecryManager {
       return true
     }
 
+    if (targetType === 'ENEMY') {
+      if (this.$source.player !== target.player) {
+        return true
+      }
+      warningMessage(this.$scene, WARNING_KEYS.NOT_VALID_TARGET)
+      return false
+    }
+
+    if (targetType === 'FRIENDLY') {
+      if (this.$source.player === target.player) {
+        return true
+      }
+      warningMessage(this.$scene, WARNING_KEYS.NOT_VALID_TARGET)
+      return false
+    }
+
+    // Exhaust
+    console.error(`[BattlecryManager:$checkValidTarget] -> No target with type ${targetType}`)
     warningMessage(this.$scene, WARNING_KEYS.NOT_VALID_TARGET)
     return false
   }

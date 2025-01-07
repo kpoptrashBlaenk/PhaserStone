@@ -180,7 +180,7 @@ export class BattleScene extends BaseScene {
     }
   }
 
-  private $setTargets(target: 'NONE' | 'ANY' | 'ENEMY'): void {
+  private $setTargets(target: 'NONE' | 'ANY' | 'ENEMY' | 'FRIENDLY'): void {
     const playerBoard = this.$board.PLAYER.cards
     const enemyBoard = this.$board.ENEMY.cards
     const playerHero = this.$hero.PLAYER
@@ -215,8 +215,14 @@ export class BattleScene extends BaseScene {
         enemyBoard.forEach((card: Card) => {
           card.setTarget(true)
         })
-
         enemyHero.setTarget(true)
+
+      case 'FRIENDLY':
+        playerBoard.forEach((card: Card) => {
+          card.setTarget(true)
+        })
+
+        playerHero.setTarget(true)
         break
     }
   }
@@ -355,7 +361,7 @@ export class BattleScene extends BaseScene {
 
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLECRY_CHOOSE_TARGET,
-      onEnter: (target: 'NONE' | 'ANY' | 'ENEMY') => {
+      onEnter: (target: 'NONE' | 'ANY' | 'ENEMY' | 'FRIENDLY') => {
         this.$setTargets(target)
       },
     })
