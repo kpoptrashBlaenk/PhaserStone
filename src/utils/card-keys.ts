@@ -1,5 +1,16 @@
+export const BATTLECRY_TARGET = Object.freeze({
+  ANY: 'ANY',
+  RANDOM_ENEMY: 'RANDOM_ENEMY',
+  RANDOM_FRIENDLY: 'RANDOM_FRIENDLY',
+  RANDOM_ENEMY_MINION: 'RANDOM_ENEMY_MINION',
+  RANDOM_FRIENDLY_MINION: 'RANDOM_FRIENDLY_MINION',
+  ENEMY_HERO: 'ENEMY_HERO',
+  FRIENDLY_HERO: 'FRIENDLY_HERO',
+})
+export type BattlecryTarget = keyof typeof BATTLECRY_TARGET
+
 export type Battlecry = {
-  target: string
+  target: BattlecryTarget
   type: string
   amount: number
 }

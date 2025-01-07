@@ -3,7 +3,7 @@ import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
 import { AnimationManager } from './animation-manager'
-import { Battlecry } from './card-keys'
+import { Battlecry, BattlecryTarget } from './card-keys'
 import { STATES, TARGET_KEYS, WARNING_KEYS } from './keys'
 import { StateMachine } from './state-machine'
 
@@ -15,7 +15,7 @@ export class BattlecryManager {
   private $hero: { PLAYER: Hero; ENEMY: Hero }
   private $source: Card
   private $effect: Battlecry
-  private $targetType: string
+  private $targetType: BattlecryTarget
   private $target: Card | Hero
   private $callback?: () => void // Usually play the card
   private $fallback?: () => void
@@ -37,132 +37,61 @@ export class BattlecryManager {
   public handleBattlecry(card: Card, callback?: () => void, fallback?: () => void): void {
     this.$source = card
 
-    if (card.card.battlecry) {
-      this.$effect = card.card.battlecry
-      this.$targetType = card.card.battlecry.target
-      this.$callback = callback
-      this.$fallback = fallback
+    if (!card.card.battlecry) {
+      callback?.()
+      return
+    }
 
-      if (this.$targetType === 'ANY') {
-        const targets = [
-          ...this.$board.PLAYER.cards,
-          ...this.$board.ENEMY.cards,
-          this.$hero.PLAYER,
-          this.$hero.ENEMY,
-        ]
+    this.$effect = card.card.battlecry
+    this.$targetType = card.card.battlecry.target
+    this.$callback = callback
+    this.$fallback = fallback
 
-        if (targets.length > 0) {
-          if (card.player === TARGET_KEYS.PLAYER) {
-            this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_CHOOSE_TARGET, this.$targetType)
-            return
-          }
+    const board = this.$board
+    const hero = this.$hero
+    const player = this.$source.player
 
-          const target = targets[Math.floor(Math.random() * targets.length)]
-          this.targetChosen(target)
-          return
-        }
-        callback?.()
+    const getTargets = (type: BattlecryTarget): (Card | Hero)[] => {
+      switch (type) {
+        case 'ANY':
+          return [...board.PLAYER.cards, ...board.ENEMY.cards, hero.PLAYER, hero.ENEMY]
+
+        case 'RANDOM_ENEMY':
+          return player === TARGET_KEYS.PLAYER
+            ? [...board.ENEMY.cards, hero.ENEMY]
+            : [...board.PLAYER.cards, hero.PLAYER]
+
+        case 'RANDOM_FRIENDLY':
+          return [...board[player].cards, hero[player]]
+
+        case 'RANDOM_ENEMY_MINION':
+          return player === TARGET_KEYS.PLAYER ? [...board.ENEMY.cards] : [...board.PLAYER.cards]
+
+        case 'RANDOM_FRIENDLY_MINION':
+          return [...board[player].cards]
+
+        case 'ENEMY_HERO':
+          return player === TARGET_KEYS.PLAYER ? [hero.ENEMY] : [hero.PLAYER]
+
+        case 'FRIENDLY_HERO':
+          return [hero[player]]
+
+        default:
+          console.error(`[BattlecryManager:handleBattlecry] - No case for ${type}`)
+          return []
+      }
+    }
+
+    const targets = getTargets(this.$targetType)
+
+    if (targets.length > 0) {
+      if (this.$targetType === 'ANY' && card.player === TARGET_KEYS.PLAYER) {
+        this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_CHOOSE_TARGET, this.$targetType)
         return
       }
 
-      if (this.$targetType === 'RANDOM_ENEMY') {
-        let targets = []
-        this.$source.player === TARGET_KEYS.PLAYER
-          ? (targets = [...this.$board.ENEMY.cards, this.$hero.ENEMY])
-          : (targets = [...this.$board.PLAYER.cards, this.$hero.PLAYER])
-
-        if (targets.length > 0) {
-          const target = targets[Math.floor(Math.random() * targets.length)]
-          this.targetChosen(target)
-          return
-        }
-
-        callback?.()
-        return
-      }
-
-      if (this.$targetType === 'RANDOM_FRIENDLY') {
-        let targets = []
-        this.$source.player === TARGET_KEYS.PLAYER
-          ? (targets = [...this.$board.PLAYER.cards, this.$hero.PLAYER])
-          : (targets = [...this.$board.ENEMY.cards, this.$hero.ENEMY])
-
-        if (targets.length > 0) {
-          const target = targets[Math.floor(Math.random() * targets.length)]
-          this.targetChosen(target)
-          return
-        }
-
-        callback?.()
-        return
-      }
-
-      if (this.$targetType === 'RANDOM_ENEMY_MINION') {
-        let targets = []
-        this.$source.player === TARGET_KEYS.PLAYER
-          ? (targets = [...this.$board.ENEMY.cards])
-          : (targets = [...this.$board.PLAYER.cards])
-
-        if (targets.length > 0) {
-          const target = targets[Math.floor(Math.random() * targets.length)]
-          this.targetChosen(target)
-          return
-        }
-
-        callback?.()
-        return
-      }
-
-      if (this.$targetType === 'RANDOM_FRIENDLY_MINION') {
-        let targets = []
-        this.$source.player === TARGET_KEYS.PLAYER
-          ? (targets = [...this.$board.PLAYER.cards])
-          : (targets = [...this.$board.ENEMY.cards])
-
-        if (targets.length > 0) {
-          const target = targets[Math.floor(Math.random() * targets.length)]
-          this.targetChosen(target)
-          return
-        }
-
-        callback?.()
-        return
-      }
-
-      if (this.$targetType === 'ENEMY_HERO') {
-        let targets = []
-        this.$source.player === TARGET_KEYS.PLAYER
-          ? (targets = [this.$hero.ENEMY])
-          : (targets = [this.$hero.PLAYER])
-
-        if (targets.length > 0) {
-          const target = targets[Math.floor(Math.random() * targets.length)]
-          this.targetChosen(target)
-          return
-        }
-
-        callback?.()
-        return
-      }
-
-      if (this.$targetType === 'FRIENDLY_HERO') {
-        let targets = []
-        this.$source.player === TARGET_KEYS.PLAYER
-          ? (targets = [this.$hero.PLAYER])
-          : (targets = [this.$hero.ENEMY])
-
-        if (targets.length > 0) {
-          const target = targets[Math.floor(Math.random() * targets.length)]
-          this.targetChosen(target)
-          return
-        }
-
-        callback?.()
-        return
-      }
-
-      // Exhausted
-      console.error(`[BattlecryManager:handleBattlecry] - No case for ${this.$targetType}`)
+      const target = targets[Math.floor(Math.random() * targets.length)]
+      this.targetChosen(target)
       return
     }
 
@@ -171,7 +100,6 @@ export class BattlecryManager {
 
   public targetChosen(target: Card | Hero): void {
     if (!this.$checkValidTarget(target)) {
-      // Warn this is wrong target
       this.$fallback?.()
       return
     }
