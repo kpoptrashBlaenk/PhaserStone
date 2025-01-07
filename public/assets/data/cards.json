@@ -63,10 +63,10 @@
     "trackId": "",
     "battlecry": {
       "target": "RANDOM_FRIENDLY",
-      "type": "DAMAGE",
+      "type": "HEAL",
       "amount": 1
     },
-    "text": "<b>Battlecry:</b> Deal 1 damage to a random friendly character.",
+    "text": "<b>Battlecry:</b> Heal 1 health to a random friendly character.",
     "name": "random friendly",
     "races": [],
     "type": "MINION"
@@ -81,10 +81,10 @@
     "trackId": "",
     "battlecry": {
       "target": "RANDOM_FRIENDLY_MINION",
-      "type": "DAMAGE",
+      "type": "HEAL",
       "amount": 1
     },
-    "text": "<b>Battlecry:</b> Deal 1 damage to a random friendly minion.",
+    "text": "<b>Battlecry:</b> Heal 1 health to a random friendly minion.",
     "name": "random friendly minion",
     "races": [],
     "type": "MINION"
@@ -117,10 +117,10 @@
     "trackId": "",
     "battlecry": {
       "target": "FRIENDLY_HERO",
-      "type": "DAMAGE",
+      "type": "HEAL",
       "amount": 1
     },
-    "text": "<b>Battlecry:</b> Deal 1 damage to your hero.",
+    "text": "<b>Battlecry:</b> Heal 1 health to your hero.",
     "name": "friendly hero",
     "races": [],
     "type": "MINION"

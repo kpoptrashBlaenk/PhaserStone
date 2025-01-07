@@ -104,7 +104,12 @@ export class AnimationManager {
     })
   }
 
-  public battlecryProjectile(source: Card, target: Card | Hero, impact?: () => void, callback?: () => void): void {
+  public battlecryDamage(
+    source: Card,
+    target: Card | Hero,
+    impact?: () => void,
+    callback?: () => void
+  ): void {
     const sourceBounds = source.container.getBounds()
     const targetBounds = target.container.getBounds()
 
@@ -129,7 +134,35 @@ export class AnimationManager {
     })
   }
 
-  public attack(attacker: Card | Hero, defender: Card | Hero, damageHandler: () => void, callback?: () => void): void {
+  public battlecryHeal(source: Card, target: Card | Hero, impact?: () => void, callback?: () => void) {
+    const sourceBounds = source.container.getBounds()
+    const targetBounds = target.container.getBounds()
+
+    const effect = this.$scene.add
+      .image(sourceBounds.centerX, sourceBounds.centerY, EFFECT_ASSET_KEYS.SPARK)
+      .setScale(0.2)
+
+    // Projectile Effect
+    this.$scene.tweens.add({
+      targets: effect,
+      x: targetBounds.centerX,
+      y: targetBounds.centerY,
+      duration: 200,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        impact?.()
+        effect.destroy()
+        callback?.()
+      },
+    })
+  }
+
+  public attack(
+    attacker: Card | Hero,
+    defender: Card | Hero,
+    damageHandler: () => void,
+    callback?: () => void
+  ): void {
     const startPosition = { x: attacker.container.x, y: attacker.container.y }
     const targetPosition = {
       x:

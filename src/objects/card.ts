@@ -66,6 +66,10 @@ export class Card {
     return this.$cardData
   }
 
+  public get original(): CardData {
+    return this.$originalData
+  }
+
   public get player(): TargetKeys {
     return this.$owner
   }

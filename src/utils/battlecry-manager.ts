@@ -108,6 +108,12 @@ export class BattlecryManager {
 
     if (this.$effect?.type === 'DAMAGE') {
       this.$dealDamage(target)
+      return
+    }
+
+    if (this.$effect.type === 'HEAL') {
+      this.$healHealth(target)
+      return
     }
   }
 
@@ -135,11 +141,27 @@ export class BattlecryManager {
   }
 
   private $dealDamage(target: Card | Hero): void {
-    this.$animationManager.battlecryProjectile(
+    this.$animationManager.battlecryDamage(
       this.$source,
       target,
       () => {
         const newHealth = (target instanceof Card ? target.card.health : target.health) - this.$effect.amount
+        target.setHealth(newHealth)
+      },
+      this.$callback
+    )
+  }
+
+  private $healHealth(target: Card | Hero): void {
+    this.$animationManager.battlecryHeal(
+      this.$source,
+      target,
+      () => {
+        const newHealth =
+          target instanceof Card
+            ? Math.min(target.card.health + this.$effect.amount, target.original.health)
+            : Math.min(target.health + this.$effect.amount, target.maxHealth)
+
         target.setHealth(newHealth)
       },
       this.$callback

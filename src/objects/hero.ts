@@ -48,6 +48,10 @@ export class Hero {
     return this.$currentHealth
   }
 
+  public get maxHealth(): number {
+    return this.$maxHealth
+  }
+
   public get attack(): number {
     return this.$currentAttack
   }
