@@ -1,121 +1,164 @@
 [
   {
-    "assetKey": "TEMPLATE",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 0,
-    "health": 1,
-    "id": 1,
-    "name": "Snowflipper Penguin",
-    "races": ["BEAST"],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "TEMPLATE",
+    "assetKey": "ALEXSTRAZA",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 2,
-    "mechanics": ["BATTLECRY"],
-    "name": "Abusive Sergeant",
+    "id": 6,
+    "trackId": "",
+    "battlecry": {
+      "target": "ANY",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Deal 1 damage.",
+    "name": "any",
     "races": [],
     "type": "MINION"
   },
   {
-    "assetKey": "TEMPLATE",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 3,
-    "id": 3,
-    "mechanics": ["BATTLECRY"],
-    "name": "Armor Vendor",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "TEMPLATE",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 2,
-    "id": 4,
-    "mechanics": ["BATTLECRY"],
-    "name": "Beaming Sidekick",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "TEMPLATE",
+    "assetKey": "ALEXSTRAZA",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
     "id": 5,
-    "mechanics": ["BATTLECRY"],
-    "name": "Elven Archer",
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_ENEMY",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Deal 1 damage to a random enemy.",
+    "name": "random enemy",
     "races": [],
     "type": "MINION"
   },
   {
-    "assetKey": "TEMPLATE",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 2,
-    "id": 6,
-    "mechanics": ["BATTLECRY"],
-    "name": "Fire Fly",
-    "races": ["ELEMENTAL"],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "TEMPLATE",
-    "attack": 2,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 7,
-    "mechanics": ["BATTLECRY"],
-    "name": "Glacial Shard",
-    "races": ["ELEMENTAL"],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "TEMPLATE",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 2,
-    "id": 8,
-    "mechanics": ["WHENEVER"],
-    "name": "Murloc Tidecaller",
-    "races": ["MURLOC"],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "TEMPLATE",
+    "assetKey": "ALEXSTRAZA",
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 9,
-    "mechanics": ["BATTLECRY"],
-    "name": "Murmy",
-    "races": ["MURLOC"],
+    "id": 4,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Deal 1 damage to a random enemy minion.",
+    "name": "random enemy minion",
+    "races": [],
     "type": "MINION"
   },
   {
-    "assetKey": "TEMPLATE",
-    "attack": 2,
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 10,
-    "mechanics": ["PASSIVE"],
-    "name": "Southsea Deckhand",
-    "races": ["PIRATE"],
+    "id": 3,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY",
+      "type": "HEAL",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Heal 1 health to a random friendly character.",
+    "name": "random friendly",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 2,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY_MINION",
+      "type": "HEAL",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Heal 1 health to a random friendly minion.",
+    "name": "random friendly minion",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "battlecry": {
+      "target": "ENEMY_HERO",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Deal 1 damage to the enemy hero.",
+    "name": "enemy hero",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "battlecry": {
+      "target": "FRIENDLY_HERO",
+      "type": "HEAL",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Heal 1 health to your hero.",
+    "name": "friendly hero",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "battlecry": {
+      "target": "FRIENDLY",
+      "type": "HEAL",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Heal 1 health to your hero.",
+    "name": "friendly",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 1,
+    "trackId": "",
+    "battlecry": {
+      "target": "ENEMY",
+      "type": "DAMAGE",
+      "amount": 1
+    },
+    "text": "[i]Battlecry:[/i] Heal 1 health to your hero.",
+    "name": "enemy",
+    "races": [],
     "type": "MINION"
   }
 ]

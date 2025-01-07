@@ -27,7 +27,7 @@
 ## General
 
 - [x] Create Methods for Animations and give them callbacks
-- [ ] Loading Screen for Preload Scene
+- [x] Loading Screen for Preload Scene
 - [x] Create files for configs (like sizes, positions, timers...)
 
 ## Hero
@@ -40,7 +40,7 @@
 - [x] Rework Card Name Sizes
 - [x] Give summoning sickness and attack once per turn
 - [ ] Create Battlecry
-- [ ] Give minion portraits
+- [x] Give minion portraits
 - [x] Cancel Attacker Minion Chosen
 
 ## Add Spells
@@ -51,3 +51,9 @@
 
 - [x] Battle AI
 - [x] Improved Battle AI
+
+## Battlecry
+
+- [ ] Arrow for targeting
+- [ ] Opponent
+- [ ] Refactoring Repeated Logic

@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin.js'
+import BBCodeTextPlugin from 'phaser3-rex-plugins/plugins/bbcodetext-plugin.js'
 import { BattleScene } from './scenes/battle-scene'
 import { PreloadScene } from './scenes/preload-scene'
 import { SCENE_KEYS } from './scenes/scene-keys'
@@ -20,6 +21,11 @@ const game = new Phaser.Game({
       {
         key: 'rexOutlinePipeline',
         plugin: OutlinePipelinePlugin,
+        start: true,
+      },
+      {
+        key: 'rexBBCodeTextPlugin',
+        plugin: BBCodeTextPlugin,
         start: true,
       },
     ],

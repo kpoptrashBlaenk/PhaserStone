@@ -1,7 +1,7 @@
-import { BattleStates } from './keys'
+import { States } from '../utils/keys'
 
 type State = {
-  name: BattleStates
+  name: States
   onEnter?: (data?: any) => void
 }
 
@@ -11,7 +11,7 @@ export class StateMachine {
   private readonly id: string
   private readonly context: Object | undefined
   private isChangingState: boolean
-  private ChangingStateQueue: { name: BattleStates; data?: any }[]
+  private ChangingStateQueue: { name: States; data?: any }[]
 
   constructor(id: string, context: Object | undefined) {
     this.id = id
@@ -22,7 +22,7 @@ export class StateMachine {
     this.states = new Map()
   }
 
-  public get currentStateName(): BattleStates | undefined {
+  public get currentStateName(): States | undefined {
     return this.currentState?.name
   }
 
@@ -33,17 +33,17 @@ export class StateMachine {
     }
   }
 
-  public setState(name: BattleStates, data?: any): void {
+  public setState(name: States, data?: any): void {
     const methodName = 'setState'
 
-    if (!this.states.has(name as BattleStates)) {
+    if (!this.states.has(name as States)) {
       console.warn(
         `[${StateMachine.name}-${this.id}:${methodName}] tried to change to unknown state: ${name}`
       )
       return
     }
 
-    if (this.isCurrentState(name as BattleStates)) {
+    if (this.isCurrentState(name as States)) {
       return
     }
 
@@ -54,7 +54,7 @@ export class StateMachine {
 
     this.isChangingState = true
 
-    this.currentState = this.states.get(name as BattleStates)
+    this.currentState = this.states.get(name as States)
 
     if (this.currentState) {
       console.log(`[${StateMachine.name}-${this.id}:${methodName}] changed to state: ${name}`)
@@ -71,7 +71,7 @@ export class StateMachine {
     })
   }
 
-  private isCurrentState(name: BattleStates): boolean {
+  private isCurrentState(name: States): boolean {
     if (!this.currentState) {
       return false
     }
