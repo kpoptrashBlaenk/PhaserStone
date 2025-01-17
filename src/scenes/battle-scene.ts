@@ -87,7 +87,13 @@ export class BattleScene extends BaseScene {
     )
 
     // Battle Manager
-    this.$battleManager = new BattleManager(this, this.$stateMachine, this.$animationManager, this.$board)
+    this.$battleManager = new BattleManager(
+      this,
+      this.$stateMachine,
+      this.$animationManager,
+      this.$board,
+      this.$hero
+    )
 
     this.$enemyAI = new EnemyAI(this, this.$stateMachine, this.$hand.ENEMY, this.$board, this.$hero)
 
@@ -298,6 +304,13 @@ export class BattleScene extends BaseScene {
       name: STATES.CHECK_BOARD,
       onEnter: (callback?: () => void) => {
         this.$battleManager.checkDead(callback)
+      },
+    })
+
+    this.$stateMachine.addState({
+      name: STATES.GAME_END,
+      onEnter: () => {
+        // GAME ENDS, GO HOME
       },
     })
 

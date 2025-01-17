@@ -44,6 +44,10 @@ export class Hero {
     return this.$heroContainer
   }
 
+  public get portrait(): Phaser.GameObjects.Image {
+    return this.$heroImage
+  }
+
   public get health(): number {
     return this.$currentHealth
   }

@@ -1,4 +1,5 @@
 import { EFFECT_ASSET_KEYS } from '../assets/asset-keys'
+import { FONT_KEYS } from '../assets/font-keys'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
 import { ANIMATION_CONFIG, BOARD_CONFIG } from './visual-configs'
@@ -60,9 +61,11 @@ export class AnimationManager {
     })
   }
 
-  public death(card: Card, callback?: () => void): void {
+  public death(card: Card | Hero, callback?: () => void): void {
     card.portrait.setTint(ANIMATION_CONFIG.DEATH.TINT)
-    card.template.setTint(ANIMATION_CONFIG.DEATH.TINT)
+    if (card instanceof Card) {
+      card.template.setTint(ANIMATION_CONFIG.DEATH.TINT)
+    }
 
     const { x, y } = {
       x: card.container.x + card.container.width / 2,
@@ -185,6 +188,45 @@ export class AnimationManager {
         this.$attackReturn(attacker.container, startPosition, callback)
       })
     )
+  }
+
+  public gameEnd(message: string): void {
+    const sceneWidth = this.$scene.scale.width
+    const sceneHeight = this.$scene.scale.height
+
+    // Gray overlay
+    this.$scene.add
+      .rectangle(sceneWidth / 2, sceneHeight / 2, sceneWidth, sceneHeight, 0x000000, 0.5)
+      .setDepth(24)
+      .setInteractive() // blocks interactions under
+
+    const endGameText = this.$scene.add
+      .text(sceneWidth / 2, sceneHeight / 2, message, {
+        fontFamily: FONT_KEYS.HEARTHSTONE,
+        fontSize: '64px',
+        color: message === 'You won!' ? '#FFD700' : '#FF4C4C',
+        stroke: '#000000',
+        strokeThickness: 6,
+        align: 'center',
+        shadow: {
+          offsetX: 3,
+          offsetY: 3,
+          color: '#000000',
+          blur: 6,
+          fill: true,
+        },
+      })
+      .setOrigin(0.5)
+      .setAlpha(0)
+      .setDepth(25)
+
+    this.$scene.tweens.add({
+      targets: endGameText,
+      alpha: { from: 0, to: 1 },
+      scale: { from: 0.5, to: 1.2 },
+      ease: 'Back.Out',
+      duration: 1000,
+    })
   }
 
   private $flashEffect(container: Phaser.GameObjects.Container): void {

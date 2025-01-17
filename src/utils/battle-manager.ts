@@ -3,7 +3,7 @@ import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
 import { AnimationManager } from './animation-manager'
-import { STATES, TARGET_KEYS, WARNING_KEYS } from './keys'
+import { STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from './keys'
 import { StateMachine } from './state-machine'
 import { ANIMATION_CONFIG } from './visual-configs'
 
@@ -12,6 +12,7 @@ export class BattleManager {
   private $stateMachine: StateMachine
   private $animationManager: AnimationManager
   private $board: { PLAYER: Board; ENEMY: Board }
+  private $hero: { PLAYER: Hero; ENEMY: Hero }
   private $attacker: Card | Hero
   private $defender: Card | Hero
   private $callback?: () => void // remove cancel
@@ -20,16 +21,18 @@ export class BattleManager {
     scene: Phaser.Scene,
     stateMachine: StateMachine,
     animationManager: AnimationManager,
-    board: { PLAYER: Board; ENEMY: Board }
+    board: { PLAYER: Board; ENEMY: Board },
+    hero: { PLAYER: Hero; ENEMY: Hero }
   ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$animationManager = animationManager
     this.$board = board
+    this.$hero = hero
   }
 
   public checkDead(callback?: () => void): void {
-    const dead: Card[] = []
+    const dead: (Card | Hero)[] = []
 
     this.$board.PLAYER.cards.forEach((card: Card) => {
       if (card.card.health <= 0) {
@@ -43,10 +46,19 @@ export class BattleManager {
       }
     })
 
+    if (this.$hero.PLAYER.health <= 0) {
+      dead.push(this.$hero.PLAYER)
+    }
+
+    if (this.$hero.ENEMY.health <= 0) {
+      dead.push(this.$hero.ENEMY)
+    }
+
     if (dead.length > 0) {
-      dead.forEach((card: Card) => {
+      dead.forEach((card: Card | Hero) => {
         this.$animationManager.death(card, () => {
-          this.$board[card.player].cardDies(card)
+          card instanceof Card ? this.$board[card.player].cardDies(card) : this.$gameEnd(card.player)
+          this.$stateMachine.setState(STATES.GAME_END)
         })
       })
     }
@@ -109,5 +121,11 @@ export class BattleManager {
         this.$stateMachine.setState(STATES.CHECK_BOARD, () => this.$stateMachine.setState(state))
       }
     )
+  }
+
+  private $gameEnd(loserPlayer: TargetKeys): void {
+    const message = loserPlayer === TARGET_KEYS.PLAYER ? 'You lost!' : 'You won!'
+
+    this.$animationManager.gameEnd(message)
   }
 }

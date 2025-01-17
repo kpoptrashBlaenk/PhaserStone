@@ -1,5 +1,5 @@
 import { FONT_KEYS } from '../assets/font-keys'
-import { WARNING_KEYS, WarningKeys } from '../utils/keys'
+import { WarningKeys } from '../utils/keys'
 
 export function warningMessage(scene: Phaser.Scene, key: WarningKeys): void {
   const warningMessage = scene.add

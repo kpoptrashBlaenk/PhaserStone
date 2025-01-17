@@ -27,6 +27,8 @@ export const STATES = Object.freeze({
   ENEMY_BATTLE_TARGET_CHOSEN: 'ENEMY_BATTLE_TARGET_CHOSEN',
 
   CHECK_BOARD: 'CHECK_BOARD',
+
+  GAME_END: 'GAME_END',
 })
 export type States = keyof typeof STATES
 
