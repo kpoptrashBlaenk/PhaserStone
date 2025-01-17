@@ -1,5 +1,6 @@
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { AnimationManager } from '../utils/animation-manager'
+import { CardData } from '../utils/card-keys'
 import { IdCounter } from '../utils/id-counter'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
@@ -14,17 +15,20 @@ export class Deck {
   private $deck: Card[]
   private $deckContainer: Phaser.GameObjects.Container
   private $idCounter: IdCounter
+  private $allCards: CardData[]
 
   constructor(
     scene: Phaser.Scene,
     stateMachine: StateMachine,
     owner: TargetKeys,
-    animationManager: AnimationManager
+    animationManager: AnimationManager,
+    allCards: CardData[]
   ) {
     this.$scene = scene
     this.$stateMachine = stateMachine
     this.$owner = owner
     this.$animationManager = animationManager
+    this.$allCards = allCards
     this.$idCounter = new IdCounter(`${this.$owner}-`)
 
     this.$createDeck()
@@ -65,7 +69,7 @@ export class Deck {
    */
   private $createDeck(): void {
     const deck = []
-    const allCards = [...this.$scene.cache.json.get(DATA_ASSET_KEYS.CARDS)]
+    const allCards = [...this.$allCards]
     const availableCards = [...allCards]
 
     for (let i = 0; i < allCards.length; i++) {

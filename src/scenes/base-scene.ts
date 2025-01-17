@@ -9,8 +9,9 @@ export class BaseScene extends Phaser.Scene {
     }
   }
 
-  init() {
+  init(data?: any) {
     this.log(`[${this.constructor.name}:init] invoked`)
+    this.log(`[${this.constructor.name}:init] data provided: ${JSON.stringify(data)}`)
   }
 
   preload() {

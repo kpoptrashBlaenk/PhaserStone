@@ -41,7 +41,7 @@ export class PreloadScene extends BaseScene {
     // Loading Screen
     // this.createLoading()
     this.load.on('complete', () => {
-      this.scene.start(SCENE_KEYS.BATTLE_SCENE)
+      this.scene.start(SCENE_KEYS.LIBRARY_SCENE)
     })
   }
 

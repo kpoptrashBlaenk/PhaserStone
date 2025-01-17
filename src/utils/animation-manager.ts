@@ -2,7 +2,8 @@ import { EFFECT_ASSET_KEYS } from '../assets/asset-keys'
 import { FONT_KEYS } from '../assets/font-keys'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
-import { ANIMATION_CONFIG, BOARD_CONFIG } from './visual-configs'
+import { SCENE_KEYS } from '../scenes/scene-keys'
+import { ANIMATION_CONFIG, BOARD_CONFIG, BUTTON_CONFIG, CARD_CONFIG } from './visual-configs'
 
 export class AnimationManager {
   private $scene: Phaser.Scene
@@ -63,14 +64,21 @@ export class AnimationManager {
 
   public death(card: Card | Hero, callback?: () => void): void {
     card.portrait.setTint(ANIMATION_CONFIG.DEATH.TINT)
+
     if (card instanceof Card) {
       card.template.setTint(ANIMATION_CONFIG.DEATH.TINT)
     }
 
-    const { x, y } = {
-      x: card.container.x + card.container.width / 2,
-      y: card.container.y + card.container.height / 2,
-    }
+    const { x, y } =
+      card instanceof Card
+        ? {
+            x: card.container.x + card.container.width / 2,
+            y: card.container.y + card.container.height / 2,
+          }
+        : {
+            x: card.container.x,
+            y: card.container.y,
+          }
 
     // Shrink
     this.$scene.tweens.add({
@@ -190,7 +198,7 @@ export class AnimationManager {
     )
   }
 
-  public gameEnd(message: string): void {
+  public gameEnd(message: string, callback?: () => void): void {
     const sceneWidth = this.$scene.scale.width
     const sceneHeight = this.$scene.scale.height
 
@@ -200,6 +208,7 @@ export class AnimationManager {
       .setDepth(24)
       .setInteractive() // blocks interactions under
 
+    // End Game Text
     const endGameText = this.$scene.add
       .text(sceneWidth / 2, sceneHeight / 2, message, {
         fontFamily: FONT_KEYS.HEARTHSTONE,
@@ -220,12 +229,49 @@ export class AnimationManager {
       .setAlpha(0)
       .setDepth(25)
 
+    // End Game Text Animation
     this.$scene.tweens.add({
       targets: endGameText,
       alpha: { from: 0, to: 1 },
       scale: { from: 0.5, to: 1.2 },
       ease: 'Back.Out',
       duration: 1000,
+      onComplete: () => {
+        // End Game Button
+        const endButton = this.$scene.add
+          .rectangle(0, 0, BUTTON_CONFIG.WIDTH * 1.5, BUTTON_CONFIG.HEIGHT * 1.5, 0x0000ff)
+          .setOrigin(0.5)
+          .setScale(0.5)
+
+        // End Game Button Text
+        const endButtonText = this.$scene.add
+          .text(0, 0, 'End Game', CARD_CONFIG.FONT_STYLE.NUMBER)
+          .setOrigin(0.5)
+          .setScale(0.5)
+
+        // End Game Button Container
+        const endButtonContainer = this.$scene.add
+          .container(endGameText.x, endGameText.y + endButton.height, [endButton, endButtonText])
+          .setAlpha(0)
+          .setDepth(25)
+          .setSize(endButton.width * endButton.scale, endButton.height * endButton.scale)
+
+        endButtonContainer.setInteractive({ cursor: 'pointer' })
+        endButtonContainer.addListener('pointerup', () => {
+          console.log('End Game')
+          this.$scene.scene.start(SCENE_KEYS.LIBRARY_SCENE)
+        })
+
+        // End Game Button Animation
+        this.$scene.tweens.add({
+          targets: endButtonContainer,
+          alpha: { from: 0, to: 1 },
+          scale: { from: 0.5, to: 1.2 },
+          ease: 'Back.Out',
+          duration: 1000,
+          onComplete: callback,
+        })
+      },
     })
   }
 

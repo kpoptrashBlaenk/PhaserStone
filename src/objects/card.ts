@@ -1,29 +1,16 @@
-import BBCodeText from 'phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText'
-import { CARD_ASSETS_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
+import { EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { colorStat } from '../common/stats-change'
 import { warningMessage } from '../common/warning'
 import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
-import { ANIMATION_CONFIG, BOARD_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
-import { FONT_KEYS } from '../assets/font-keys'
+import { ANIMATION_CONFIG, BOARD_CONFIG } from '../utils/visual-configs'
+import { BaseCard } from './base-card'
 
-export class Card {
-  private $scene: Phaser.Scene
+export class Card extends BaseCard {
   private $stateMachine: StateMachine
-  private $cardData: CardData
-  private $originalData: CardData
   private $owner: TargetKeys
-  private $cardContainer: Phaser.GameObjects.Container
-  private $cardTemplateImage: Phaser.GameObjects.Image
-  private $cardPortraitImage: Phaser.GameObjects.Image
-  private $cardNameText: Phaser.GameObjects.Text
-  private $cardCostText: Phaser.GameObjects.Text
-  private $cardAttackText: Phaser.GameObjects.Text
-  private $cardHealthText: Phaser.GameObjects.Text
-  private $cardBodyText: Phaser.GameObjects.Text | BBCodeText
-  private $previewContainer: Phaser.GameObjects.Container
   private $cancelButton: Phaser.GameObjects.Image
   private $sickParticles: Phaser.GameObjects.Particles.ParticleEmitter | null = null
   private $playable: boolean
@@ -37,40 +24,19 @@ export class Card {
     owner: TargetKeys,
     id: string
   ) {
-    this.$scene = scene
+    super(scene, cardData)
     this.$stateMachine = stateMachine
-    this.$cardData = { ...cardData }
-    this.$originalData = Object.freeze({ ...cardData })
     this.$owner = owner
-
     this.$playable = false
     this.$attacked = false
     this.$sick = true
 
-    this.$cardContainer = this.$createCard()
-    this.$cardContainer.setData('id', id) // avoid that card containers are the same
-    this.$cardData.trackId = id // avoid that cards are the same
-    this.$resizeCard(this.$cardContainer)
-  }
-
-  public get container(): Phaser.GameObjects.Container {
-    return this.$cardContainer
-  }
-
-  public get portrait(): Phaser.GameObjects.Image {
-    return this.$cardPortraitImage
-  }
-
-  public get template(): Phaser.GameObjects.Image {
-    return this.$cardTemplateImage
-  }
-
-  public get card(): CardData {
-    return this.$cardData
+    this._cardContainer.setData('id', id) // avoid that card containers are the same
+    this._cardData.trackId = id // avoid that cards are the same
   }
 
   public get original(): CardData {
-    return this.$originalData
+    return this._originalData
   }
 
   public get player(): TargetKeys {
@@ -96,7 +62,7 @@ export class Card {
 
     if (sick) {
       this.$sickParticles = this.$sickAnimation()
-      this.$cardContainer.add(this.$sickParticles)
+      this._cardContainer.add(this.$sickParticles)
       this.setOutline(false)
       return
     }
@@ -110,59 +76,28 @@ export class Card {
   }
 
   public setHealth(newHealth: number): void {
-    this.$cardData.health = newHealth
+    this._cardData.health = newHealth
 
-    colorStat(this.$cardData.health, this.$originalData.health, this.$cardHealthText)
+    colorStat(this._cardData.health, this._originalData.health, this._cardHealthText)
   }
 
   public setAttack(newAttack: number): void {
-    this.$cardData.attack = newAttack
+    this._cardData.attack = newAttack
 
-    colorStat(this.$cardData.attack, this.$originalData.attack, this.$cardAttackText)
+    colorStat(this._cardData.attack, this._originalData.attack, this._cardAttackText)
   }
 
   public setOutline(value: boolean): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
-      setOutline(this.$scene, value, this.$cardTemplateImage)
+      setOutline(this._scene, value, this._cardTemplateImage)
     }
-  }
-
-  /**
-   * Show front or back
-   */
-  public setSide(side: 'FRONT' | 'BACK'): void {
-    if (side === 'FRONT') {
-      this.$cardPortraitImage.setTexture(this.$cardData.assetKey)
-      this.$cardCostText.setAlpha(1)
-      this.$cardAttackText.setAlpha(1)
-      this.$cardHealthText.setAlpha(1)
-      this.$cardNameText.setAlpha(1)
-      this.$cardBodyText.setAlpha(1)
-      this.$cardTemplateImage.setAlpha(1)
-      this.$cardPortraitImage.setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
-      this.$cardPortraitImage.setY(this.$cardTemplateImage.height / 3)
-      this.$cardTemplateImage.setInteractive({
-        cursor: 'pointer',
-      })
-      this.$createHover()
-      return
-    }
-
-    this.$cardPortraitImage.setTexture(CARD_ASSETS_KEYS.CARD_BACK)
-    this.$cardCostText.setAlpha(0)
-    this.$cardAttackText.setAlpha(0)
-    this.$cardHealthText.setAlpha(0)
-    this.$cardNameText.setAlpha(0)
-    this.$cardBodyText.setAlpha(0)
-    this.$cardTemplateImage.setAlpha(0)
-    this.$cardPortraitImage.setScale(1)
   }
 
   /**
    * Set interactions for context
    */
   public setContext(context: 'HAND' | 'BOARD'): void {
-    this.$cardTemplateImage.removeListener('pointerup')
+    this._cardTemplateImage.removeListener('pointerup')
 
     switch (context) {
       case 'HAND':
@@ -181,195 +116,16 @@ export class Card {
    */
   public setTarget(targeted: boolean): void {
     if (targeted) {
-      this.$cardTemplateImage.setTint(0xff0000)
+      this._cardTemplateImage.setTint(0xff0000)
     } else {
-      this.$cardTemplateImage.setTint(0xffffff)
+      this._cardTemplateImage.setTint(0xffffff)
     }
   }
 
   public die(): void {
-    if (this.$previewContainer) {
-      this.$previewContainer.destroy()
+    if (this._previewContainer) {
+      this._previewContainer.destroy()
     }
-  }
-
-  /**
-   * Creates card objects
-   */
-  private $createCard(): Phaser.GameObjects.Container {
-    // Image
-    this.$cardTemplateImage = this.$scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
-    this.$cardTemplateImage.setPosition(this.$cardTemplateImage.width / 2, this.$cardTemplateImage.height / 2)
-
-    this.$cardPortraitImage = this.$scene.add
-      .image(0, 0, this.$cardData.assetKey)
-      .setSize(this.$cardTemplateImage.width / 2, this.$cardTemplateImage.height / 2)
-      .setDepth(-1)
-      .setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
-
-    // Cost
-    this.$cardCostText = this.$scene.add.text(
-      CARD_CONFIG.POSITION.COST.X,
-      CARD_CONFIG.POSITION.COST.Y,
-      String(this.$cardData.cost),
-      CARD_CONFIG.FONT_STYLE.NUMBER
-    )
-
-    // Attack
-    this.$cardAttackText = this.$scene.add.text(
-      CARD_CONFIG.POSITION.ATTACK.X,
-      CARD_CONFIG.POSITION.ATTACK.Y,
-      String(this.$cardData.attack),
-      CARD_CONFIG.FONT_STYLE.NUMBER
-    )
-
-    // Health
-    this.$cardHealthText = this.$scene.add.text(
-      CARD_CONFIG.POSITION.HEALTH.X,
-      CARD_CONFIG.POSITION.HEALTH.Y,
-      String(this.$cardData.health),
-      CARD_CONFIG.FONT_STYLE.NUMBER
-    )
-
-    // Name
-    this.$cardNameText = this.$scene.add
-      .text(
-        this.$cardTemplateImage.x,
-        CARD_CONFIG.POSITION.NAME.Y,
-        this.$cardData.name,
-        this.$cardData.name.length > 10 ? CARD_CONFIG.FONT_STYLE.NAME.SMALL : CARD_CONFIG.FONT_STYLE.NAME.BIG
-      )
-      .setOrigin(0.5)
-
-    // Body Text
-    this.$cardBodyText = new BBCodeText(
-      this.$scene,
-      CARD_CONFIG.POSITION.BODY.X,
-      CARD_CONFIG.POSITION.BODY.Y,
-      this.$cardData.text,
-      //@ts-ignore
-      CARD_CONFIG.FONT_STYLE.BODY
-    )
-
-    this.$cardBodyText.setX(CARD_CONFIG.POSITION.BODY.X + (185 - this.$cardBodyText.getBounds().width) / 2)
-    this.$cardBodyText.setY(this.$cardBodyText.y + (40 - this.$cardBodyText.height / 2))
-
-    // Container
-    const container = this.$scene.add
-      .container(0, 0)
-      .setSize(this.$cardTemplateImage.width, this.$cardTemplateImage.height)
-    this.$cardPortraitImage.setPosition(this.$cardTemplateImage.width / 2, this.$cardTemplateImage.height / 2)
-
-    container.add([
-      this.$cardPortraitImage,
-      this.$cardTemplateImage,
-      this.$cardCostText,
-      this.$cardAttackText,
-      this.$cardHealthText,
-      this.$cardNameText,
-      this.$cardBodyText,
-    ])
-    container.add(this.$cardBodyText)
-    return container
-  }
-
-  /**
-   * Creates preview objects
-   */
-  private $createPreview(): Phaser.GameObjects.Container {
-    // Image
-    const template = this.$scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
-    template.setPosition(template.width / 2, template.height / 2)
-
-    const portrait = this.$scene.add
-      .image(0, 0, this.$cardData.assetKey)
-      .setSize(template.width / 2, template.height / 2)
-      .setDepth(-1)
-      .setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
-
-    // Cost
-    const cost = this.$scene.add.text(
-      CARD_CONFIG.POSITION.COST.X,
-      CARD_CONFIG.POSITION.COST.Y,
-      String(this.$cardData.cost),
-      CARD_CONFIG.FONT_STYLE.NUMBER
-    )
-
-    // Attack
-    const attack = this.$scene.add.text(
-      CARD_CONFIG.POSITION.ATTACK.X,
-      CARD_CONFIG.POSITION.ATTACK.Y,
-      String(this.$cardData.attack),
-      CARD_CONFIG.FONT_STYLE.NUMBER
-    )
-
-    // Health
-    const health = this.$scene.add.text(
-      CARD_CONFIG.POSITION.HEALTH.X,
-      CARD_CONFIG.POSITION.HEALTH.Y,
-      String(this.$cardData.health),
-      CARD_CONFIG.FONT_STYLE.NUMBER
-    )
-
-    // Name
-    const name = this.$scene.add
-      .text(
-        template.x,
-        CARD_CONFIG.POSITION.NAME.Y,
-        this.$cardData.name,
-        this.$cardData.name.length > 10 ? CARD_CONFIG.FONT_STYLE.NAME.SMALL : CARD_CONFIG.FONT_STYLE.NAME.BIG
-      )
-      .setOrigin(0.5)
-
-    // Body Text
-    const cardBodyText = new BBCodeText(
-      this.$scene,
-      CARD_CONFIG.POSITION.BODY.X,
-      CARD_CONFIG.POSITION.BODY.Y,
-      this.$cardData.text,
-      //@ts-ignore
-      CARD_CONFIG.FONT_STYLE.BODY
-    )
-
-    cardBodyText.setX(CARD_CONFIG.POSITION.BODY.X + (185 - cardBodyText.getBounds().width) / 2)
-    cardBodyText.setY(cardBodyText.y + (40 - cardBodyText.height / 2))
-
-    // Container
-    const container = this.$scene.add.container(0, 0).setSize(template.width, template.height)
-    portrait.setPosition(template.width / 2, template.height / 3)
-
-    container.add([portrait, template, cost, attack, health, name, cardBodyText])
-
-    return container
-  }
-
-  /**
-   * Resize card and card objects
-   */
-  private $resizeCard(container: Phaser.GameObjects.Container): void {
-    container.setScale(CARD_CONFIG.SIZE.SCALE)
-    container.setSize(
-      this.$cardTemplateImage.width * container.scaleX,
-      this.$cardTemplateImage.height * container.scaleY
-    )
-  }
-
-  /**
-   * Pointerover: Create preview to right top
-   * Pointerout: Destroy hover
-   */
-  private $createHover(): void {
-    this.$cardTemplateImage.on('pointerover', () => {
-      this.$previewContainer = this.$createPreview()
-      this.$resizeCard(this.$previewContainer)
-      this.$previewContainer.setScale(1.5)
-      const x = this.$cardContainer.getBounds().x - this.$cardContainer.x + 650
-      this.$previewContainer.setX(x)
-    })
-
-    this.$cardTemplateImage.on('pointerout', () => {
-      this.$previewContainer.destroy()
-    })
   }
 
   /**
@@ -378,34 +134,34 @@ export class Card {
   private $addClickHand(): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
       // Player Turn
-      this.$cardTemplateImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
+      this._cardTemplateImage.on('pointerup', (pointer: Phaser.Input.Pointer) => {
         // Callback and Fallback for playing card
         const playCardCallback = () => {
           this.$removeCancel()
           this.$stateMachine.setState(STATES.PLAYER_PLAY_CARD, this)
         }
         const playCardFallback = () => {
-          this.$cardContainer.setPosition(
-            this.$cardContainer.getData('position').container.x,
-            this.$cardContainer.getData('position').container.y
+          this._cardContainer.setPosition(
+            this._cardContainer.getData('position').container.x,
+            this._cardContainer.getData('position').container.y
           )
           this.$removeCancel()
           this.$stateMachine.setState(STATES.PLAYER_TURN)
         }
         const cleanInteractions = () => {
-          this.$cardContainer.setData('draggingFromHand', false).setDepth(0)
-          this.$scene.input.removeListener('pointermove')
-          this.$previewContainer.destroy()
+          this._cardContainer.setData('draggingFromHand', false).setDepth(0)
+          this._scene.input.removeListener('pointermove')
+          this._previewContainer.destroy()
         }
 
         if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$playable) {
-          if (!this.$cardContainer.getData('draggingFromHand')) {
+          if (!this._cardContainer.getData('draggingFromHand')) {
             // Dragging is false
-            this.$cardContainer.setData('draggingFromHand', true).setDepth(1)
-            this.$cardContainer.setData('position', {
+            this._cardContainer.setData('draggingFromHand', true).setDepth(1)
+            this._cardContainer.setData('position', {
               container: {
-                x: this.$cardContainer.x,
-                y: this.$cardContainer.y,
+                x: this._cardContainer.x,
+                y: this._cardContainer.y,
               },
               pointer: {
                 x: pointer.x,
@@ -414,19 +170,19 @@ export class Card {
             })
 
             // Add dragging
-            this.$scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-              this.$cardContainer.x =
-                this.$cardContainer.getData('position').container.x +
-                (pointer.x - this.$cardContainer.getData('position').pointer.x)
-              this.$cardContainer.y =
-                this.$cardContainer.getData('position').container.y +
-                (pointer.y - this.$cardContainer.getData('position').pointer.y)
+            this._scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+              this._cardContainer.x =
+                this._cardContainer.getData('position').container.x +
+                (pointer.x - this._cardContainer.getData('position').pointer.x)
+              this._cardContainer.y =
+                this._cardContainer.getData('position').container.y +
+                (pointer.y - this._cardContainer.getData('position').pointer.y)
             })
             return
           }
 
           // Dragging is true
-          this.$cardContainer.setData('draggingFromHand', false).setDepth(0)
+          this._cardContainer.setData('draggingFromHand', false).setDepth(0)
 
           // Check if on board
           if (
@@ -444,7 +200,7 @@ export class Card {
           }
 
           // If battlecry, set state and pass what happens if battlecry passes or not
-          if (this.$cardData.battlecry) {
+          if (this._cardData.battlecry) {
             this.$addCancel()
             this.$stateMachine.setState(STATES.PLAYER_BATTLECRY, {
               source: this,
@@ -472,7 +228,7 @@ export class Card {
         }
 
         // Exhausted
-        warningMessage(this.$scene, WARNING_KEYS.CANT_PLAY)
+        warningMessage(this._scene, WARNING_KEYS.CANT_PLAY)
       })
 
       return
@@ -484,7 +240,7 @@ export class Card {
   }
 
   private $addClickBoard(): void {
-    this.$cardTemplateImage.on('pointerup', () => {
+    this._cardTemplateImage.on('pointerup', () => {
       if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLECRY_CHOOSE_TARGET) {
         this.$stateMachine.setState(STATES.PLAYER_BATTLECRY_TARGET_CHOSEN, this)
         return
@@ -515,7 +271,7 @@ export class Card {
       }
 
       // Exhausted
-      warningMessage(this.$scene, WARNING_KEYS.CANT_BE_SELECTED)
+      warningMessage(this._scene, WARNING_KEYS.CANT_BE_SELECTED)
     })
   }
 
@@ -525,13 +281,13 @@ export class Card {
   }
 
   private $addCancel(): void {
-    this.$cancelButton = this.$scene.add
-      .image(this.$cardTemplateImage.width / 2, this.$cardTemplateImage.height / 2, UI_ASSET_KEYS.CANCEL)
+    this.$cancelButton = this._scene.add
+      .image(this._cardTemplateImage.width / 2, this._cardTemplateImage.height / 2, UI_ASSET_KEYS.CANCEL)
       .setScale(0.8)
       .setAlpha(1)
       .setOrigin(0.5)
 
-    this.$cardContainer.add(this.$cancelButton)
+    this._cardContainer.add(this.$cancelButton)
   }
 
   private $removeCancel(): void {
@@ -541,7 +297,7 @@ export class Card {
   }
 
   private $sickAnimation(): Phaser.GameObjects.Particles.ParticleEmitter {
-    return this.$scene.add.particles(
+    return this._scene.add.particles(
       ANIMATION_CONFIG.SICK.POSITION.X,
       ANIMATION_CONFIG.SICK.POSITION.Y,
       EFFECT_ASSET_KEYS.Z,
