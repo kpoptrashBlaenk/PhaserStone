@@ -107,23 +107,22 @@ export class BattleScene extends BaseScene {
   }
 
   private $playCard(target: TargetKeys, card: Card, callback?: () => void) {
-    const afterPlayCard = () => {
+    const afterPlayCard = (afterCallback?: () => void) => {
       this.$mana[target].useMana(card.card.cost)
       this.$board[target].playCard(card)
+      afterCallback?.()
       callback?.()
     }
 
-    this.$hand[target].playCard(card, () => {
+    this.$hand[target].playCard(card, (playCardCallback?: () => void) => {
       if (target === TARGET_KEYS.ENEMY) {
         if (card.card.battlecry) {
-          this.$battlecryManager.handleBattlecry(card, afterPlayCard)
+          this.$battlecryManager.handleBattlecry(card, () => afterPlayCard(playCardCallback))
           return
         }
-        afterPlayCard()
-        return
       }
 
-      afterPlayCard()
+      afterPlayCard(playCardCallback)
     })
   }
 
