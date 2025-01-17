@@ -39,10 +39,7 @@ export class PreloadScene extends BaseScene {
     this.load.json(DATA_ASSET_KEYS.CARDS, `${jsonAssetPath}/cards.json`)
 
     // Loading Screen
-    // this.createLoading()
-    this.load.on('complete', () => {
-      this.scene.start(SCENE_KEYS.LIBRARY_SCENE)
-    })
+    this.createLoading()
   }
 
   /**
@@ -95,7 +92,7 @@ export class PreloadScene extends BaseScene {
       percentageText.destroy()
       loadingText.setText('Click to Start').setAlpha(LOADING_SCREEN.ANIMATION.ORIGIN_ALPHA)
       this.input.once('pointerdown', () => {
-        this.scene.start(SCENE_KEYS.BATTLE_SCENE)
+        this.scene.start(SCENE_KEYS.LIBRARY_SCENE)
       })
     })
 
