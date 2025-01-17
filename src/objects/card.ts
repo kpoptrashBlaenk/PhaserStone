@@ -302,6 +302,7 @@ export class Card {
       String(this.$cardData.attack),
       CARD_CONFIG.FONT_STYLE.NUMBER
     )
+    colorStat(this.$cardData.attack, this.$originalData.attack, attack)
 
     // Health
     const health = this.$scene.add.text(
@@ -310,6 +311,7 @@ export class Card {
       String(this.$cardData.health),
       CARD_CONFIG.FONT_STYLE.NUMBER
     )
+    colorStat(this.$cardData.health, this.$originalData.health, health)
 
     // Name
     const name = this.$scene.add
