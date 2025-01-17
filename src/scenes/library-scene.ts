@@ -42,6 +42,7 @@ export class LibraryScene extends BaseScene {
     for (let i = 0; i < 10; i++) {
       const card = new LibraryCard(this, this.$allLoadedCards[i])
       card.setSide('FRONT')
+      card.removeHover()
       card.container.setScale(0.7)
       card.container.setSize(card.container.width * 0.7, card.container.height * 0.7)
 
