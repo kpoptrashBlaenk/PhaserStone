@@ -1,10 +1,17 @@
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { LibraryCard } from '../objects/library-card'
+import { CardData } from '../utils/card-keys'
 import { CARD_CONFIG } from '../utils/visual-configs'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
 export class LibraryScene extends BaseScene {
+  private $allLoadedCards: CardData[]
+  private $shownCards: LibraryCard[]
+  private $currentPage: number
+  private $maxPage: number
+  private $libraryPage: Phaser.GameObjects.Rectangle
+
   constructor() {
     super({
       key: SCENE_KEYS.LIBRARY_SCENE,
@@ -14,8 +21,51 @@ export class LibraryScene extends BaseScene {
   create() {
     super.create()
 
+    this.$allLoadedCards = [...this.cache.json.get(DATA_ASSET_KEYS.CARDS)]
+    this.$shownCards = []
+    this.$currentPage = 0
+
     this.$createLibrary()
+    this.$changePage(1)
     // this.$createCards()
+  }
+
+  private $changePage(page: 1 | -1) {
+    this.$currentPage += page
+
+    if (this.$shownCards.length > 0) {
+      for (const card of this.$shownCards) {
+        card.container.destroy(true)
+      }
+    }
+
+    for (let i = 0; i < 10; i++) {
+      const card = new LibraryCard(this, this.$allLoadedCards[i])
+      card.setSide('FRONT')
+      card.container.setScale(0.7)
+      card.container.setSize(card.container.width * 0.7, card.container.height * 0.7)
+
+      const paddingX = (this.$libraryPage.width - card.container.width * 5) / 6
+      const paddingY = (this.$libraryPage.height - card.container.height * 2) / 3
+      const multiplierX = i < 5 ? i : i - 5
+      const multiplierY = i < 5 ? 0 : 1
+
+      card.container.setPosition(
+        this.$libraryPage.x +
+          card.container.width * multiplierX +
+          paddingX * (multiplierX + 1) -
+          card.container.width,
+        this.$libraryPage.y +
+          card.container.height * multiplierY +
+          paddingY * (multiplierY + 1) -
+          card.container.height
+      )
+
+      this.$shownCards.push(card)
+    }
+
+    CARD_CONFIG.SIZE.HEIGHT
+    CARD_CONFIG.SIZE.WIDTH
   }
 
   private $createLibrary() {
@@ -36,7 +86,7 @@ export class LibraryScene extends BaseScene {
     libraryText.setX(sceneWidth / 2 - libraryText.width / 2)
 
     // Add beige background for cards
-    const cardBackground = this.add
+    this.$libraryPage = this.add
       .rectangle(
         padding,
         libraryText.y + libraryText.height + padding,
@@ -49,8 +99,8 @@ export class LibraryScene extends BaseScene {
     // Add left arrow
     this.add
       .rectangle(
-        cardBackground.x + cardBackground.width / 2 - padding * 2,
-        cardBackground.y + cardBackground.height + padding / 2,
+        this.$libraryPage.x + this.$libraryPage.width / 2 - padding * 2,
+        this.$libraryPage.y + this.$libraryPage.height + padding / 2,
         padding,
         padding,
         0x000000
@@ -62,8 +112,8 @@ export class LibraryScene extends BaseScene {
     // Add right arrow
     this.add
       .rectangle(
-        cardBackground.x + cardBackground.width / 2 + padding * 2,
-        cardBackground.y + cardBackground.height + padding / 2,
+        this.$libraryPage.x + this.$libraryPage.width / 2 + padding * 2,
+        this.$libraryPage.y + this.$libraryPage.height + padding / 2,
         padding,
         padding,
         0x000000
@@ -77,14 +127,16 @@ export class LibraryScene extends BaseScene {
       .rectangle(
         0,
         0,
-        sceneWidth - cardBackground.width - cardBackground.x - padding * 2,
-        cardBackground.height,
+        sceneWidth - this.$libraryPage.width - this.$libraryPage.x - padding * 2,
+        this.$libraryPage.height,
         0x000000
       )
       .setOrigin(0)
 
     const cardListContainer = this.add
-      .container(cardBackground.x + cardBackground.width + padding, cardBackground.y, [cardListRectangle])
+      .container(this.$libraryPage.x + this.$libraryPage.width + padding, this.$libraryPage.y, [
+        cardListRectangle,
+      ])
       .setSize(cardListRectangle.width, cardListRectangle.height)
 
     // Add card counter
@@ -124,17 +176,5 @@ export class LibraryScene extends BaseScene {
         strokeThickness: 2,
       })
       .setOrigin(0.5)
-  }
-
-  private $createCards() {
-    const library = []
-    const allCards = [...this.cache.json.get(DATA_ASSET_KEYS.CARDS)]
-    const availableCards = [...allCards]
-
-    for (let i = 0; i < allCards.length; i++) {
-      const card = new LibraryCard(this, availableCards[0])
-      library.push(card)
-      card.setSide('FRONT')
-    }
   }
 }
