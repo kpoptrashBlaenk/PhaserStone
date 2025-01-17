@@ -64,14 +64,21 @@ export class AnimationManager {
 
   public death(card: Card | Hero, callback?: () => void): void {
     card.portrait.setTint(ANIMATION_CONFIG.DEATH.TINT)
+
     if (card instanceof Card) {
       card.template.setTint(ANIMATION_CONFIG.DEATH.TINT)
     }
 
-    const { x, y } = {
-      x: card.container.x + card.container.width / 2,
-      y: card.container.y + card.container.height / 2,
-    }
+    const { x, y } =
+      card instanceof Card
+        ? {
+            x: card.container.x + card.container.width / 2,
+            y: card.container.y + card.container.height / 2,
+          }
+        : {
+            x: card.container.x,
+            y: card.container.y,
+          }
 
     // Shrink
     this.$scene.tweens.add({
