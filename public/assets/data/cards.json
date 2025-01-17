@@ -4,106 +4,47 @@
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
-    "health": 1,
-    "id": 6,
-    "trackId": "",
-    "battlecry": {
-      "target": "ANY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "[i]Battlecry:[/i] Deal 1 damage.",
-    "name": "any",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 5,
-    "trackId": "",
-    "battlecry": {
-      "target": "RANDOM_ENEMY",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "[i]Battlecry:[/i] Deal 1 damage to a random enemy.",
-    "name": "random enemy",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 4,
-    "trackId": "",
-    "battlecry": {
-      "target": "RANDOM_ENEMY_MINION",
-      "type": "DAMAGE",
-      "amount": 1
-    },
-    "text": "[i]Battlecry:[/i] Deal 1 damage to a random enemy minion.",
-    "name": "random enemy minion",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 3,
-    "trackId": "",
-    "battlecry": {
-      "target": "RANDOM_FRIENDLY",
-      "type": "HEAL",
-      "amount": 1
-    },
-    "text": "[i]Battlecry:[/i] Heal 1 health to a random friendly character.",
-    "name": "random friendly",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
-    "id": 2,
-    "trackId": "",
-    "battlecry": {
-      "target": "RANDOM_FRIENDLY_MINION",
-      "type": "HEAL",
-      "amount": 1
-    },
-    "text": "[i]Battlecry:[/i] Heal 1 health to a random friendly minion.",
-    "name": "random friendly minion",
-    "races": [],
-    "type": "MINION"
-  },
-  {
-    "assetKey": "ALEXSTRAZA",
-    "attack": 1,
-    "cardClass": "NEUTRAL",
-    "cost": 1,
-    "health": 1,
+    "health": 2,
     "id": 1,
     "trackId": "",
     "battlecry": {
       "target": "ENEMY_HERO",
       "type": "DAMAGE",
-      "amount": 1
+      "amount": 2
     },
-    "text": "[i]Battlecry:[/i] Deal 1 damage to the enemy hero.",
-    "name": "enemy hero",
+    "text": "[i]Battlecry:[/i] Deal 2 damage to the enemy hero.",
+    "name": "Hero's Sting",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 3,
+    "cardClass": "NEUTRAL",
+    "cost": 2,
+    "health": 3,
+    "id": 2,
+    "trackId": "",
+    "text": "",
+    "name": "Ironfoot Grunt",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 2,
+    "cardClass": "NEUTRAL",
+    "cost": 2,
+    "health": 2,
+    "id": 3,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_ENEMY",
+      "type": "DAMAGE",
+      "amount": 2
+    },
+    "text": "[i]Battlecry:[/i] Deal 2 damage to a random enemy.",
+    "name": "Flame Sprinter",
     "races": [],
     "type": "MINION"
   },
@@ -112,16 +53,176 @@
     "attack": 1,
     "cardClass": "NEUTRAL",
     "cost": 1,
-    "health": 1,
-    "id": 1,
+    "health": 3,
+    "id": 4,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY_MINION",
+      "type": "HEAL",
+      "amount": 2
+    },
+    "text": "[i]Battlecry:[/i] Heal 2 health to a random friendly minion.",
+    "name": "Forest Acolyte",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 2,
+    "cardClass": "NEUTRAL",
+    "cost": 2,
+    "health": 4,
+    "id": 5,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 2
+    },
+    "text": "[i]Battlecry:[/i] Deal 2 damage to a random enemy minion.",
+    "name": "Shardflinger",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 0,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 4,
+    "id": 6,
+    "trackId": "",
+    "text": "",
+    "name": "Living Wall",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 3,
+    "cardClass": "NEUTRAL",
+    "cost": 3,
+    "health": 3,
+    "id": 7,
     "trackId": "",
     "battlecry": {
       "target": "FRIENDLY_HERO",
       "type": "HEAL",
-      "amount": 1
+      "amount": 3
     },
-    "text": "[i]Battlecry:[/i] Heal 1 health to your hero.",
-    "name": "friendly hero",
+    "text": "[i]Battlecry:[/i] Heal 3 health to your hero.",
+    "name": "Radiant Monk",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 2,
+    "health": 5,
+    "id": 8,
+    "trackId": "",
+    "text": "",
+    "name": "Oakheart Guardian",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 4,
+    "cardClass": "NEUTRAL",
+    "cost": 4,
+    "health": 3,
+    "id": 9,
+    "trackId": "",
+    "battlecry": {
+      "target": "ANY",
+      "type": "DAMAGE",
+      "amount": 3
+    },
+    "text": "[i]Battlecry:[/i] Deal 3 damage.",
+    "name": "Volcanic Scorcher",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 2,
+    "cardClass": "NEUTRAL",
+    "cost": 3,
+    "health": 2,
+    "id": 10,
+    "trackId": "",
+    "battlecry": {
+      "target": "FRIENDLY",
+      "type": "HEAL",
+      "amount": 3
+    },
+    "text": "[i]Battlecry:[/i] Heal 3 health to a friendly character.",
+    "name": "Healing Spirit",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 6,
+    "cardClass": "NEUTRAL",
+    "cost": 5,
+    "health": 6,
+    "id": 11,
+    "trackId": "",
+    "text": "",
+    "name": "Mountain Juggernaut",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 4,
+    "cardClass": "NEUTRAL",
+    "cost": 4,
+    "health": 4,
+    "id": 12,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY",
+      "type": "HEAL",
+      "amount": 4
+    },
+    "text": "[i]Battlecry:[/i] Heal 4 health to a random friendly character.",
+    "name": "Spirit Guardian",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 3,
+    "cardClass": "NEUTRAL",
+    "cost": 3,
+    "health": 3,
+    "id": 13,
+    "trackId": "",
+    "text": "",
+    "name": "Steady Archer",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 5,
+    "cardClass": "NEUTRAL",
+    "cost": 5,
+    "health": 5,
+    "id": 14,
+    "trackId": "",
+    "battlecry": {
+      "target": "ENEMY",
+      "type": "DAMAGE",
+      "amount": 3
+    },
+    "text": "[i]Battlecry:[/i] Deal 3 damage to an enemy.",
+    "name": "Darkblaze Sorcerer",
     "races": [],
     "type": "MINION"
   },
@@ -131,7 +232,123 @@
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 1,
+    "id": 15,
+    "trackId": "",
+    "text": "",
+    "name": "Peasant Scout",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 2,
+    "cardClass": "NEUTRAL",
+    "cost": 2,
+    "health": 2,
+    "id": 16,
+    "trackId": "",
+    "battlecry": {
+      "target": "ENEMY_HERO",
+      "type": "DAMAGE",
+      "amount": 2
+    },
+    "text": "[i]Battlecry:[/i] Deal 2 damage to the enemy hero.",
+    "name": "Piercing Shot",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 3,
+    "cardClass": "NEUTRAL",
+    "cost": 3,
+    "health": 4,
+    "id": 17,
+    "trackId": "",
+    "battlecry": {
+      "target": "ANY",
+      "type": "HEAL",
+      "amount": 2
+    },
+    "text": "[i]Battlecry:[/i] Heal 2 health.",
+    "name": "Sage of Renewal",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 4,
+    "cardClass": "NEUTRAL",
+    "cost": 4,
+    "health": 5,
+    "id": 18,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 3
+    },
+    "text": "[i]Battlecry:[/i] Deal 3 damage to a random enemy minion.",
+    "name": "Thunderstrike Elemental",
+    "races": ["ELEMENTAL"],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 6,
+    "cardClass": "NEUTRAL",
+    "cost": 6,
+    "health": 4,
+    "id": 19,
+    "trackId": "",
+    "text": "",
+    "name": "Raging Behemoth",
+    "races": ["BEAST"],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 3,
+    "cardClass": "NEUTRAL",
+    "cost": 3,
+    "health": 2,
+    "id": 20,
+    "trackId": "",
+    "battlecry": {
+      "target": "FRIENDLY_HERO",
+      "type": "HEAL",
+      "amount": 4
+    },
+    "text": "[i]Battlecry:[/i] Heal 4 health to your hero.",
+    "name": "Lifebinder Acolyte",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 5,
+    "cardClass": "NEUTRAL",
+    "cost": 5,
+    "health": 4,
+    "id": 21,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_ENEMY",
+      "type": "DAMAGE",
+      "amount": 4
+    },
+    "text": "[i]Battlecry:[/i] Deal 4 damage to a random enemy.",
+    "name": "Furyflame Drake",
+    "races": ["DRAGON"],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 1,
+    "cardClass": "NEUTRAL",
+    "cost": 1,
+    "health": 1,
+    "id": 22,
     "trackId": "",
     "battlecry": {
       "target": "FRIENDLY",
@@ -139,7 +356,105 @@
       "amount": 1
     },
     "text": "[i]Battlecry:[/i] Heal 1 health to a friendly character.",
-    "name": "friendly",
+    "name": "Healing Imp",
+    "races": ["DEMON"],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 2,
+    "cardClass": "NEUTRAL",
+    "cost": 2,
+    "health": 3,
+    "id": 23,
+    "trackId": "",
+    "battlecry": {
+      "target": "ENEMY",
+      "type": "DAMAGE",
+      "amount": 2
+    },
+    "text": "[i]Battlecry:[/i] Deal 2 damage to an enemy.",
+    "name": "Shadowbolt Caster",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 4,
+    "cardClass": "NEUTRAL",
+    "cost": 4,
+    "health": 4,
+    "id": 24,
+    "trackId": "",
+    "text": "",
+    "name": "Stoneclaw Giant",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 3,
+    "cardClass": "NEUTRAL",
+    "cost": 3,
+    "health": 2,
+    "id": 25,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY",
+      "type": "HEAL",
+      "amount": 3
+    },
+    "text": "[i]Battlecry:[/i] Heal 3 health to a random friendly character.",
+    "name": "Graceful Medic",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 4,
+    "cardClass": "NEUTRAL",
+    "cost": 4,
+    "health": 5,
+    "id": 26,
+    "trackId": "",
+    "battlecry": {
+      "target": "ANY",
+      "type": "DAMAGE",
+      "amount": 4
+    },
+    "text": "[i]Battlecry:[/i] Deal 4 damage.",
+    "name": "Pyroblast Wielder",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 2,
+    "cardClass": "NEUTRAL",
+    "cost": 3,
+    "health": 6,
+    "id": 27,
+    "trackId": "",
+    "text": "",
+    "name": "Shielded Defender",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 5,
+    "cardClass": "NEUTRAL",
+    "cost": 6,
+    "health": 6,
+    "id": 28,
+    "trackId": "",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 5
+    },
+    "text": "[i]Battlecry:[/i] Deal 5 damage to a random enemy minion.",
+    "name": "Stormcaller Titan",
     "races": [],
     "type": "MINION"
   },
@@ -149,16 +464,29 @@
     "cardClass": "NEUTRAL",
     "cost": 1,
     "health": 1,
-    "id": 1,
+    "id": 29,
+    "trackId": "",
+    "text": "",
+    "name": "Young Adventurer",
+    "races": [],
+    "type": "MINION"
+  },
+  {
+    "assetKey": "ALEXSTRAZA",
+    "attack": 4,
+    "cardClass": "NEUTRAL",
+    "cost": 4,
+    "health": 4,
+    "id": 30,
     "trackId": "",
     "battlecry": {
-      "target": "ENEMY",
+      "target": "ENEMY_HERO",
       "type": "DAMAGE",
-      "amount": 1
+      "amount": 4
     },
-    "text": "[i]Battlecry:[/i] Deal 1 damage to an enemy.",
-    "name": "enemy",
-    "races": [],
+    "text": "[i]Battlecry:[/i] Deal 4 damage to the enemy hero.",
+    "name": "Infernal Blaster",
+    "races": ["DEMON"],
     "type": "MINION"
   }
 ]
