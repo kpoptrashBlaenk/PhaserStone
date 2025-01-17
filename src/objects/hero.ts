@@ -65,7 +65,7 @@ export class Hero {
   }
 
   public setHealth(newHealth: number): void {
-    this.$currentHealth = newHealth > this.$maxHealth ? this.$maxHealth : newHealth
+    this.$currentHealth = newHealth
 
     colorStat(this.$currentHealth, this.$maxHealth, this.$healthText)
   }
