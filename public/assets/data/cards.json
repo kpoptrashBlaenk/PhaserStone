@@ -138,7 +138,7 @@
       "type": "HEAL",
       "amount": 1
     },
-    "text": "[i]Battlecry:[/i] Heal 1 health to your hero.",
+    "text": "[i]Battlecry:[/i] Heal 1 health to a friendly character.",
     "name": "friendly",
     "races": [],
     "type": "MINION"
@@ -156,7 +156,7 @@
       "type": "DAMAGE",
       "amount": 1
     },
-    "text": "[i]Battlecry:[/i] Heal 1 health to your hero.",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to an enemy.",
     "name": "enemy",
     "races": [],
     "type": "MINION"
