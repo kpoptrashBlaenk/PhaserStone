@@ -8,9 +8,11 @@ import { SCENE_KEYS } from './scene-keys'
 export class LibraryScene extends BaseScene {
   private $allLoadedCards: CardData[]
   private $shownCards: LibraryCard[]
+  private $selectedCards: Phaser.GameObjects.Container[]
   private $currentPage: number
   private $maxPage: number
   private $libraryPage: Phaser.GameObjects.Rectangle
+  private $libraryList: Phaser.GameObjects.Container
 
   constructor() {
     super({
@@ -22,6 +24,7 @@ export class LibraryScene extends BaseScene {
     super.create()
     this.$allLoadedCards = [...this.cache.json.get(DATA_ASSET_KEYS.CARDS)]
     this.$shownCards = []
+    this.$selectedCards = []
     this.$currentPage = 0
     this.$maxPage = Math.floor(this.$allLoadedCards.length / 10)
 
@@ -29,16 +32,12 @@ export class LibraryScene extends BaseScene {
     this.$changePage(1)
   }
 
-  private $changePage(page: 1 | -1) {
+  private $changePage(page: 1 | -1): void {
+    if (this.$currentPage + page <= 0 || this.$currentPage + page > this.$maxPage) {
+      return
+    }
+
     this.$currentPage += page
-
-    if (this.$currentPage <= 0) {
-      this.$currentPage = 1
-    }
-
-    if (this.$currentPage > this.$maxPage) {
-      this.$currentPage = this.$maxPage
-    }
 
     if (this.$shownCards.length > 0) {
       for (const card of this.$shownCards) {
@@ -70,10 +69,28 @@ export class LibraryScene extends BaseScene {
       )
 
       this.$shownCards.push(card)
+
+      this.$cardClick(card)
     }
   }
 
-  private $createLibrary() {
+  private $cardClick(card: LibraryCard): void {
+    card.template.on('pointerdown', () => {
+      this.$addSelectedCard(card.card)
+
+      this.$cardSelected(card)
+    })
+  }
+
+  private $cardSelected(card: LibraryCard): void {
+    card.portrait.setTint(0x808080)
+    card.template.setTint(0x808080)
+
+    card.template.disableInteractive()
+    this.input.setDefaultCursor('default')
+  }
+
+  private $createLibrary(): void {
     const sceneWidth = this.scale.width
     const sceneHeight = this.scale.height
     const padding = 50
@@ -138,7 +155,7 @@ export class LibraryScene extends BaseScene {
       )
       .setOrigin(0)
 
-    const cardListContainer = this.add
+    this.$libraryList = this.add
       .container(this.$libraryPage.x + this.$libraryPage.width + padding, this.$libraryPage.y, [
         cardListRectangle,
       ])
@@ -147,8 +164,8 @@ export class LibraryScene extends BaseScene {
     // Add card counter
     const cardCounterBackground = this.add
       .rectangle(
-        cardListContainer.x,
-        cardListContainer.y + cardListContainer.height + padding / 2,
+        this.$libraryList.x,
+        this.$libraryList.y + this.$libraryList.height + padding / 2,
         200,
         50,
         0x0000ff
@@ -170,9 +187,9 @@ export class LibraryScene extends BaseScene {
 
     // Add start button
     const startButton = this.add
-      .rectangle(0, cardListContainer.y + cardListContainer.height + padding / 2, 200, 50, 0x0000ff)
+      .rectangle(0, this.$libraryList.y + this.$libraryList.height + padding / 2, 200, 50, 0x0000ff)
       .setOrigin(0)
-    startButton.setX(cardListContainer.x + cardListContainer.width - startButton.width)
+    startButton.setX(this.$libraryList.x + this.$libraryList.width - startButton.width)
 
     const startButtonText = this.add
       .text(startButton.x + startButton.width / 2, startButton.y + startButton.height / 2, 'Start', {
@@ -181,5 +198,39 @@ export class LibraryScene extends BaseScene {
         strokeThickness: 2,
       })
       .setOrigin(0.5)
+  }
+
+  private $addSelectedCard(card: CardData): void {
+    const padding = 5
+    const height = (this.$libraryList.height - padding * 29) / 30
+
+    const rectangle = this.add.rectangle(0, 0, this.$libraryList.width, height, 0xffffff).setOrigin(0)
+
+    const name = this.add
+      .text(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height / 2, card.name, {
+        ...CARD_CONFIG.FONT_STYLE.NUMBER,
+        color: '#000000',
+        strokeThickness: 0,
+        fontSize: '20px',
+      })
+      .setOrigin(0.5)
+
+    const container = this.add.container(0, 0, [rectangle, name]).setSize(rectangle.width, rectangle.height)
+    container.setData('card', card)
+
+    this.$selectedCards.push(container)
+    this.$libraryList.add(container)
+    this.$resizeList()
+  }
+
+  private $resizeList(): void {
+    let i = 0
+
+    this.$libraryList.iterate((child: Phaser.GameObjects.Container) => {
+      if (child instanceof Phaser.GameObjects.Container) {
+        child.setPosition(0, i * (child.height + 5))
+        i++
+      }
+    })
   }
 }
