@@ -252,7 +252,7 @@ export class Card {
     )
 
     this.$cardBodyText.setX(CARD_CONFIG.POSITION.BODY.X + (185 - this.$cardBodyText.getBounds().width) / 2)
-    this.$cardBodyText.setY(this.$cardBodyText.y + (45 - this.$cardBodyText.height))
+    this.$cardBodyText.setY(this.$cardBodyText.y + (40 - this.$cardBodyText.height / 2))
 
     // Container
     const container = this.$scene.add
@@ -332,7 +332,7 @@ export class Card {
     )
 
     cardBodyText.setX(CARD_CONFIG.POSITION.BODY.X + (185 - cardBodyText.getBounds().width) / 2)
-    cardBodyText.setY(cardBodyText.y + (60 - cardBodyText.height))
+    cardBodyText.setY(cardBodyText.y + (40 - cardBodyText.height / 2))
 
     // Container
     const container = this.$scene.add.container(0, 0).setSize(template.width, template.height)
