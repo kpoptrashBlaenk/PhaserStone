@@ -84,7 +84,7 @@ export class LibraryScene extends BaseScene {
 
   private $cardClick(card: LibraryCard): void {
     card.template.on('pointerdown', () => {
-      this.$addSelectedCard(card.card)
+      this.$addSelectedCard(card)
 
       this.$cardSelected(card)
     })
@@ -96,6 +96,13 @@ export class LibraryScene extends BaseScene {
 
     card.template.disableInteractive()
     this.input.setDefaultCursor('default')
+  }
+
+  private $cardUnselected(card: LibraryCard): void {
+    card.portrait.setTint(0xffffff)
+    card.template.setTint(0xffffff)
+
+    card.template.setInteractive()
   }
 
   private $createLibrary(): void {
@@ -213,14 +220,14 @@ export class LibraryScene extends BaseScene {
       .setOrigin(0.5)
   }
 
-  private $addSelectedCard(card: CardData): void {
+  private $addSelectedCard(card: LibraryCard): void {
     const padding = 5
     const height = (this.$libraryList.height - padding * 29) / 30
 
     const rectangle = this.add.rectangle(0, 0, this.$libraryList.width, height, 0xffffff).setOrigin(0)
 
     const name = this.add
-      .text(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height / 2, card.name, {
+      .text(rectangle.x + rectangle.width / 2, rectangle.y + rectangle.height / 2, card.card.name, {
         ...CARD_CONFIG.FONT_STYLE.NUMBER,
         color: '#000000',
         strokeThickness: 0,
@@ -230,6 +237,13 @@ export class LibraryScene extends BaseScene {
 
     const container = this.add.container(0, 0, [rectangle, name]).setSize(rectangle.width, rectangle.height)
     container.setData('card', card)
+    container.setInteractive({ cursor: 'pointer' }).on('pointerdown', () => {
+      this.$selectedCards = this.$selectedCards.filter((selectedCard) => selectedCard !== container)
+      this.$cardUnselected(container.getData('card'))
+      container.destroy(true)
+      this.$resizeList()
+      this.$updateCardCounter()
+    })
 
     this.$selectedCards.push(container)
     this.$libraryList.add(container)
