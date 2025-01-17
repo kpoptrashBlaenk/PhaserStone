@@ -46,7 +46,7 @@ export class LibraryScene extends BaseScene {
     }
 
     for (let i = 0; i < 10; i++) {
-      const card = new LibraryCard(this, this.$allLoadedCards[i + this.$currentPage])
+      const card = new LibraryCard(this, this.$allLoadedCards[i + 10 * (this.$currentPage - 1)])
       card.setSide('FRONT')
       card.removeHover()
       card.container.setScale(0.7)
@@ -71,6 +71,12 @@ export class LibraryScene extends BaseScene {
       this.$shownCards.push(card)
 
       this.$cardClick(card)
+
+      this.$selectedCards.forEach((selectedCard) => {
+        if (selectedCard.getData('card').name === card.card.name) {
+          this.$cardSelected(card)
+        }
+      })
     }
   }
 
