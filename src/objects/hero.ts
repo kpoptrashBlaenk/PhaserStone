@@ -160,7 +160,6 @@ export class Hero {
       if (this.$owner === TARGET_KEYS.PLAYER) {
         if (this.$stateMachine.currentStateName === STATES.PLAYER_TURN && this.$currentAttack > 0) {
           if (this.$attacked) {
-            // warn, already attacked
             return
           }
 

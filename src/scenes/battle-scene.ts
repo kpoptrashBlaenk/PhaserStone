@@ -222,6 +222,7 @@ export class BattleScene extends BaseScene {
           card.setTarget(true)
         })
         enemyHero.setTarget(true)
+        break
 
       case 'FRIENDLY':
         playerBoard.forEach((card: Card) => {
