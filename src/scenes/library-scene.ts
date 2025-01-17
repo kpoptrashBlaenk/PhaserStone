@@ -20,18 +20,25 @@ export class LibraryScene extends BaseScene {
 
   create() {
     super.create()
-
     this.$allLoadedCards = [...this.cache.json.get(DATA_ASSET_KEYS.CARDS)]
     this.$shownCards = []
     this.$currentPage = 0
+    this.$maxPage = Math.floor(this.$allLoadedCards.length / 10)
 
     this.$createLibrary()
     this.$changePage(1)
-    // this.$createCards()
   }
 
   private $changePage(page: 1 | -1) {
     this.$currentPage += page
+
+    if (this.$currentPage <= 0) {
+      this.$currentPage = 1
+    }
+
+    if (this.$currentPage > this.$maxPage) {
+      this.$currentPage = this.$maxPage
+    }
 
     if (this.$shownCards.length > 0) {
       for (const card of this.$shownCards) {
@@ -40,7 +47,7 @@ export class LibraryScene extends BaseScene {
     }
 
     for (let i = 0; i < 10; i++) {
-      const card = new LibraryCard(this, this.$allLoadedCards[i])
+      const card = new LibraryCard(this, this.$allLoadedCards[i + this.$currentPage])
       card.setSide('FRONT')
       card.removeHover()
       card.container.setScale(0.7)
@@ -64,9 +71,6 @@ export class LibraryScene extends BaseScene {
 
       this.$shownCards.push(card)
     }
-
-    CARD_CONFIG.SIZE.HEIGHT
-    CARD_CONFIG.SIZE.WIDTH
   }
 
   private $createLibrary() {
@@ -107,7 +111,7 @@ export class LibraryScene extends BaseScene {
         0x000000
       )
       .setInteractive({ cursor: 'pointer' })
-      .on('pointerdown', () => {})
+      .on('pointerdown', () => this.$changePage(-1))
       .setOrigin(0)
 
     // Add right arrow
@@ -120,7 +124,7 @@ export class LibraryScene extends BaseScene {
         0x000000
       )
       .setInteractive({ cursor: 'pointer' })
-      .on('pointerdown', () => {})
+      .on('pointerdown', () => this.$changePage(1))
       .setOrigin(0)
 
     // Add card list
