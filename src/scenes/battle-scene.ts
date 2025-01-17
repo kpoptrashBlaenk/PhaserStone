@@ -311,7 +311,7 @@ export class BattleScene extends BaseScene {
     this.$stateMachine.addState({
       name: STATES.GAME_END,
       onEnter: () => {
-        // GAME ENDS, GO HOME
+        // GAME END
       },
     })
 

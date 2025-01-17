@@ -58,12 +58,18 @@ export class BattleManager {
       dead.forEach((card: Card | Hero) => {
         this.$animationManager.death(card, () => {
           card instanceof Card ? this.$board[card.player].cardDies(card) : this.$gameEnd(card.player)
-          this.$stateMachine.setState(STATES.GAME_END)
         })
       })
     }
 
-    setTimeout(() => callback?.(), ANIMATION_CONFIG.DEATH.DURATION)
+    setTimeout(() => {
+      // If hero died don't callback
+      if (dead.some((item) => item instanceof Hero)) {
+        return
+      }
+
+      callback?.()
+    }, ANIMATION_CONFIG.DEATH.DURATION)
   }
 
   public handleBattle(attacker: Card | Hero, cancelButton?: Phaser.GameObjects.Image): void {
@@ -85,6 +91,12 @@ export class BattleManager {
     }
 
     this.$battle()
+  }
+
+  private $gameEnd(loserPlayer: TargetKeys): void {
+    const message = loserPlayer === TARGET_KEYS.PLAYER ? 'You lost!' : 'You won!'
+
+    this.$animationManager.gameEnd(message, () => this.$stateMachine.setState(STATES.GAME_END))
   }
 
   private $checkValidTarget(target: Card | Hero): boolean {
@@ -121,11 +133,5 @@ export class BattleManager {
         this.$stateMachine.setState(STATES.CHECK_BOARD, () => this.$stateMachine.setState(state))
       }
     )
-  }
-
-  private $gameEnd(loserPlayer: TargetKeys): void {
-    const message = loserPlayer === TARGET_KEYS.PLAYER ? 'You lost!' : 'You won!'
-
-    this.$animationManager.gameEnd(message)
   }
 }
