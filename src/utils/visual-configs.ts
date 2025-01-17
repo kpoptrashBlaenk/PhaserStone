@@ -5,6 +5,7 @@ export const BASIC_CARD_FONT_STYLE = Object.freeze({
   fontFamily: FONT_KEYS.HEARTHSTONE,
   stroke: '#000000',
   strokeThickness: 4,
+  color: '#FFFFFF',
 })
 
 // CARD
