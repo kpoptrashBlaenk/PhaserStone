@@ -204,6 +204,11 @@ export class LibraryScene extends BaseScene {
     this.$startButton = this.add
       .rectangle(0, this.$libraryList.y + this.$libraryList.height + padding / 2, 200, 50, 0xff0000)
       .setOrigin(0)
+      .on('pointerup', () => {
+        this.scene.start(SCENE_KEYS.BATTLE_SCENE, {
+          deck: this.$selectedCards.map((card) => card.getData('card').card),
+        })
+      })
     this.$startButton.setX(this.$libraryList.x + this.$libraryList.width - this.$startButton.width)
 
     const startButtonText = this.add
@@ -267,12 +272,7 @@ export class LibraryScene extends BaseScene {
     this.$cardCounter.setText(`${this.$selectedCards.length}/30`)
 
     this.$selectedCards.length === 30
-      ? this.$startButton
-          .setInteractive({ cursor: 'pointer' })
-          .on('pointerup', () => {
-            this.scene.start(SCENE_KEYS.BATTLE_SCENE)
-          })
-          .setFillStyle(0x00ff00)
+      ? this.$startButton.setInteractive({ cursor: 'pointer' }).setFillStyle(0x00ff00)
       : this.$startButton.disableInteractive().setFillStyle(0xff0000)
   }
 }

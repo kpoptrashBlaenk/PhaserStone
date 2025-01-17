@@ -1,3 +1,4 @@
+import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { EnemyAI } from '../common/enemy-ai'
 import { Board } from '../objects/board'
 import { Card } from '../objects/card'
@@ -10,6 +11,7 @@ import { TurnButton } from '../ui/turn-button'
 import { AnimationManager } from '../utils/animation-manager'
 import { BattleManager } from '../utils/battle-manager'
 import { BattlecryManager } from '../utils/battlecry-manager'
+import { CardData } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
@@ -22,6 +24,7 @@ export class BattleScene extends BaseScene {
   private $stateMachine: StateMachine
   private $enemyAI: EnemyAI
   private $turnButton: TurnButton
+  private $selectedCards: CardData[]
 
   private $deck: { PLAYER: Deck; ENEMY: Deck } = { PLAYER: null as any, ENEMY: null as any }
   private $hand: { PLAYER: Hand; ENEMY: Hand } = { PLAYER: null as any, ENEMY: null as any }
@@ -33,6 +36,12 @@ export class BattleScene extends BaseScene {
     super({
       key: SCENE_KEYS.BATTLE_SCENE,
     })
+  }
+
+  init(data: { deck: CardData[] }): void {
+    super.init()
+
+    this.$selectedCards = data.deck
   }
 
   update(): void {
@@ -56,10 +65,22 @@ export class BattleScene extends BaseScene {
 
     // Turn Button
     this.$turnButton = new TurnButton(this, this.$stateMachine)
-
+    
     // Deck
-    this.$deck.PLAYER = new Deck(this, this.$stateMachine, TARGET_KEYS.PLAYER, this.$animationManager)
-    this.$deck.ENEMY = new Deck(this, this.$stateMachine, TARGET_KEYS.ENEMY, this.$animationManager)
+    this.$deck.PLAYER = new Deck(
+      this,
+      this.$stateMachine,
+      TARGET_KEYS.PLAYER,
+      this.$animationManager,
+      this.$selectedCards
+    )
+    this.$deck.ENEMY = new Deck(
+      this,
+      this.$stateMachine,
+      TARGET_KEYS.ENEMY,
+      this.$animationManager,
+      this.cache.json.get(DATA_ASSET_KEYS.CARDS)
+    )
 
     // Hand
     this.$hand.PLAYER = new Hand(this, TARGET_KEYS.PLAYER, this.$animationManager)
