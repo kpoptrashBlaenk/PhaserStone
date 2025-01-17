@@ -13,6 +13,8 @@ export class LibraryScene extends BaseScene {
   private $maxPage: number
   private $libraryPage: Phaser.GameObjects.Rectangle
   private $libraryList: Phaser.GameObjects.Container
+  private $cardCounter: Phaser.GameObjects.Text
+  private $startButton: Phaser.GameObjects.Rectangle
 
   constructor() {
     super({
@@ -178,7 +180,7 @@ export class LibraryScene extends BaseScene {
       )
       .setOrigin(0)
 
-    const cardCounterText = this.add
+    this.$cardCounter = this.add
       .text(
         cardCounterBackground.x + cardCounterBackground.width / 2,
         cardCounterBackground.y + cardCounterBackground.height / 2,
@@ -186,23 +188,28 @@ export class LibraryScene extends BaseScene {
         {
           ...CARD_CONFIG.FONT_STYLE.NUMBER,
           color: '#000000',
-          strokeThickness: 2,
+          strokeThickness: 0,
         }
       )
       .setOrigin(0.5)
 
     // Add start button
-    const startButton = this.add
-      .rectangle(0, this.$libraryList.y + this.$libraryList.height + padding / 2, 200, 50, 0x0000ff)
+    this.$startButton = this.add
+      .rectangle(0, this.$libraryList.y + this.$libraryList.height + padding / 2, 200, 50, 0xff0000)
       .setOrigin(0)
-    startButton.setX(this.$libraryList.x + this.$libraryList.width - startButton.width)
+    this.$startButton.setX(this.$libraryList.x + this.$libraryList.width - this.$startButton.width)
 
     const startButtonText = this.add
-      .text(startButton.x + startButton.width / 2, startButton.y + startButton.height / 2, 'Start', {
-        ...CARD_CONFIG.FONT_STYLE.NUMBER,
-        color: '#000000',
-        strokeThickness: 2,
-      })
+      .text(
+        this.$startButton.x + this.$startButton.width / 2,
+        this.$startButton.y + this.$startButton.height / 2,
+        'Start',
+        {
+          ...CARD_CONFIG.FONT_STYLE.NUMBER,
+          color: '#000000',
+          strokeThickness: 2,
+        }
+      )
       .setOrigin(0.5)
   }
 
@@ -226,7 +233,9 @@ export class LibraryScene extends BaseScene {
 
     this.$selectedCards.push(container)
     this.$libraryList.add(container)
+
     this.$resizeList()
+    this.$updateCardCounter()
   }
 
   private $resizeList(): void {
@@ -238,5 +247,18 @@ export class LibraryScene extends BaseScene {
         i++
       }
     })
+  }
+
+  private $updateCardCounter(): void {
+    this.$cardCounter.setText(`${this.$selectedCards.length}/30`)
+
+    this.$selectedCards.length === 30
+      ? this.$startButton
+          .setInteractive({ cursor: 'pointer' })
+          .on('pointerup', () => {
+            this.scene.start(SCENE_KEYS.BATTLE_SCENE)
+          })
+          .setFillStyle(0x00ff00)
+      : this.$startButton.disableInteractive().setFillStyle(0xff0000)
   }
 }
