@@ -25,6 +25,7 @@ export class LibraryScene extends BaseScene {
   create() {
     super.create()
     this.$allLoadedCards = [...this.cache.json.get(DATA_ASSET_KEYS.CARDS)]
+
     this.$shownCards = []
     this.$selectedCards = []
     this.$currentPage = 0
@@ -75,7 +76,7 @@ export class LibraryScene extends BaseScene {
       this.$cardClick(card)
 
       this.$selectedCards.forEach((selectedCard) => {
-        if (selectedCard.getData('card').name === card.card.name) {
+        if (selectedCard.getData('card').card.name === card.card.name) {
           this.$cardSelected(card)
         }
       })

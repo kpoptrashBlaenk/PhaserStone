@@ -1,4 +1,5 @@
 const path = require('path')
+require('dotenv').config()
 
 module.exports = {
   mode: 'development',
@@ -13,7 +14,15 @@ module.exports = {
       directory: path.join(__dirname, 'public'),
     },
     compress: true,
-    port: 9000,
+    port: process.env.PHASER_PORT || 9000,
+    proxy: [
+      {
+        context: ['/api'],
+        target: `http://localhost:${process.env.API_PORT || 3000}`,
+        changeOrigin: true,
+        pathRewrite: { '^/api': '' },
+      },
+    ],
   },
   resolve: {
     extensions: ['.ts', '.js'],

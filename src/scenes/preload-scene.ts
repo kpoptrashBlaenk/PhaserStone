@@ -36,7 +36,7 @@ export class PreloadScene extends BaseScene {
     this.load.image(EFFECT_ASSET_KEYS.Z, `${effectAssetsPath}/z.png`)
 
     // JSON Data
-    this.load.json(DATA_ASSET_KEYS.CARDS, `${jsonAssetPath}/cards.json`)
+    this.load.json(DATA_ASSET_KEYS.CARDS, `http://localhost:3000/api/cards`)
 
     // Loading Screen
     this.$createLoading()
