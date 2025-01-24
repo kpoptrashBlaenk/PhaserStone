@@ -16,7 +16,6 @@ export class PreloadScene extends BaseScene {
     const cardAssetsPath = 'assets/images/cards'
     const boardAssetsPath = 'assets/images/ui'
     const effectAssetsPath = 'assets/images/effects'
-    const jsonAssetPath = 'assets/data'
 
     // UI Assets
     this.load.image(UI_ASSET_KEYS.BOARD, `${boardAssetsPath}/board.webp`)
@@ -36,19 +35,17 @@ export class PreloadScene extends BaseScene {
     this.load.image(EFFECT_ASSET_KEYS.Z, `${effectAssetsPath}/z.png`)
 
     // JSON Data
-    this.load.json(DATA_ASSET_KEYS.CARDS, `${jsonAssetPath}/cards.json`)
+    const apiUrl = (process.env.HOST || `http://localhost:${process.env.PORT}`) + '/api/cards'
+    this.load.json(DATA_ASSET_KEYS.CARDS, apiUrl)
 
     // Loading Screen
-    // this.createLoading()
-    this.load.on('complete', () => {
-      this.scene.start(SCENE_KEYS.LIBRARY_SCENE)
-    })
+    this.$createLoading()
   }
 
   /**
    * Loading Screen showing assets loading, then click to start
    */
-  private createLoading(): void {
+  private $createLoading(): void {
     // Text
     const loadingText = this.add
       .text(this.scale.width / 2, this.scale.height / 2, 'Loading...', LOADING_SCREEN.TITLE)
@@ -95,7 +92,7 @@ export class PreloadScene extends BaseScene {
       percentageText.destroy()
       loadingText.setText('Click to Start').setAlpha(LOADING_SCREEN.ANIMATION.ORIGIN_ALPHA)
       this.input.once('pointerdown', () => {
-        this.scene.start(SCENE_KEYS.BATTLE_SCENE)
+        this.scene.start(SCENE_KEYS.LIBRARY_SCENE)
       })
     })
 

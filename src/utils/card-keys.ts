@@ -11,9 +11,15 @@ export const BATTLECRY_TARGET = Object.freeze({
 })
 export type BattlecryTarget = keyof typeof BATTLECRY_TARGET
 
+export const BATTLECRY_TYPE = Object.freeze({
+  HEAL: 'HEAL',
+  DAMAGE: 'DAMAGE',
+})
+export type BattlecryType = keyof typeof BATTLECRY_TYPE
+
 export type Battlecry = {
   target: BattlecryTarget
-  type: string
+  type: BattlecryType
   amount: number
 }
 
