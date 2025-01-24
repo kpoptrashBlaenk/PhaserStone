@@ -1,40 +1,33 @@
 const path = require('path')
+const Dotenv = require('dotenv-webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('dotenv').config()
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: './src/main.ts',
   output: {
     filename: 'bundle.min.js',
-    path: path.resolve(__dirname, 'public'),
-    clean: true,
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    compress: true,
-    port: process.env.PHASER_PORT || 9000,
-    proxy: [
-      {
-        context: ['/api'],
-        target: `${process.env.HOST}` || `http://localhost:${process.env.API_PORT}`,
-        changeOrigin: true,
-        pathRewrite: { '^/api': '' },
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
+    path: path.resolve(__dirname, 'dist'),
+    clean: false,
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
         use: 'ts-loader',
-        exclude: [/node_modules/, /Legacy/],
+        exclude: [/node_modules/],
       },
     ],
   },
-  plugins: [new Dotenv()],
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new Dotenv(),
+  ],
 }

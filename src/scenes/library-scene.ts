@@ -262,7 +262,7 @@ export class LibraryScene extends BaseScene {
     let i = 0
 
     this.$libraryList.iterate((child: Phaser.GameObjects.Container) => {
-      if (child instanceof Phaser.GameObjects.Container) {
+      if (child.type === 'Container') {
         child.setPosition(0, i * (child.height + 5))
         i++
       }

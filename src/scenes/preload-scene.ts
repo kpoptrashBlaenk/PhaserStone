@@ -16,7 +16,6 @@ export class PreloadScene extends BaseScene {
     const cardAssetsPath = 'assets/images/cards'
     const boardAssetsPath = 'assets/images/ui'
     const effectAssetsPath = 'assets/images/effects'
-    const jsonAssetPath = 'assets/data'
 
     // UI Assets
     this.load.image(UI_ASSET_KEYS.BOARD, `${boardAssetsPath}/board.webp`)
@@ -36,7 +35,7 @@ export class PreloadScene extends BaseScene {
     this.load.image(EFFECT_ASSET_KEYS.Z, `${effectAssetsPath}/z.png`)
 
     // JSON Data
-    const apiUrl = (`${process.env.HOST}` || `http://localhost:${process.env.API_PORT}`) + '/api/cards'
+    const apiUrl = (process.env.HOST || `http://localhost:${process.env.PORT}`) + '/api/cards'
     this.load.json(DATA_ASSET_KEYS.CARDS, apiUrl)
 
     // Loading Screen
