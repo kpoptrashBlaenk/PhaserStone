@@ -39,13 +39,13 @@ export class PreloadScene extends BaseScene {
     this.load.json(DATA_ASSET_KEYS.CARDS, `${jsonAssetPath}/cards.json`)
 
     // Loading Screen
-    this.createLoading()
+    this.$createLoading()
   }
 
   /**
    * Loading Screen showing assets loading, then click to start
    */
-  private createLoading(): void {
+  private $createLoading(): void {
     // Text
     const loadingText = this.add
       .text(this.scale.width / 2, this.scale.height / 2, 'Loading...', LOADING_SCREEN.TITLE)
