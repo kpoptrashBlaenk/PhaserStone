@@ -18,7 +18,7 @@ module.exports = {
     proxy: [
       {
         context: ['/api'],
-        target: `http://localhost:${process.env.API_PORT || 3000}`,
+        target: `${process.env.HOST}` || `http://localhost:${process.env.API_PORT}`,
         changeOrigin: true,
         pathRewrite: { '^/api': '' },
       },
@@ -36,4 +36,5 @@ module.exports = {
       },
     ],
   },
+  plugins: [new Dotenv()],
 }

@@ -10,9 +10,11 @@ const PORT = process.env.API_PORT || 3000
 
 app.use(express.json())
 
+const corsOrigin = `${process.env.HOST}` || `http://localhost:${process.env.PHASER_PORT}`
+
 app.use(
   cors({
-    origin: `http://localhost:${process.env.PHASER_PORT}`,
+    origin: corsOrigin,
     methods: 'GET,POST,PUT,DELETE',
   })
 )
@@ -54,5 +56,5 @@ app.get('/api/cards', async (req: any, res: any) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`)
+  console.log(`API running on ` + `${process.env.HOST}` || `http://localhost:${process.env.PHASER_PORT}`)
 })
