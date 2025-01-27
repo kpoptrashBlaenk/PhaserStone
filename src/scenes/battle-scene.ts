@@ -116,7 +116,7 @@ export class BattleScene extends BaseScene {
       this.$hero
     )
 
-    this.$enemyAI = new EnemyAI(this, this.$stateMachine, this.$hand.ENEMY, this.$board, this.$hero)
+    this.$enemyAI = new EnemyAI(this.$stateMachine, this.$hand.ENEMY, this.$board, this.$hero)
 
     this.$turnButton.changeTurn()
   }

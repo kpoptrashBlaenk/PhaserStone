@@ -12,7 +12,6 @@ export class EnemyAI {
   private $hero: { PLAYER: Hero; ENEMY: Hero }
 
   constructor(
-    scene: Phaser.Scene,
     stateMachine: StateMachine,
     hand: Hand,
     board: { PLAYER: Board; ENEMY: Board },

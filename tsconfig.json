@@ -1,23 +1,19 @@
 {
-  "ts-node": {
-    // these options are overrides used only by ts-node
-    // same as the --compilerOptions flag and the TS_NODE_COMPILER_OPTIONS environment variable
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  },
   "compilerOptions": {
     "target": "es5",
     "module": "ESNext",
-    "lib": ["es6"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "moduleResolution": "node", // Ensure module resolution is set to node
-    "strictPropertyInitialization": false
+    "lib": ["es6"], // Specifies library files to include during compilation
+    "strict": true, // Enables all strict type-checking options
+    "strictPropertyInitialization": false, // No need to initialize variable in constructor
+    "esModuleInterop": true, // Ensures compatibility with CommonJS modules
+    "outDir": "./dist", // Output directory for compiled files
+    "moduleResolution": "node"
   },
-  "include": ["public/**/*.ts", "src/**/*.ts", "server.ts"],
-  "exclude": ["node_modules", "Legacy"]
+  "include": ["src/**/*.ts", "server.ts"],
+  "exclude": ["node_modules", "Legacy"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }
