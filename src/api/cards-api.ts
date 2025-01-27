@@ -1,5 +1,5 @@
 import express from 'express'
-import pool from '../database/database'
+import pool from '../database/database.config'
 
 const router = express.Router()
 

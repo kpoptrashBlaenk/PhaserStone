@@ -9,7 +9,7 @@ module.exports = {
   output: {
     filename: 'bundle.min.js',
     path: path.resolve(__dirname, 'dist'),
-    clean: false,
+    clean: true,
   },
   module: {
     rules: [
@@ -25,7 +25,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './public/index.html',
       filename: 'index.html',
     }),
     new Dotenv(),

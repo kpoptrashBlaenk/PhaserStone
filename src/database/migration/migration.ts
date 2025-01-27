@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import pool from '../database'
+import pool from '../database.config'
 
 const executeMigration = async () => {
   const filePath = path.join(__dirname, 'db-migration.sql')

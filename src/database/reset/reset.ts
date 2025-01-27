@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import pool from '../database'
+import pool from '../database.config'
 
 const executeReset = async () => {
   const filePath = path.join(__dirname, 'db-reset.sql')

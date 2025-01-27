@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import pool from '../database'
+import pool from '../database.config'
 
 const executeInsertion = async () => {
   const filePathBase = path.join(__dirname, 'db-insertion-base.sql')
