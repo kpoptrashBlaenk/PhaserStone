@@ -65,7 +65,7 @@ export class BattleScene extends BaseScene {
 
     // Turn Button
     this.$turnButton = new TurnButton(this, this.$stateMachine)
-    
+
     // Deck
     this.$deck.PLAYER = new Deck(
       this,

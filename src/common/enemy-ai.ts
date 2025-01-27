@@ -6,7 +6,6 @@ import { STATES } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 
 export class EnemyAI {
-  private $scene: Phaser.Scene
   private $stateMachine: StateMachine
   private $hand: Hand
   private $board: { PLAYER: Board; ENEMY: Board }
@@ -19,7 +18,6 @@ export class EnemyAI {
     board: { PLAYER: Board; ENEMY: Board },
     hero: { PLAYER: Hero; ENEMY: Hero }
   ) {
-    this.$scene = scene
     this.$stateMachine = stateMachine
     this.$hand = hand
     this.$board = board

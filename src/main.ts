@@ -1,10 +1,10 @@
 import Phaser from 'phaser'
-import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin.js'
 import BBCodeTextPlugin from 'phaser3-rex-plugins/plugins/bbcodetext-plugin.js'
+import OutlinePipelinePlugin from 'phaser3-rex-plugins/plugins/outlinepipeline-plugin.js'
 import { BattleScene } from './scenes/battle-scene'
+import { LibraryScene } from './scenes/library-scene'
 import { PreloadScene } from './scenes/preload-scene'
 import { SCENE_KEYS } from './scenes/scene-keys'
-import { LibraryScene } from './scenes/library-scene'
 import { loadFonts } from './utils/webfontloader'
 
 function launchGame(): void {
