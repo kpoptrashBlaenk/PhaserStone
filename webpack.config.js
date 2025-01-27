@@ -11,6 +11,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   module: {
     rules: [
       {
@@ -19,9 +22,6 @@ module.exports = {
         exclude: [/node_modules/],
       },
     ],
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
   },
   plugins: [
     new HtmlWebpackPlugin({
