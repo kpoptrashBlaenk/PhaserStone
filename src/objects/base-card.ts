@@ -43,9 +43,6 @@ export class BaseCard {
     return this._cardData
   }
 
-  /**
-   * Show front or back
-   */
   public setSide(side: 'FRONT' | 'BACK'): void {
     if (side === 'FRONT') {
       this._cardPortraitImage.setTexture(this._cardData.assetKey)
@@ -74,9 +71,6 @@ export class BaseCard {
     this._cardPortraitImage.setScale(1)
   }
 
-  /**
-   * Creates card objects
-   */
   private $createCard(): Phaser.GameObjects.Container {
     // Image
     this._cardTemplateImage = this._scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
@@ -154,9 +148,6 @@ export class BaseCard {
     return container
   }
 
-  /**
-   * Creates preview objects
-   */
   private $createPreview(): Phaser.GameObjects.Container {
     // Image
     const template = this._scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
@@ -226,9 +217,6 @@ export class BaseCard {
     return container
   }
 
-  /**
-   * Resize card and card objects
-   */
   private $resizeCard(container: Phaser.GameObjects.Container): void {
     container.setScale(CARD_CONFIG.SIZE.SCALE)
     container.setSize(
@@ -237,10 +225,6 @@ export class BaseCard {
     )
   }
 
-  /**
-   * Pointerover: Create preview to right top
-   * Pointerout: Destroy hover
-   */
   private $createHover(): void {
     this._cardTemplateImage.on('pointerover', () => {
       this._previewContainer = this.$createPreview()

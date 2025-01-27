@@ -26,9 +26,6 @@ export class Mana {
     return this.$currentMana
   }
 
-  /**
-   * Add a mana crystal if max mana is not reached
-   */
   public addMana(): void {
     if (this.$currentMana >= this.$manaLimit) {
       return
@@ -45,9 +42,6 @@ export class Mana {
     }
   }
 
-  /**
-   * Recalculate mana then change mana crystals color
-   */
   public useMana(usedMana: number): void {
     if (usedMana === 0) {
       return
@@ -67,9 +61,6 @@ export class Mana {
     }
   }
 
-  /**
-   * Refreshes mana to max
-   */
   public refreshMana(): void {
     this.$currentMana = this.$maxMana
     this.$manaText.setText(`${this.$currentMana}/${this.$maxMana}`)
@@ -79,9 +70,6 @@ export class Mana {
     })
   }
 
-  /**
-   * Create mana, player will have mana crystals
-   */
   private $createMana(): void {
     this.$manaText = this.$scene.add
       .text(

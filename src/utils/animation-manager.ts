@@ -94,9 +94,7 @@ export class AnimationManager {
     })
   }
 
-  /**
-   * Animates opponent playing card from hand
-   */
+
   public animateCardFromHandToBoard(card: Card, callback?: () => void): void {
     card.setSide('FRONT')
     this.$scene.tweens.add({

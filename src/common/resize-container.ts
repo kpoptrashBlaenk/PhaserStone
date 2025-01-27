@@ -1,8 +1,5 @@
 import { RESIZE_CONFIG } from '../utils/visual-configs'
 
-/**
- * Resize the container
- */
 export function resizeContainer(container: Phaser.GameObjects.Container, callback?: () => void): void {
   const padding = 10
   let newWidth = 0
@@ -28,9 +25,6 @@ export function resizeContainer(container: Phaser.GameObjects.Container, callbac
   callback?.()
 }
 
-/**
- * Reposition the container
- */
 export function repositionContainer(
   container: Phaser.GameObjects.Container,
   x: number,

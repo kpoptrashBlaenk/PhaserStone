@@ -23,16 +23,10 @@ export class EnemyAI {
     this.$hero = hero
   }
 
-  /**
-   * Public Opponent Turn Handler
-   */
   public opponentTurn(): void {
     this.$playHand()
   }
 
-  /**
-   * Play cards from hand if none, go to board
-   */
   private $playHand(): void {
     let playableHand: Card[] = []
     const hand = this.$hand.cards
@@ -44,7 +38,7 @@ export class EnemyAI {
       }
     })
 
-    // If playable cards, play, if not attack (board)
+    // If playable cards, play, if not, attack (board)
     if (playableHand.length > 0) {
       const card = playableHand[Math.floor(Math.random() * playableHand.length)]
       this.$stateMachine.setState(STATES.ENEMY_PLAY_CARD, card)

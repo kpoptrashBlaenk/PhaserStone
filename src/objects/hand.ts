@@ -21,16 +21,10 @@ export class Hand {
     this.$resizeContainer()
   }
 
-  /**
-   * Return all cards in hand
-   */
   public get cards(): Card[] {
     return this.$hand
   }
 
-  /**
-   * Add card to hand and resize
-   */
   public drawCard(card: Card | undefined, callback?: () => void): void {
     if (!card) {
       callback?.()
@@ -65,16 +59,10 @@ export class Hand {
     this.$animationManager.animateCardFromHandToBoard(card, removeFromHand)
   }
 
-  /**
-   * Create empty hand container
-   */
   private $createContainer(): void {
     this.$handContainer = this.$scene.add.container().setDepth(1)
   }
 
-  /**
-   * Resize container and reposition it
-   */
   private $resizeContainer(): void {
     resizeContainer(this.$handContainer, () =>
       repositionContainer(

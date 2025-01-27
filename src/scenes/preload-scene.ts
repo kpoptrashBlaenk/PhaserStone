@@ -42,9 +42,6 @@ export class PreloadScene extends BaseScene {
     this.$createLoading()
   }
 
-  /**
-   * Loading Screen showing assets loading, then click to start
-   */
   private $createLoading(): void {
     // Text
     const loadingText = this.add

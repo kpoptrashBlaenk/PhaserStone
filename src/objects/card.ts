@@ -93,9 +93,6 @@ export class Card extends BaseCard {
     }
   }
 
-  /**
-   * Set interactions for context
-   */
   public setContext(context: 'HAND' | 'BOARD'): void {
     this._cardTemplateImage.removeListener('pointerup')
 
@@ -111,9 +108,6 @@ export class Card extends BaseCard {
     }
   }
 
-  /**
-   * Mark or remove mark if this is a valid target
-   */
   public setTarget(targeted: boolean): void {
     if (targeted) {
       this._cardTemplateImage.setTint(0xff0000)
@@ -128,9 +122,6 @@ export class Card extends BaseCard {
     }
   }
 
-  /**
-   * Pointerup: If not dragging -> drag. If dragging -> Check if on board -> Return to hand | Play card
-   */
   private $addClickHand(): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
       // Player Turn

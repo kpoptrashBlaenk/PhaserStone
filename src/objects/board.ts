@@ -29,9 +29,6 @@ export class Board {
     this.$boardContainer.depth = value
   }
 
-  /**
-   * Play card
-   */
   public playCard(card: Card, callback?: () => void): void {
     if (!card) {
       callback?.()
@@ -46,9 +43,6 @@ export class Board {
     })
   }
 
-  /**
-   * Remove cardUI and card from board
-   */
   public cardDies(card: Card, callback?: () => void): void {
     const index = this.$board.findIndex((boardCard) => boardCard === card)
     this.$board.splice(index, 1)
@@ -57,16 +51,10 @@ export class Board {
     this.$resizeContainer(callback)
   }
 
-  /**
-   * Create empty board container
-   */
   private $createContainer(): void {
     this.$boardContainer = this.$scene.add.container()
   }
 
-  /**
-   * Resize container and reposition it
-   */
   private $resizeContainer(callback?: () => void): void {
     resizeContainer(this.$boardContainer, () =>
       repositionContainer(

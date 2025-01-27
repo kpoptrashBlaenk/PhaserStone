@@ -18,9 +18,6 @@ export class TurnButton {
     this.$createTurnButton()
   }
 
-  /**
-   * Change turn depending on player
-   */
   public changeTurn(): void {
     if (this.$currentTurn === TARGET_KEYS.PLAYER) {
       this.$stateMachine.setState(STATES.PLAYER_TURN_END)
@@ -41,9 +38,6 @@ export class TurnButton {
     this.$stateMachine.setState(STATES.PLAYER_TURN_START)
   }
 
-  /**
-   * Create turn button
-   */
   private $createTurnButton(): void {
     this.$button = this.$scene.add.rectangle(
       BUTTON_CONFIG.X,
@@ -67,9 +61,6 @@ export class TurnButton {
     })
   }
 
-  /**
-   * Create Your Turn Message
-   */
   private $createTurnMessage(): void {
     this.$turnMessage = this.$scene.add
       .text(this.$scene.scale.width / 2, this.$scene.scale.height / 2, 'Your Turn', {
@@ -92,9 +83,6 @@ export class TurnButton {
       .setDepth(10)
   }
 
-  /**
-   * Show Your Turn Message, happens only when players turn
-   */
   private $showTurnMessage(): void {
     this.$scene.tweens.add({
       targets: this.$turnMessage,

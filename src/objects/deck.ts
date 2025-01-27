@@ -42,9 +42,6 @@ export class Deck {
     })
   }
 
-  /**
-   * Remove card and flip
-   */
   public drawCard(callback?: (card: Card | undefined) => void): Card | undefined {
     const drawnCard = this.$deck.pop()
     if (!drawnCard) {
@@ -63,9 +60,6 @@ export class Deck {
     callback?.(drawnCard)
   }
 
-  /**
-   * Create card classes for each card in deck
-   */
   private $createDeck(): void {
     const deck = []
     const allCards = [...this.$allCards]
@@ -86,9 +80,6 @@ export class Deck {
     this.$deck = deck
   }
 
-  /**
-   * Shuffle deck
-   */
   private $shuffle(): void {
     for (let i = this.$deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
@@ -96,9 +87,6 @@ export class Deck {
     }
   }
 
-  /**
-   * Create deck ui
-   */
   private $createContainer(): void {
     this.$deckContainer = this.$scene.add.container(
       DECK_CONFIG.POSITION.X,
