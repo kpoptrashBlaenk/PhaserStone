@@ -1,7 +1,7 @@
 import { UI_ASSET_KEYS } from '../assets/asset-keys'
 import { setOutline } from '../common/outline'
 import { colorStat } from '../common/stats-change'
-import { MAX_HEALTH } from '../utils/configs'
+import { HERO_ATTACK, MAX_HEALTH } from '../utils/configs'
 import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { CARD_CONFIG, HERO_CONFIG } from '../utils/visual-configs'
@@ -31,7 +31,7 @@ export class Hero {
     this.$attacked = false
 
     this.$createHero()
-    this.setAttack(0)
+    this.setAttack(HERO_ATTACK)
 
     this.$addClick()
   }
