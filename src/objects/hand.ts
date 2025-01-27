@@ -1,5 +1,5 @@
 import { repositionContainer, resizeContainer } from '../common/resize-container'
-import { AnimationManager } from '../utils/animation-manager'
+import { AnimationManager } from '../managers/animation-manager'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { CARD_CONFIG } from '../utils/visual-configs'
 import { Card } from './card'

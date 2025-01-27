@@ -3,9 +3,9 @@ import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
 import { AnimationManager } from './animation-manager'
-import { STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from './keys'
-import { StateMachine } from './state-machine'
-import { ANIMATION_CONFIG } from './visual-configs'
+import { STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
+import { StateMachine } from '../utils/state-machine'
+import { ANIMATION_CONFIG } from '../utils/visual-configs'
 
 export class BattleManager {
   private $scene: Phaser.Scene

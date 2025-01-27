@@ -3,9 +3,9 @@ import { Board } from '../objects/board'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
 import { AnimationManager } from './animation-manager'
-import { Battlecry, BattlecryTarget } from './card-keys'
-import { STATES, TARGET_KEYS, WARNING_KEYS } from './keys'
-import { StateMachine } from './state-machine'
+import { Battlecry, BattlecryTarget } from '../utils/card-keys'
+import { STATES, TARGET_KEYS, WARNING_KEYS } from '../utils/keys'
+import { StateMachine } from '../utils/state-machine'
 
 export class BattlecryManager {
   private $scene: Phaser.Scene

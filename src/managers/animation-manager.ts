@@ -3,7 +3,7 @@ import { FONT_KEYS } from '../assets/font-keys'
 import { Card } from '../objects/card'
 import { Hero } from '../objects/hero'
 import { SCENE_KEYS } from '../scenes/scene-keys'
-import { ANIMATION_CONFIG, BOARD_CONFIG, BUTTON_CONFIG, CARD_CONFIG } from './visual-configs'
+import { ANIMATION_CONFIG, BOARD_CONFIG, BUTTON_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
 
 export class AnimationManager {
   private $scene: Phaser.Scene
@@ -93,7 +93,6 @@ export class AnimationManager {
       onComplete: callback,
     })
   }
-
 
   public animateCardFromHandToBoard(card: Card, callback?: () => void): void {
     card.setSide('FRONT')

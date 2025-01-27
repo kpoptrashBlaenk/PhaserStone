@@ -1,4 +1,4 @@
-import { AnimationManager } from '../utils/animation-manager'
+import { AnimationManager } from '../managers/animation-manager'
 import { CardData } from '../utils/card-keys'
 import { IdCounter } from '../utils/id-counter'
 import { TARGET_KEYS, TargetKeys } from '../utils/keys'
