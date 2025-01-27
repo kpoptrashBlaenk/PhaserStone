@@ -14,14 +14,23 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "dependencies": {
+    "express": "^4.21.2",
+    "dotenv": "^16.4.7",
+    "pg": "^8.13.1",
+    "phaser": "^3.87.0",
+    "phaser3-rex-plugins": "^1.80.12",
+    "webfontloader": "^1.6.28"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/eslint": "^9.6.1",
-    "@types/eslint-scope": "^3.7.7",
+    "@types/express": "^4.17.21",
     "@types/pg": "^8.11.10",
     "@types/webfontloader": "^1.6.38",
     "@types/webpack": "^5.28.5",
     "@types/webpack-dev-server": "^4.7.1",
+    "@types/eslint": "^9.6.1",
+    "@types/eslint-scope": "^3.7.7",
     "cors": "^2.8.5",
     "dotenv-webpack": "^8.1.0",
     "html-webpack-plugin": "^5.6.3",
@@ -30,15 +39,6 @@
     "typescript": "^5.7.3",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
-  },
-  "dependencies": {
-    "@types/express": "^4.17.21",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "pg": "^8.13.1",
-    "phaser": "^3.87.0",
-    "phaser3-rex-plugins": "^1.80.12",
-    "webfontloader": "^1.6.28"
   },
   "prettier": {
     "semi": false,
