@@ -1,7 +1,7 @@
-import express from 'express'
+import express, { Router } from 'express'
 import pool from '../database/database.config'
 
-const router = express.Router()
+const router: Router = express.Router()
 
 router.get('/', async (req, res) => {
   try {

@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000
 
 app.use(express.json())
 
-const corsOrigin = (process.env.DB_EXTERNAL_HOST || `http://localhost:${process.env.PORT}`) + '/'
+const corsOrigin = (process.env.HOST || `http://localhost:${process.env.PORT}`) + '/'
 
 app.use(
   cors({
@@ -28,5 +28,5 @@ app.use('/api/cards', cardsApiRoute)
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`API running on ` + (process.env.DB_EXTERNAL_HOST || `http://localhost:${process.env.PORT}`))
+  console.log(`API running on ` + (process.env.HOST || `http://localhost:${process.env.PORT}`))
 })

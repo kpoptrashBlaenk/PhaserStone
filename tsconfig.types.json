@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "ESNext",
+      "lib": ["es6", "DOM"], // Specifies library files to include during compilation
+      "strict": true, // Enables all strict type-checking options
+      "strictPropertyInitialization": false, // No need to initialize variable in constructor
+      "esModuleInterop": true, // Ensures compatibility with CommonJS modules
+      "outFile": "src/types/index.d.ts",
+      "declaration": true, // Generate .d.ts files,
+      "emitDeclarationOnly": true, // Outputs only .d.ts and no .js,
+      "skipLibCheck": true,
+      "moduleResolution": "node",
+    },
+    "include": ["src/**/*.ts", "server.ts"],
+    "exclude": ["node_modules", "Legacy", "src/types/index.d.ts"],
+    "ts-node": {
+      "compilerOptions": {
+        "module": "commonjs"
+      }
+    }
+  }
+  
