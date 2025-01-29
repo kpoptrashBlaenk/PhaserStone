@@ -2,6 +2,11 @@ import path from 'path'
 import fs from 'fs'
 import pool from '../database.config'
 
+/**
+ * npm run insert
+ *
+ * Insertion of a base set of data into the database
+ */
 const executeInsertion = async () => {
   const filePathBase = path.join(__dirname, 'db-insertion-base.sql')
   const sqlBase = fs.readFileSync(filePathBase, 'utf-8')
