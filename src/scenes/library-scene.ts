@@ -5,6 +5,11 @@ import { CARD_CONFIG } from '../utils/visual-configs'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
+/**
+ * LibraryScene extends {@link BaseScene}
+ *
+ * This scene shows all cards available and lets the user choose cards to use in the players deck.
+ */
 export class LibraryScene extends BaseScene {
   private $allLoadedCards: CardData[]
   private $shownCards: LibraryCard[]
@@ -35,19 +40,28 @@ export class LibraryScene extends BaseScene {
     this.$changePage(1)
   }
 
+  /**
+   * When page changes, delete all {@link LibraryCard}s and place new ones.
+   *
+   * @param page 1 for next and -1 for previous page
+   * @returns
+   */
   private $changePage(page: 1 | -1): void {
+    // If page = 0 or if page = max, stay on the same page
     if (this.$currentPage + page <= 0 || this.$currentPage + page > this.$maxPage) {
       return
     }
 
     this.$currentPage += page
 
+    // Delete all shown cards
     if (this.$shownCards.length > 0) {
       for (const card of this.$shownCards) {
         card.container.destroy(true)
       }
     }
 
+    // Create the new 10 cards and order them in the library
     for (let i = 0; i < 10; i++) {
       const card = new LibraryCard(this, this.$allLoadedCards[i + 10 * (this.$currentPage - 1)])
       card.setSide('FRONT')
@@ -73,8 +87,10 @@ export class LibraryScene extends BaseScene {
 
       this.$shownCards.push(card)
 
+      // Add click to card
       this.$cardClick(card)
 
+      // Attach the card name to the container for each card
       this.$selectedCards.forEach((selectedCard) => {
         if (selectedCard.getData('card').card.name === card.card.name) {
           this.$cardSelected(card)
@@ -83,6 +99,11 @@ export class LibraryScene extends BaseScene {
     }
   }
 
+  /**
+   * OnClick: Add to invoke {@link $addSelectedCard()} and {@link $cardSelected()}
+   *
+   * @param card {@link LibraryCard} to add the click to
+   */
   private $cardClick(card: LibraryCard): void {
     card.template.on('pointerdown', () => {
       this.$addSelectedCard(card)
@@ -91,6 +112,11 @@ export class LibraryScene extends BaseScene {
     })
   }
 
+  /**
+   * Tint the card portrait and disable interactivity.
+   * 
+   * @param card Selected {@link LibraryCard}
+   */
   private $cardSelected(card: LibraryCard): void {
     card.portrait.setTint(0x808080)
     card.template.setTint(0x808080)
@@ -99,6 +125,11 @@ export class LibraryScene extends BaseScene {
     this.input.setDefaultCursor('default')
   }
 
+  /**
+   * Reset card portrait tint and enable interactivity.
+   * 
+   * @param card Unselected {@link LibraryCard}
+   */
   private $cardUnselected(card: LibraryCard): void {
     card.portrait.setTint(0xffffff)
     card.template.setTint(0xffffff)
@@ -106,6 +137,9 @@ export class LibraryScene extends BaseScene {
     card.template.setInteractive()
   }
 
+  /**
+   * Create the whole library interface with all its objects.
+   */
   private $createLibrary(): void {
     const sceneWidth = this.scale.width
     const sceneHeight = this.scale.height
@@ -205,6 +239,7 @@ export class LibraryScene extends BaseScene {
     this.$startButton = this.add
       .rectangle(0, this.$libraryList.y + this.$libraryList.height + padding / 2, 200, 50, 0xff0000)
       .setOrigin(0)
+      // OnClick: Start BattleScene and pass all selected cards as data
       .on('pointerup', () => {
         this.scene.start(SCENE_KEYS.BATTLE_SCENE, {
           deck: this.$selectedCards.map((card) => card.getData('card').card),
@@ -226,6 +261,11 @@ export class LibraryScene extends BaseScene {
       .setOrigin(0.5)
   }
 
+  /**
+   * Create a rectangle with name and insert into the deck list that removes itself when clicked
+   *
+   * @param card Card to add into deck
+   */
   private $addSelectedCard(card: LibraryCard): void {
     const padding = 5
     const height = (this.$libraryList.height - padding * 29) / 30
@@ -243,6 +283,7 @@ export class LibraryScene extends BaseScene {
 
     const container = this.add.container(0, 0, [rectangle, name]).setSize(rectangle.width, rectangle.height)
     container.setData('card', card)
+    // OnClick: Unselected the card and destroy the container then resize the deck list
     container.setInteractive({ cursor: 'pointer' }).on('pointerdown', () => {
       this.$selectedCards = this.$selectedCards.filter((selectedCard) => selectedCard !== container)
       this.$cardUnselected(container.getData('card'))
@@ -258,6 +299,9 @@ export class LibraryScene extends BaseScene {
     this.$updateCardCounter()
   }
 
+  /**
+   * Reorder deck list.
+   */
   private $resizeList(): void {
     let i = 0
 
@@ -269,6 +313,9 @@ export class LibraryScene extends BaseScene {
     })
   }
 
+  /**
+   * Update the counter of selected cards and check if 30 cards are selected or not.
+   */
   private $updateCardCounter(): void {
     this.$cardCounter.setText(`${this.$selectedCards.length}/30`)
 
