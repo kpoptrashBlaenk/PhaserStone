@@ -5,4 +5,7 @@ export const SCENE_KEYS = Object.freeze({
   LIBRARY_SCENE: 'LIBRARY_SCENE',
 })
 
+/**
+ * Scene key used when instancing a {@link Phaser.Scene}
+ */
 export type SceneKeys = keyof typeof SCENE_KEYS
