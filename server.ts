@@ -20,11 +20,19 @@ app.use(
   })
 )
 
+// Default game
 app.use('/', express.static(path.join(__dirname, 'dist')))
 
+// Assets
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')))
 
+// Api for cards
 app.use('/api/cards', cardsApiRoute)
+
+// // Fallback: Default game
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+})
 
 // Start the server
 app.listen(PORT, () => {
