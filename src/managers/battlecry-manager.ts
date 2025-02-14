@@ -7,6 +7,9 @@ import { Battlecry, BattlecryTarget } from '../utils/card-keys'
 import { STATES, TARGET_KEYS, WARNING_KEYS } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 
+/**
+ * The BattlecryManager class handles battlecries
+ */
 export class BattlecryManager {
   private $scene: Phaser.Scene
   private $stateMachine: StateMachine
@@ -16,7 +19,6 @@ export class BattlecryManager {
   private $source: Card
   private $effect: Battlecry
   private $targetType: BattlecryTarget
-  private $target: Card | Hero
   private $callback?: () => void // Usually play the card
   private $fallback?: () => void
 
@@ -34,6 +36,13 @@ export class BattlecryManager {
     this.$hero = hero
   }
 
+  /**
+   * Set battlecry choose target or target chosen depending on battlecry target value
+   *
+   * @param card {@link Card} with battlecry
+   * @param callback Usually playCard()
+   * @param fallback Usually remove cancel button and return card to hand
+   */
   public handleBattlecry(card: Card, callback?: () => void, fallback?: () => void): void {
     this.$source = card
 
@@ -110,13 +119,16 @@ export class BattlecryManager {
     callback?.()
   }
 
+  /**
+   * Check target validity and then do {@link $dealDamage} or {@link $healHealth} depending on {@link $effect}s type
+   *
+   * @param target Targeted {@link Card} or {@link Hero}
+   */
   public targetChosen(target: Card | Hero): void {
     if (!this.$checkValidTarget(target)) {
       this.$fallback?.()
       return
     }
-
-    this.$target = target
 
     if (this.$effect?.type === 'DAMAGE') {
       this.$dealDamage(target)
@@ -129,6 +141,12 @@ export class BattlecryManager {
     }
   }
 
+  /**
+   * Check if target is valid, if not show warning message
+   *
+   * @param target Targeted {@link Card} or {@link Hero}
+   * @returns If target is valid
+   */
   private $checkValidTarget(target: Card | Hero): boolean {
     const targetType = this.$targetType
 
@@ -165,11 +183,15 @@ export class BattlecryManager {
     }
 
     // Exhaust
-    console.error(`[BattlecryManager:$checkValidTarget] -> No target with type ${targetType}`)
     warningMessage(this.$scene, WARNING_KEYS.NOT_VALID_TARGET)
     return false
   }
 
+  /**
+   * Deal damage to the target by using animation managers battlecryDamage()
+   *
+   * @param target Targeted {@link Card} or {@link Hero}
+   */
   private $dealDamage(target: Card | Hero): void {
     this.$animationManager.battlecryDamage(
       this.$source,
@@ -182,6 +204,11 @@ export class BattlecryManager {
     )
   }
 
+  /**
+   * Heal health to the target by using animation managers battlecryHeal()
+   *
+   * @param target Targeted {@link Card} or {@link Hero}
+   */
   private $healHealth(target: Card | Hero): void {
     this.$animationManager.battlecryHeal(
       this.$source,
