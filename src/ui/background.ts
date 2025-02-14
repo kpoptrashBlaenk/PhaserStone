@@ -1,6 +1,9 @@
 import Phaser from 'phaser'
 import { UI_ASSET_KEYS } from '../assets/asset-keys'
 
+/**
+ * The Background class handles the background of BattleScene
+ */
 export class Background {
   private $scene: Phaser.Scene
   private $background: Phaser.GameObjects.Image
