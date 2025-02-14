@@ -4,6 +4,9 @@ import { colorStat } from '../common/stats-change'
 import { CardData } from '../utils/card-keys'
 import { CARD_CONFIG } from '../utils/visual-configs'
 
+/**
+ * Base class for Cards, which includes the card's visual objects
+ */
 export class BaseCard {
   protected _scene: Phaser.Scene
   protected _cardData: CardData
@@ -20,30 +23,50 @@ export class BaseCard {
 
   constructor(scene: Phaser.Scene, cardData: CardData) {
     this._scene = scene
+    // Create copy of card data to not change and keep the origin
     this._cardData = { ...cardData }
     this._originalData = Object.freeze({ ...cardData })
 
+    // Create card and resize it
     this._cardContainer = this.$createCard()
     this.$resizeCard(this._cardContainer)
   }
 
+  /**
+   * Return the card container
+   */
   public get container(): Phaser.GameObjects.Container {
     return this._cardContainer
   }
 
+  /**
+   * Return the card portrait image
+   */
   public get portrait(): Phaser.GameObjects.Image {
     return this._cardPortraitImage
   }
 
+  /**
+   * Return the card template image
+   */
   public get template(): Phaser.GameObjects.Image {
     return this._cardTemplateImage
   }
 
+  /**
+   * Return the card's modifiable data
+   */
   public get card(): CardData {
     return this._cardData
   }
 
+  /**
+   * Set card's shown side, to remove/add {@link $createHover()}, etc.
+   *
+   * @param side Front or backside
+   */
   public setSide(side: 'FRONT' | 'BACK'): void {
+    // Front side makes all objects visible and adds hover
     if (side === 'FRONT') {
       this._cardPortraitImage.setTexture(this._cardData.assetKey)
       this._cardCostText.setAlpha(1)
@@ -61,6 +84,9 @@ export class BaseCard {
       return
     }
 
+    /**
+     * Back side makes all objects invisible and removes hover
+     */
     this._cardPortraitImage.setTexture(CARD_ASSETS_KEYS.CARD_BACK)
     this._cardCostText.setAlpha(0)
     this._cardAttackText.setAlpha(0)
@@ -71,6 +97,10 @@ export class BaseCard {
     this._cardPortraitImage.setScale(1)
   }
 
+  /**
+   * Create template image, portrait image, cost object, attack object, attack object, health object, name object, body text object
+   * and places them into the container
+   */
   private $createCard(): Phaser.GameObjects.Container {
     // Image
     this._cardTemplateImage = this._scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
@@ -148,6 +178,10 @@ export class BaseCard {
     return container
   }
 
+  /**
+   * Create template image, portrait image, cost object, attack object, attack object, health object, name object, body text object
+   * and places them into the container to make it bigger and place it at the right top as preview
+   */
   private $createPreview(): Phaser.GameObjects.Container {
     // Image
     const template = this._scene.add.image(0, 0, CARD_ASSETS_KEYS.TEMPLATE)
@@ -217,6 +251,11 @@ export class BaseCard {
     return container
   }
 
+  /**
+   * Size card size to deck/hand/board size
+   * 
+   * @param container The card container
+   */
   private $resizeCard(container: Phaser.GameObjects.Container): void {
     container.setScale(CARD_CONFIG.SIZE.SCALE)
     container.setSize(
@@ -225,6 +264,9 @@ export class BaseCard {
     )
   }
 
+  /**
+   * Add hover, which does {@link $createPreview()}
+   */
   private $createHover(): void {
     this._cardTemplateImage.on('pointerover', () => {
       this._previewContainer = this.$createPreview()

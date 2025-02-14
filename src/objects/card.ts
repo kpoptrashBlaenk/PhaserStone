@@ -8,6 +8,9 @@ import { StateMachine } from '../utils/state-machine'
 import { ANIMATION_CONFIG, BOARD_CONFIG } from '../utils/visual-configs'
 import { BaseCard } from './base-card'
 
+/**
+ * Card class for BattleScene, which is used in Deck, Hand and Board
+ */
 export class Card extends BaseCard {
   private $stateMachine: StateMachine
   private $owner: TargetKeys
@@ -24,41 +27,63 @@ export class Card extends BaseCard {
     owner: TargetKeys,
     id: string
   ) {
+    // Create card
     super(scene, cardData)
+    // By default all cards are not playable/hasn't attack/summoning sick
     this.$stateMachine = stateMachine
     this.$owner = owner
     this.$playable = false
     this.$attacked = false
     this.$sick = true
 
-    this._cardContainer.setData('id', id) // avoid that card containers are the same
-    this._cardData.trackId = id // avoid that cards are the same
+    // Id for each card to difference them
+    this._cardContainer.setData('id', id)
+    this._cardData.trackId = id
   }
 
+  /**
+   * Return original stats of card
+   */
   public get original(): CardData {
     return this._originalData
   }
 
+  /**
+   * Return owner of card
+   */
   public get player(): TargetKeys {
     return this.$owner
   }
 
+  /**
+   * Return if card is playable
+   */
   public get isPlayable(): boolean {
     return this.$playable
   }
 
+  /**
+   * Return if card can attack (hasn't attacked & is not sick)
+   */
   public get canAttack(): boolean {
     return !this.$attacked && !this.$sick
   }
 
+  /**
+   * Set attacked and then outline
+   * 
+   * @param attacked If card has attacked this turn or not
+   */
   public setAttacked(attacked: boolean) {
     this.$attacked = attacked
     this.setOutline(this.canAttack)
   }
 
+  /**
+   * Set sick, outline and {@link $sickAnimation()}
+   */
   public setSick(sick: boolean) {
     this.$sick = sick
-    this.setOutline(this.canAttack)
 
     if (sick) {
       this.$sickParticles = this.$sickAnimation()
@@ -67,32 +92,58 @@ export class Card extends BaseCard {
       return
     }
 
+    this.setOutline(this.canAttack)
     this.$sickParticles?.destroy()
   }
 
+  /**
+   * Set playable and outline
+   * 
+   * @param activatable If card can be played
+   */
   public setPlayable(activatable: boolean): void {
     this.$playable = activatable
     this.setOutline(activatable)
   }
 
+  /**
+   * Set health and {@link colorStat()}
+   * 
+   * @param newHealth New health of card
+   */
   public setHealth(newHealth: number): void {
     this._cardData.health = newHealth
 
     colorStat(this._cardData.health, this._originalData.health, this._cardHealthText)
   }
 
+  /**
+   * Set attack and {@link colorStat()}
+   * 
+   * @param newAttack New attack of card
+   */
   public setAttack(newAttack: number): void {
     this._cardData.attack = newAttack
 
     colorStat(this._cardData.attack, this._originalData.attack, this._cardAttackText)
   }
 
+  /**
+   * Sets {@link setOutline()} around the template image
+   * 
+   * @param value If set or destroy outline
+   */
   public setOutline(value: boolean): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
       setOutline(this._scene, value, this._cardTemplateImage)
     }
   }
 
+  /**
+   * Remove click then call {@link $addClickHand()}/{@link $addClickBoard()} and {@link $handCard()}/{@link $boardCard()}
+   * 
+   * @param context If card is in hand or board
+   */
   public setContext(context: 'HAND' | 'BOARD'): void {
     this._cardTemplateImage.removeListener('pointerup')
 
@@ -108,6 +159,11 @@ export class Card extends BaseCard {
     }
   }
 
+  /**
+   * Set tint of card to normal or red
+   * 
+   * @param targeted If card is targeted or not
+   */
   public setTarget(targeted: boolean): void {
     if (targeted) {
       this._cardTemplateImage.setTint(0xff0000)
@@ -116,12 +172,22 @@ export class Card extends BaseCard {
     }
   }
 
+  /**
+   * Destroy the preview container to avoid it being stuck since there was no manual pointer out
+   */
   public die(): void {
     if (this._previewContainer) {
       this._previewContainer.destroy()
     }
   }
 
+  /**
+   * If player's turn and card is playable, drag card and remember original position
+   * 
+   * If player's turn and card is being dragged play it if on board
+   * 
+   * If battlecry then choose battlecry target, then battlecry manager and add cancel button, if valid target cancel if not play
+   */
   private $addClickHand(): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
       // Player Turn
@@ -226,10 +292,20 @@ export class Card extends BaseCard {
     }
   }
 
+  /**
+   * Set playable to false
+   */
   private $handCard(): void {
     this.$playable = false
   }
 
+  /**
+   * If battlecry choose target then set target chosen
+   * 
+   * If battle choose target and cancel exists then remove cancel and set player turn, if no cancel then set target chosen
+   * 
+   * If player turn and can attack then set player choose target
+   */
   private $addClickBoard(): void {
     this._cardTemplateImage.on('pointerup', () => {
       if (this.$stateMachine.currentStateName === STATES.PLAYER_BATTLECRY_CHOOSE_TARGET) {
@@ -266,11 +342,17 @@ export class Card extends BaseCard {
     })
   }
 
+  /**
+   * {@link setAttacked()} to false and {@link setSick} to true as default
+   */
   private $boardCard(): void {
     this.setAttacked(false)
     this.setSick(true)
   }
 
+  /**
+   * Add a cancel button to cancel action
+   */
   private $addCancel(): void {
     this.$cancelButton = this._scene.add
       .image(this._cardTemplateImage.width / 2, this._cardTemplateImage.height / 2, UI_ASSET_KEYS.CANCEL)
@@ -281,12 +363,18 @@ export class Card extends BaseCard {
     this._cardContainer.add(this.$cancelButton)
   }
 
+  /**
+   * Remove cancel button
+   */
   private $removeCancel(): void {
     if (this.$cancelButton) {
       this.$cancelButton.destroy()
     }
   }
 
+  /**
+   * Create and return sickness zzz animation
+   */
   private $sickAnimation(): Phaser.GameObjects.Particles.ParticleEmitter {
     return this._scene.add.particles(
       ANIMATION_CONFIG.SICK.POSITION.X,
