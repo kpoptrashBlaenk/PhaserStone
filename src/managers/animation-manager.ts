@@ -5,6 +5,9 @@ import { Hero } from '../objects/hero'
 import { SCENE_KEYS } from '../scenes/scene-keys'
 import { ANIMATION_CONFIG, BOARD_CONFIG, BUTTON_CONFIG, CARD_CONFIG } from '../utils/visual-configs'
 
+/**
+ * The AnimationManager handles all animations
+ */
 export class AnimationManager {
   private $scene: Phaser.Scene
 
@@ -12,6 +15,12 @@ export class AnimationManager {
     this.$scene = scene
   }
 
+  /**
+   * Set scaleX to 0 then set side to 'FRONT' then scaleX to default, then callback
+   *
+   * @param card {@link Card} to be flipped
+   * @param callback Usually hands drawCard()
+   */
   public flipCard(card: Card, callback?: () => void) {
     this.$scene.tweens.add({
       targets: card.container,
@@ -31,12 +40,14 @@ export class AnimationManager {
     })
   }
 
-  public addToContainer(
-    card: Card,
-    container: Phaser.GameObjects.Container,
-    resizer: () => void,
-    callback?: () => void
-  ) {
+  /**
+   * Move card to container then resize
+   *
+   * @param card {@link Card} to add to container
+   * @param container Container to add card to
+   * @param resizer The container resize function
+   */
+  public addToContainer(card: Card, container: Phaser.GameObjects.Container, resizer: () => void) {
     const originalPositionX = card.container.getBounds().x
     const originalPositionY = card.container.getBounds().y
 
@@ -48,7 +59,7 @@ export class AnimationManager {
 
     card.container.setPosition(originalPositionX - container.x, originalPositionY - container.y)
 
-    // Moving to Hand Animation
+    // Moving to container animation
     this.$scene.tweens.add({
       targets: card.container,
       x: newPositionX,
@@ -57,11 +68,16 @@ export class AnimationManager {
       ease: ANIMATION_CONFIG.HAND.DECK_TO_HAND.EASE,
       onComplete: () => {
         resizer()
-        callback?.()
       },
     })
   }
 
+  /**
+   * Set tint of card then shrink it
+   *
+   * @param card {@link Card} or {@link Hero} that dies
+   * @param callback Usually boards cardDies()
+   */
   public death(card: Card | Hero, callback?: () => void): void {
     card.portrait.setTint(ANIMATION_CONFIG.DEATH.TINT)
 
@@ -94,6 +110,12 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * Set side to 'FRONT' to gain hovers then move it board
+   *
+   * @param card {@link Card} to move to board
+   * @param callback Usually removeFromHand() within hands playCard()
+   */
   public animateCardFromHandToBoard(card: Card, callback?: () => void): void {
     card.setSide('FRONT')
     this.$scene.tweens.add({
@@ -112,6 +134,14 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * Create and move projectile effect then impact, {@link $flashEffect()}, {@link $particleEffect()} and callback
+   *
+   * @param source {@link Card} with the battlecry
+   * @param target {@link Card} or {@link Hero} that is targeted
+   * @param impact What happens on impact, usually set health
+   * @param callback Usually play card to execute after animations
+   */
   public battlecryDamage(
     source: Card,
     target: Card | Hero,
@@ -142,6 +172,14 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * Create and move projectile effect then impact and callback
+   *
+   * @param source {@link Card} with the battlecry
+   * @param target {@link Card} or {@link Hero} that is targeted
+   * @param impact What happens on impact, usually set health
+   * @param callback Usually play card to execute after animations
+   */
   public battlecryHeal(source: Card, target: Card | Hero, impact?: () => void, callback?: () => void) {
     const sourceBounds = source.container.getBounds()
     const targetBounds = target.container.getBounds()
@@ -165,6 +203,15 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * {@link $stepBack()}, then {@link $crash()},
+   * then damageHandler(), {@link $flashEffect()}, {@link $particleEffect()}, {@link $shake()} and {@link $attackReturn()}
+   *
+   * @param attacker {@link Card} or {@link Hero} that attacks
+   * @param defender {@link Card} or {@link Hero} that is being attacked
+   * @param damageHandler The damage handler defined in battle managers $battle()
+   * @param callback Usually check board state
+   */
   public attack(
     attacker: Card | Hero,
     defender: Card | Hero,
@@ -195,6 +242,12 @@ export class AnimationManager {
     )
   }
 
+  /**
+   * Create end game message and animate it, then give end game button to return to library
+   *
+   * @param message Game end message
+   * @param callback Set game end state
+   */
   public gameEnd(message: string, callback?: () => void): void {
     const sceneWidth = this.$scene.scale.width
     const sceneHeight = this.$scene.scale.height
@@ -272,6 +325,11 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * Flash effect for damage taken
+   *
+   * @param container Container to fash
+   */
   private $flashEffect(container: Phaser.GameObjects.Container): void {
     this.$scene.tweens.add({
       targets: container,
@@ -282,6 +340,11 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * Spark particles for damage taken
+   *
+   * @param container Container to add particles to
+   */
   private $particleEffect(container: Phaser.GameObjects.Container): void {
     this.$scene.add.particles(
       container.getBounds().centerX,
@@ -297,6 +360,9 @@ export class AnimationManager {
     )
   }
 
+  /**
+   * Shake effect for crashes in battle
+   */
   private $shake(): void {
     this.$scene.cameras.main.shake(
       ANIMATION_CONFIG.DAMAGE.CAMERA.DURATION,
@@ -304,6 +370,13 @@ export class AnimationManager {
     )
   }
 
+  /**
+   * Take step back to then crash into target
+   *
+   * @param attacker {@link Card} or {@link Hero} that attacks
+   * @param start Starting coordinates
+   * @param callback Usually {@link $crash()}
+   */
   private $stepBack(attacker: Card | Hero, start: { x: number; y: number }, callback?: () => void): void {
     this.$scene.tweens.add({
       targets: attacker.container,
@@ -314,6 +387,13 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * Crash into the target
+   * 
+   * @param container {@link Card} or {@link Hero} that attacks
+   * @param target {@link Card} or {@link Hero} that is being attacked
+   * @param callback Damage taken animations and return
+   */
   private $crash(
     container: Phaser.GameObjects.Container,
     target: { x: number; y: number },
@@ -329,6 +409,13 @@ export class AnimationManager {
     })
   }
 
+  /**
+   * Return to original position after attack
+   * 
+   * @param container {@link Card} or {@link Hero} that attacked
+   * @param position Original position
+   * @param callback Usually check board state
+   */
   private $attackReturn(
     container: Phaser.GameObjects.Container,
     position: { x: number; y: number },

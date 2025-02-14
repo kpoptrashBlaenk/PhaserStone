@@ -3,6 +3,11 @@ import { LOADING_SCREEN } from '../utils/visual-configs'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
+/**
+ * PreloadScene extends {@link BaseScene}
+ *
+ * This scene preloads all assets, including the cards data from the database, during a loading screen.
+ */
 export class PreloadScene extends BaseScene {
   constructor() {
     super({
@@ -42,6 +47,9 @@ export class PreloadScene extends BaseScene {
     this.$createLoading()
   }
 
+  /**
+   * Creates a Text and a Loading Bar that loads during the preload.
+   */
   private $createLoading(): void {
     // Text
     const loadingText = this.add

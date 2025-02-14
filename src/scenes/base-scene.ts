@@ -1,7 +1,16 @@
 import Phaser from 'phaser'
 import { SceneKeys } from './scene-keys'
 
+/**
+ * BaseScene extends {@link Phaser.Scene}.
+ * 
+ * Extend this scene to log when scenes are invoked and to handle Scene Resume and Cleanup
+ */
 export class BaseScene extends Phaser.Scene {
+  /**
+   * 
+   * @param {SceneKeys} config Select a key from {@link SceneKeys}
+   */
   constructor(config: { key: SceneKeys }) {
     super(config)
     if (this.constructor === BaseScene) {
@@ -9,6 +18,10 @@ export class BaseScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * 
+   * @param data Pass any data to this scene
+   */
   init(data?: any) {
     this.log(`[${this.constructor.name}:init] invoked`)
     this.log(`[${this.constructor.name}:init] data provided: ${JSON.stringify(data)}`)
@@ -37,6 +50,10 @@ export class BaseScene extends Phaser.Scene {
     this.events.off(Phaser.Scenes.Events.RESUME, this.handleSceneResume, this)
   }
 
+  /**
+   * 
+   * @param message Message in form of `[${this.constructor.name}:MethodName] invoked`
+   */
   protected log(message: string) {
     console.log(`%c${message}`, 'color: orange; background: black;')
   }

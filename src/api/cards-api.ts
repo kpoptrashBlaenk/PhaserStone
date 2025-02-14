@@ -1,8 +1,14 @@
 import express, { Router } from 'express'
 import pool from '../database/database.config'
+import { CardData } from '../utils/card-keys'
 
 const router: Router = express.Router()
 
+/**
+ * GET
+ *
+ * Return all cards in form of {@link CardData}
+ */
 router.get('/', async (req, res) => {
   try {
     const query = `

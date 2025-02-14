@@ -4,6 +4,9 @@ import { TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { CARD_CONFIG } from '../utils/visual-configs'
 import { Card } from './card'
 
+/**
+ * The Hand class handles all hand related actions
+ */
 export class Hand {
   private $scene: Phaser.Scene
   private $owner: TargetKeys
@@ -21,10 +24,19 @@ export class Hand {
     this.$resizeContainer()
   }
 
+  /**
+   * Return {@link $hand}
+   */
   public get cards(): Card[] {
     return this.$hand
   }
 
+  /**
+   * If card then add to hand and set cards context then {@link $resizeContainer()} with callback as callback
+   * 
+   * @param card Card drawn
+   * @param callback Usually setting state to player or enemy turn
+   */
   public drawCard(card: Card | undefined, callback?: () => void): void {
     if (!card) {
       callback?.()
@@ -40,6 +52,13 @@ export class Hand {
     })
   }
 
+  /**
+   * Remove card from hand then animate it to board
+   * 
+   * @param card Card played
+   * @param callback This is afterPlayCallback() in battle scene that also has a callback as param
+   * @returns 
+   */
   public playCard(card: Card, callback?: (callback: () => void) => void): void {
     // Prepare remove card from hand function
     const removeFromHand = () => {
@@ -59,10 +78,16 @@ export class Hand {
     this.$animationManager.animateCardFromHandToBoard(card, removeFromHand)
   }
 
+  /**
+   * Create {@link $handContainer}
+   */
   private $createContainer(): void {
     this.$handContainer = this.$scene.add.container().setDepth(1)
   }
 
+  /**
+   * {@link resizeContainer()} with {@link repositionContainer()} as callback
+   */
   private $resizeContainer(): void {
     resizeContainer(this.$handContainer, () =>
       repositionContainer(

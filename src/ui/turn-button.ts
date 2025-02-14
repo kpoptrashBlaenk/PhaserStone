@@ -3,6 +3,9 @@ import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { BUTTON_CONFIG } from '../utils/visual-configs'
 
+/**
+ * The TurnButton class handles all turn related actions
+ */
 export class TurnButton {
   private $scene: Phaser.Scene
   private $stateMachine: StateMachine
@@ -18,6 +21,9 @@ export class TurnButton {
     this.$createTurnButton()
   }
 
+  /**
+   * Change turn depending on current turn and {@link $createTurnMessage()} (default is player's turn)
+   */
   public changeTurn(): void {
     if (this.$currentTurn === TARGET_KEYS.PLAYER) {
       this.$stateMachine.setState(STATES.PLAYER_TURN_END)
@@ -38,6 +44,9 @@ export class TurnButton {
     this.$stateMachine.setState(STATES.PLAYER_TURN_START)
   }
 
+  /**
+   * Create turn button and set it interactive to set turn states
+   */
   private $createTurnButton(): void {
     this.$button = this.$scene.add.rectangle(
       BUTTON_CONFIG.X,
@@ -61,6 +70,9 @@ export class TurnButton {
     })
   }
 
+  /**
+   * Create turn message but hide it
+   */
   private $createTurnMessage(): void {
     this.$turnMessage = this.$scene.add
       .text(this.$scene.scale.width / 2, this.$scene.scale.height / 2, 'Your Turn', {
@@ -83,13 +95,18 @@ export class TurnButton {
       .setDepth(10)
   }
 
+  /**
+   * Show turn message and animate it to then hide it
+   */
   private $showTurnMessage(): void {
+    // Show message
     this.$scene.tweens.add({
       targets: this.$turnMessage,
       alpha: { from: 0, to: 1 },
       scale: { from: 0.5, to: 1 },
       ease: 'Back.Out',
       duration: 800,
+      // Hide message
       onComplete: () => {
         this.$scene.tweens.add({
           targets: this.$turnMessage,

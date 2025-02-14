@@ -6,6 +6,9 @@ export class LibraryCard extends BaseCard {
     super(scene, cardData)
   }
 
+  /**
+   * Remove hover effect because useless for library scene
+   */
   public removeHover() {
     this._cardTemplateImage.off('pointerover')
     this._cardTemplateImage.off('pointerout')

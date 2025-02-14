@@ -22,10 +22,16 @@ export class Mana {
     this.$createMana()
   }
 
+  /**
+   * Return {@link $currentMana}
+   */
   public get mana(): number {
     return this.$currentMana
   }
 
+  /**
+   * Add mana and check limit, if player then add mana crystal to {@link $manaContainer}
+   */
   public addMana(): void {
     if (this.$currentMana >= this.$manaLimit) {
       return
@@ -42,6 +48,11 @@ export class Mana {
     }
   }
 
+  /**
+   * Reduce {@link $currentMana} and and set tint for crystals in {@link $manaContainer}
+   * 
+   * @param usedMana Amount of mana used
+   */
   public useMana(usedMana: number): void {
     if (usedMana === 0) {
       return
@@ -61,6 +72,9 @@ export class Mana {
     }
   }
 
+  /**
+   * Set {@link $currentMana} to {@link $maxMana}
+   */
   public refreshMana(): void {
     this.$currentMana = this.$maxMana
     this.$manaText.setText(`${this.$currentMana}/${this.$maxMana}`)
@@ -70,6 +84,9 @@ export class Mana {
     })
   }
 
+  /**
+   * Create {@link $manaText} and {@link $manaContainer}
+   */
   private $createMana(): void {
     this.$manaText = this.$scene.add
       .text(
