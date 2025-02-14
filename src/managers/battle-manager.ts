@@ -7,6 +7,9 @@ import { STATES, TARGET_KEYS, TargetKeys, WARNING_KEYS } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { ANIMATION_CONFIG } from '../utils/visual-configs'
 
+/**
+ * The BattleManager class handles battles
+ */
 export class BattleManager {
   private $scene: Phaser.Scene
   private $stateMachine: StateMachine
@@ -31,6 +34,11 @@ export class BattleManager {
     this.$hero = hero
   }
 
+  /**
+   * Check dead cards and heroes then animate death
+   *
+   * @param callback State after board is checked
+   */
   public checkDead(callback?: () => void): void {
     const dead: (Card | Hero)[] = []
 
@@ -72,6 +80,12 @@ export class BattleManager {
     }, ANIMATION_CONFIG.DEATH.DURATION)
   }
 
+  /**
+   * Set {@link attacker} and remove cancel button
+   *
+   * @param attacker {@link Card} or {@link Hero} that attacks
+   * @param cancelButton The cancel button to handle
+   */
   public handleBattle(attacker: Card | Hero, cancelButton?: Phaser.GameObjects.Image): void {
     this.$attacker = attacker
 
@@ -80,6 +94,11 @@ export class BattleManager {
     }
   }
 
+  /**
+   * Set {@link $defender} and check if target is valid {@link $battle()} if not the callback and set player turn
+   *
+   * @param target {@link Card} or {@link Hero} is being attacked
+   */
   public targetChosen(target: Card | Hero): void {
     this.$defender = target
 
@@ -93,12 +112,23 @@ export class BattleManager {
     this.$battle()
   }
 
+  /**
+   * Show end game message and set game end state
+   *
+   * @param loserPlayer {@link TargetKeys} of player that lost
+   */
   private $gameEnd(loserPlayer: TargetKeys): void {
     const message = loserPlayer === TARGET_KEYS.PLAYER ? 'You lost!' : 'You won!'
 
     this.$animationManager.gameEnd(message, () => this.$stateMachine.setState(STATES.GAME_END))
   }
 
+  /**
+   * Check if target is valid, if not show warning message
+   *
+   * @param target Targeted {@link Card} or {@link Hero}
+   * @returns If target is valid
+   */
   private $checkValidTarget(target: Card | Hero): boolean {
     if (!(this.$attacker.player === target.player)) {
       return true
@@ -108,6 +138,9 @@ export class BattleManager {
     return false
   }
 
+  /**
+   * Call animation managers attack() by passing an damage handler and pass check board state into player/enemy turn state as callback
+   */
   private $battle(): void {
     this.$board[this.$attacker.player].setDepth(1)
     this.$callback?.()
