@@ -1,5 +1,10 @@
 import WebFont from 'webfontloader'
 
+/**
+ * Load custom fonts
+ * 
+ * @param callback Launch game usually
+ */
 export function loadFonts(callback: () => void) {
   WebFont.load({
     custom: {
