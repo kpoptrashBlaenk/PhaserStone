@@ -33,28 +33,28 @@ export class BaseCard {
   }
 
   /**
-   * Return the card container
+   * Return {@link _cardContainer}
    */
   public get container(): Phaser.GameObjects.Container {
     return this._cardContainer
   }
 
   /**
-   * Return the card portrait image
+   * Return {@link _cardPortraitImage}
    */
   public get portrait(): Phaser.GameObjects.Image {
     return this._cardPortraitImage
   }
 
   /**
-   * Return the card template image
+   * Return {@link _cardTemplateImage}
    */
   public get template(): Phaser.GameObjects.Image {
     return this._cardTemplateImage
   }
 
   /**
-   * Return the card's modifiable data
+   * Return the card's modifiable {@link _cardData}
    */
   public get card(): CardData {
     return this._cardData
@@ -98,8 +98,8 @@ export class BaseCard {
   }
 
   /**
-   * Create template image, portrait image, cost object, attack object, attack object, health object, name object, body text object
-   * and places them into the container
+   * Create {@link _cardTemplateImage}, {@link _cardPortraitImage}, {@link _cardCostText}, {@link _cardAttackText},
+   * {@link _cardHealthText}, {@link _cardNameText}, {@link _cardNameText} then place them into {@link _cardContainer}
    */
   private $createCard(): Phaser.GameObjects.Container {
     // Image

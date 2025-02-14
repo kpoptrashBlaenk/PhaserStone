@@ -6,6 +6,9 @@ import { StateMachine } from '../utils/state-machine'
 import { DECK_CONFIG } from '../utils/visual-configs'
 import { Card } from './card'
 
+/**
+ * The Deck class handles deck related actions
+ */
 export class Deck {
   private $scene: Phaser.Scene
   private $stateMachine: StateMachine
@@ -36,12 +39,11 @@ export class Deck {
     this.$createContainer()
   }
 
-  public id() {
-    this.$deck.forEach((element) => {
-      console.log(element.card.trackId)
-    })
-  }
-
+  /**
+   * Return top card from deck, if card then flip animation and callback
+   * 
+   * @param callback Usually draw card method in hand
+   */
   public drawCard(callback?: (card: Card | undefined) => void): Card | undefined {
     const drawnCard = this.$deck.pop()
     if (!drawnCard) {
@@ -60,6 +62,9 @@ export class Deck {
     callback?.(drawnCard)
   }
 
+  /**
+   * Create random deck with {@link $allCards}
+   */
   private $createDeck(): void {
     const deck = []
     const allCards = [...this.$allCards]
@@ -80,6 +85,9 @@ export class Deck {
     this.$deck = deck
   }
 
+  /**
+   * Shuffle {@link $deck}
+   */
   private $shuffle(): void {
     for (let i = this.$deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
@@ -87,6 +95,9 @@ export class Deck {
     }
   }
 
+  /**
+   * Create deck container and place cards with back side on it
+   */
   private $createContainer(): void {
     this.$deckContainer = this.$scene.add.container(
       DECK_CONFIG.POSITION.X,

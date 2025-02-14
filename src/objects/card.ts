@@ -42,21 +42,21 @@ export class Card extends BaseCard {
   }
 
   /**
-   * Return original stats of card
+   * Return {@link _originalData}
    */
   public get original(): CardData {
     return this._originalData
   }
 
   /**
-   * Return owner of card
+   * Return {@link $owner}
    */
   public get player(): TargetKeys {
     return this.$owner
   }
 
   /**
-   * Return if card is playable
+   * Return if card is {@link $playable}
    */
   public get isPlayable(): boolean {
     return this.$playable
@@ -351,7 +351,7 @@ export class Card extends BaseCard {
   }
 
   /**
-   * Add a cancel button to cancel action
+   * Add {@link $cancelButton}
    */
   private $addCancel(): void {
     this.$cancelButton = this._scene.add
@@ -364,7 +364,7 @@ export class Card extends BaseCard {
   }
 
   /**
-   * Remove cancel button
+   * Remove {@link $cancelButton}
    */
   private $removeCancel(): void {
     if (this.$cancelButton) {
