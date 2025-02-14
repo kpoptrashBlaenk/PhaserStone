@@ -17,6 +17,11 @@ import { StateMachine } from '../utils/state-machine'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
 
+/**
+ * BattleScene extends {@link BaseScene}
+ *
+ * This scene handles the all actions in a battle.
+ */
 export class BattleScene extends BaseScene {
   private $animationManager: AnimationManager
   private $battlecryManager: BattlecryManager
@@ -38,6 +43,11 @@ export class BattleScene extends BaseScene {
     })
   }
 
+  /**
+   * Scene initialization with data.
+   *
+   * @param data An array of {@link CardData} that will become the players deck.
+   */
   init(data: { deck: CardData[] }): void {
     super.init()
 
@@ -116,26 +126,44 @@ export class BattleScene extends BaseScene {
       this.$hero
     )
 
+    // Enemy Ai
     this.$enemyAI = new EnemyAI(this.$stateMachine, this.$hand.ENEMY, this.$board, this.$hero)
 
+    // Start first turn
     this.$turnButton.changeTurn()
   }
 
-  private $drawCard(player: TargetKeys, callback?: () => void): void {
+  /**
+   * Player draws a card from deck with {@link Deck.drawCard()} followed by placing it into the hand with {@link Hand.drawCard()} followed by the callback.
+   *
+   * @param player Player to draw card
+   * @param callback Sets state to either {@link STATES.PLAYER_TURN} or {@link STATES.ENEMY_TURN}
+   */
+  private $drawCard(player: TargetKeys, callback: () => void): void {
     this.$deck[player].drawCard((card: Card | undefined) => {
       this.$hand[player].drawCard(card, callback)
     })
   }
 
-  private $playCard(target: TargetKeys, card: Card, callback?: () => void) {
-    const afterPlayCard = (afterCallback?: () => void) => {
+  /**
+   * Play card from hand with {@link Hand.playCard()}
+   *
+   * @param target Player that plays the card
+   * @param card The {@link Card} played
+   * @param callback Sets state to {@link STATES.CHECK_BOARD} then to either {@link STATES.PLAYER_TURN} or {@link STATES.ENEMY_TURN}
+   */
+  private $playCard(target: TargetKeys, card: Card, callback: () => void) {
+    // Use mana then place the card onto the board and execute the afterCallback which removes card from hand and resizes it then set states
+    const afterPlayCard = (afterCallback: () => void) => {
       this.$mana[target].useMana(card.card.cost)
       this.$board[target].playCard(card)
-      afterCallback?.()
-      callback?.()
+      afterCallback()
+      callback()
     }
 
-    this.$hand[target].playCard(card, (playCardCallback?: () => void) => {
+    // Play card from hand and handle battlecry if it's the enemies' turn
+    // playCardCallback is a variable that Hand.playCard() modifies which is then being passed into afterPlayCard()
+    this.$hand[target].playCard(card, (playCardCallback: () => void) => {
       if (target === TARGET_KEYS.ENEMY) {
         if (card.card.battlecry) {
           this.$battlecryManager.handleBattlecry(card, () => afterPlayCard(playCardCallback))
@@ -147,6 +175,12 @@ export class BattleScene extends BaseScene {
     })
   }
 
+  /**
+   * Add a new mana crystal or refresh the mana for selected player.
+   *
+   * @param player Players' {@link Mana} affected
+   * @param context ADD: {@link Mana.addMana()}, REFRESH: {@link Mana.refreshMana()}
+   */
   private $handleMana(player: TargetKeys, context: 'ADD' | 'REFRESH'): void {
     switch (context) {
       case 'ADD':
@@ -159,10 +193,17 @@ export class BattleScene extends BaseScene {
     }
   }
 
+  /**
+   * If a card is playable add an outline and if not, remove it, for reset, remove all outlines.
+   *
+   * @param player Players' {@link Hand} affected
+   * @param context PLAYABLE: Check if {@link Card} playable, RESET: Make all {@link Card} unplayable
+   */
   private $handleHand(player: TargetKeys, context: 'PLAYABLE' | 'RESET'): void {
     switch (context) {
       case 'PLAYABLE':
         this.$hand[player].cards.forEach((card: Card) => {
+          // Check if enough mana or if less than 7 cards on board
           const canBePlayed =
             this.$mana[player].mana >= card.card.cost && this.$board[player].cards.length < 7
           card.setPlayable(canBePlayed)
@@ -176,11 +217,25 @@ export class BattleScene extends BaseScene {
     }
   }
 
+  /**
+   * If a card can attack add an outline and if not, remove it, for reset, remove all outlines.
+   *
+   * @param player Players' {@link Board} affected
+   * @param context ATTACKABLE: Check what {@link Card} and {@link Hero} can attack, RESET: Make all {@link Card} and {@link Hero} not being able to attack
+   */
   private $handleBoard(player: TargetKeys, context: 'RESET' | 'ATTACKABLE'): void {
     const boardCards = this.$board[player].cards
     const hero = this.$hero[player]
 
     switch (context) {
+      case 'ATTACKABLE': // it's more "who can attack then set outline"
+        boardCards.forEach((card: Card) => {
+          card.setOutline(card.canAttack)
+        })
+
+        hero.setOutline(hero.canAttack)
+        break
+
       case 'RESET':
         boardCards.forEach((card: Card) => {
           card.setSick(false)
@@ -195,17 +250,14 @@ export class BattleScene extends BaseScene {
         hero.setAttacked(false)
         hero.setOutline(false)
         break
-
-      case 'ATTACKABLE': // it's more "who can attack then set outline"
-        boardCards.forEach((card: Card) => {
-          card.setOutline(card.canAttack)
-        })
-
-        hero.setOutline(hero.canAttack)
-        break
     }
   }
 
+  /**
+   * Set red tint for targets.
+   *
+   * @param target The targetable characters
+   */
   private $setTargets(target: 'NONE' | 'ANY' | 'ENEMY' | 'FRIENDLY'): void {
     const playerBoard = this.$board.PLAYER.cards
     const enemyBoard = this.$board.ENEMY.cards
@@ -254,8 +306,13 @@ export class BattleScene extends BaseScene {
     }
   }
 
+  /**
+   * Create the big ass state machine
+   */
   private $createStateMachine(): void {
-    // Game Flow States
+    //  ### Game Flow States ###
+
+    // Change turn
     this.$stateMachine.addState({
       name: STATES.TURN_BUTTON,
       onEnter: () => {
@@ -263,6 +320,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Add a mana crystal, Refresh the mana, Set state to PLAYER_DRAW_CARD
     this.$stateMachine.addState({
       name: STATES.PLAYER_TURN_START,
       onEnter: () => {
@@ -272,6 +330,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Add a mana crystal, Refresh the mana, Set state to ENEMY_DRAW_CARD
     this.$stateMachine.addState({
       name: STATES.ENEMY_TURN_START,
       onEnter: () => {
@@ -281,6 +340,8 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Looped State
+    // Check what cards can be played, Check what cards can attack, Reset all targets
     this.$stateMachine.addState({
       name: STATES.PLAYER_TURN,
       onEnter: () => {
@@ -290,9 +351,12 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Looped state
+    // Check what cards can be played, Check what cards can attack, Let EnemyAI handle actions
     this.$stateMachine.addState({
       name: STATES.ENEMY_TURN,
       onEnter: () => {
+        // Delay because enemy is too fast
         setTimeout(() => {
           this.$handleHand(TARGET_KEYS.ENEMY, 'PLAYABLE')
           this.$handleBoard(TARGET_KEYS.ENEMY, 'ATTACKABLE')
@@ -301,6 +365,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Set all cards in hand unplayable, Set all cards on board unable to attack, Set state to ENEMY_TURN_START
     this.$stateMachine.addState({
       name: STATES.PLAYER_TURN_END,
       onEnter: () => {
@@ -311,6 +376,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Set all cards in hand unplayable, Set all cards on board unable to attack, Set state to ENEMY_TURN_START
     this.$stateMachine.addState({
       name: STATES.ENEMY_TURN_END,
       onEnter: () => {
@@ -321,13 +387,15 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Check if cards died, callback is setting the state to either PLAYER_TURN or ENEMY_TURN
     this.$stateMachine.addState({
       name: STATES.CHECK_BOARD,
-      onEnter: (callback?: () => void) => {
+      onEnter: (callback: () => void) => {
         this.$battleManager.checkDead(callback)
       },
     })
 
+    // Game ended
     this.$stateMachine.addState({
       name: STATES.GAME_END,
       onEnter: () => {
@@ -335,7 +403,9 @@ export class BattleScene extends BaseScene {
       },
     })
 
-    // Player States
+    // ### Player States ###
+
+    // Draw a card, Set state to PLAYER_TURN
     this.$stateMachine.addState({
       name: STATES.PLAYER_DRAW_CARD,
       onEnter: () => {
@@ -345,6 +415,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Play passed card, Check board, Set state to PLAYER_TURN
     this.$stateMachine.addState({
       name: STATES.PLAYER_PLAY_CARD,
       onEnter: (card: Card) => {
@@ -356,7 +427,9 @@ export class BattleScene extends BaseScene {
       },
     })
 
-    // Enemy States
+    // ### Enemy States ###
+
+    // Draw a card, Set state to ENEMY_TURN
     this.$stateMachine.addState({
       name: STATES.ENEMY_DRAW_CARD,
       onEnter: () => {
@@ -366,6 +439,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Play passed card, Check board, Set state to ENEMY_TURN
     this.$stateMachine.addState({
       name: STATES.ENEMY_PLAY_CARD,
       onEnter: (card: Card) => {
@@ -377,7 +451,10 @@ export class BattleScene extends BaseScene {
       },
     })
 
-    // Battlecry States
+    // ### Battlecry States ###
+
+    // source: Card, callback: Play card, fallback: Cancel play card
+    // Handle the battlecry
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLECRY,
       onEnter: ({
@@ -393,6 +470,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Set targets tint
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLECRY_CHOOSE_TARGET,
       onEnter: (target: 'NONE' | 'ANY' | 'ENEMY' | 'FRIENDLY') => {
@@ -400,6 +478,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Reset targets, Pass target to BattlecryManager
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLECRY_TARGET_CHOSEN,
       onEnter: (target: Card | Hero) => {
@@ -408,7 +487,9 @@ export class BattleScene extends BaseScene {
       },
     })
 
-    // Battle States
+    // ### Battle States ###
+
+    // Set targets tint then prepare battle manager
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLE_CHOOSE_TARGET,
       onEnter: ({
@@ -423,6 +504,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Remove target tint then handle battle
     this.$stateMachine.addState({
       name: STATES.PLAYER_BATTLE_TARGET_CHOSEN,
       onEnter: (target: Card) => {
@@ -431,6 +513,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Prepare battle manager for enemy
     this.$stateMachine.addState({
       name: STATES.ENEMY_BATTLE_CHOOSE_TARGET,
       onEnter: (card: Card | Hero) => {
@@ -438,6 +521,7 @@ export class BattleScene extends BaseScene {
       },
     })
 
+    // Handle battle for enemy
     this.$stateMachine.addState({
       name: STATES.ENEMY_BATTLE_TARGET_CHOSEN,
       onEnter: (target: Card | Hero) => {
