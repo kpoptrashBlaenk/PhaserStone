@@ -6,6 +6,9 @@ import { STATES, TARGET_KEYS, TargetKeys } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 import { CARD_CONFIG, HERO_CONFIG } from '../utils/visual-configs'
 
+/**
+ * The Hero class is used in BattleScene. There's only one hero per player.
+ */
 export class Hero {
   private $scene: Phaser.Scene
   private $owner: TargetKeys
@@ -36,40 +39,71 @@ export class Hero {
     this.$addClick()
   }
 
+  /**
+   * Return {@link $owner} of hero
+   */
   public get player(): TargetKeys {
     return this.$owner
   }
 
+  /**
+   * Return {@link $heroContainer} of hero
+   */
   public get container(): Phaser.GameObjects.Container {
     return this.$heroContainer
   }
 
+  /**
+   * Return portrait {@link $heroImage} of hero
+   */
   public get portrait(): Phaser.GameObjects.Image {
     return this.$heroImage
   }
 
+  /**
+   * Return {@link $currentHealth} of hero
+   */
   public get health(): number {
     return this.$currentHealth
   }
 
+  /**
+   * Return {@link $maxHealth} of hero
+   */
   public get maxHealth(): number {
     return this.$maxHealth
   }
 
+  /**
+   * Return {@link $currentAttack} of hero
+   */
   public get attack(): number {
     return this.$currentAttack
   }
 
+  /**
+   * Return if hero can attack (hasn't attacked & currentAttack > 0)
+   */
   public get canAttack(): boolean {
     return !this.$attacked && this.$currentAttack > 0
   }
 
+  /**
+   * Set {@link $currentHealth} to new health then {@link colorStat()}
+   *
+   * @param newHealth New health
+   */
   public setHealth(newHealth: number): void {
     this.$currentHealth = newHealth
 
     colorStat(this.$currentHealth, this.$maxHealth, this.$healthText)
   }
 
+  /**
+   * Set {@link $currentAttack} to new attack then {@link colorStat()}
+   *
+   * @param newAttack New attack
+   */
   public setAttack(newAttack: number): void {
     this.$currentAttack = newAttack
     this.$attackContainer.setAlpha(this.$currentAttack > 0 ? 1 : 0)
@@ -77,17 +111,32 @@ export class Hero {
     colorStat(this.$currentAttack, 0, this.$attackText)
   }
 
+  /**
+   * Set {@link $attacked} then set outline
+   *
+   * @param attacked If hero attacked
+   */
   public setAttacked(attacked: boolean) {
     this.$attacked = attacked
     this.setOutline(!this.$attacked)
   }
 
+  /**
+   * {@link setOutline()} of {@link $heroImage}
+   *
+   * @param value If outline or not
+   */
   public setOutline(value: boolean): void {
     if (this.$owner === TARGET_KEYS.PLAYER) {
       setOutline(this.$scene, value, this.$heroImage)
     }
   }
 
+  /**
+   * Set tint of hero to normal or red
+   *
+   * @param targeted If hero is targeted or not
+   */
   public setTarget(targeted: boolean): void {
     if (targeted) {
       this.$heroImage.setTint(0xff0000)
@@ -96,6 +145,9 @@ export class Hero {
     }
   }
 
+  /**
+   * Create {@link $heroImage}, {@link $healthText}, {@link $attackText} and {@link $attackContainer}
+   */
   private $createHero(): void {
     const portrait = this.$scene.add.rectangle(0, 0, HERO_CONFIG.WIDTH, HERO_CONFIG.HEIGHT, HERO_CONFIG.COLOR)
 
@@ -148,6 +200,13 @@ export class Hero {
     this.$attackContainer = attackContainer
   }
 
+  /**
+   * If battlecry choose target then set target chosen
+   *
+   * If battle choose target and cancel exists then remove cancel and set player turn, if no cancel then set target chosen
+   *
+   * If player turn and can attack then set player choose target
+   */
   private $addClick(): void {
     this.$heroContainer.on('pointerup', () => {
       // Battlecry
@@ -188,6 +247,9 @@ export class Hero {
     })
   }
 
+  /**
+   * Add {@link $cancelButton}
+   */
   private $addCancel(): void {
     this.$cancelButton = this.$scene.add
       .image(this.$heroContainer.width / 2, this.$heroContainer.height / 2, UI_ASSET_KEYS.CANCEL)
@@ -198,6 +260,9 @@ export class Hero {
     this.$heroContainer.add(this.$cancelButton)
   }
 
+  /**
+   * Remove {@link $cancelButton}
+   */
   private $removeCancel(): void {
     if (this.$cancelButton) {
       this.$cancelButton.destroy()
