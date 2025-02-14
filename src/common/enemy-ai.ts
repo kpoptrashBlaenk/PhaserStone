@@ -5,6 +5,9 @@ import { Hero } from '../objects/hero'
 import { STATES } from '../utils/keys'
 import { StateMachine } from '../utils/state-machine'
 
+/**
+ * The EnemyAI class handles the enemy actions during its turn
+ */
 export class EnemyAI {
   private $stateMachine: StateMachine
   private $hand: Hand
@@ -23,10 +26,16 @@ export class EnemyAI {
     this.$hero = hero
   }
 
+  /**
+   * Call {@link $playHand}
+   */
   public opponentTurn(): void {
     this.$playHand()
   }
 
+  /**
+   * Check for playable cards and play them, if none then {@link $playBoard}
+   */
   private $playHand(): void {
     let playableHand: Card[] = []
     const hand = this.$hand.cards
@@ -48,6 +57,10 @@ export class EnemyAI {
     this.$playBoard()
   }
 
+
+  /**
+   * Check for cards and heroes that can attack, if none then change turn
+   */
   private $playBoard(): void {
     let attackingCards: (Card | Hero)[] = []
     const enemyBoard = [...this.$board.ENEMY.cards, this.$hero.ENEMY]
