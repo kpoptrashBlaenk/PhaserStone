@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "types": "tsc -p tsconfig.types.json",
-    "dev": "webpack --mode production && ts-node server.ts",
+    "dev": "webpack serve",
+    "prod": "webpack --mode production && ts-node server.ts",
     "build": "webpack --mode production",
     "start": "ts-node server.ts",
+    "types": "tsc -p tsconfig.types.json",
     "migrate": "ts-node ./src/database/migration/migration.ts",
     "insert": "ts-node ./src/database/insertion/insertion.ts",
     "reset": "ts-node ./src/database/reset/reset.ts"

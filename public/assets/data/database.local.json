@@ -1,0 +1,404 @@
+[
+  {
+    "id": 1,
+    "trackId": "",
+    "name": "Fire Imp",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to any target.",
+    "cost": 1,
+    "attack": 1,
+    "health": 1,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "ANY",
+      "type": "DAMAGE",
+      "amount": 1
+    }
+  },
+  {
+    "id": 2,
+    "trackId": "",
+    "name": "Flame Elemental",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to an enemy.",
+    "cost": 2,
+    "attack": 2,
+    "health": 2,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "ENEMY",
+      "type": "DAMAGE",
+      "amount": 1
+    }
+  },
+  {
+    "id": 3,
+    "trackId": "",
+    "name": "Healing Spirit",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to a friendly character.",
+    "cost": 3,
+    "attack": 3,
+    "health": 3,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "FRIENDLY",
+      "type": "HEAL",
+      "amount": 1
+    }
+  },
+  {
+    "id": 4,
+    "trackId": "",
+    "name": "Random Ember",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to a random enemy.",
+    "cost": 3,
+    "attack": 2,
+    "health": 3,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_ENEMY",
+      "type": "DAMAGE",
+      "amount": 1
+    }
+  },
+  {
+    "id": 5,
+    "trackId": "",
+    "name": "Guardian Angel",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to a random friendly character.",
+    "cost": 2,
+    "attack": 3,
+    "health": 2,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY",
+      "type": "HEAL",
+      "amount": 1
+    }
+  },
+  {
+    "id": 6,
+    "trackId": "",
+    "name": "Arcane Wisp",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to a random enemy minion.",
+    "cost": 4,
+    "attack": 4,
+    "health": 4,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 1
+    }
+  },
+  {
+    "id": 7,
+    "trackId": "",
+    "name": "Divine Protector",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to a random friendly minion.",
+    "cost": 5,
+    "attack": 5,
+    "health": 5,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_FRIENDLY_MINION",
+      "type": "HEAL",
+      "amount": 1
+    }
+  },
+  {
+    "id": 8,
+    "trackId": "",
+    "name": "Inferno Fiend",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to the enemy hero.",
+    "cost": 6,
+    "attack": 6,
+    "health": 6,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "ENEMY_HERO",
+      "type": "DAMAGE",
+      "amount": 1
+    }
+  },
+  {
+    "id": 9,
+    "trackId": "",
+    "name": "Searing Spirit",
+    "text": "[i]Battlecry:[/i] Deal 1 damage to the friendly hero.",
+    "cost": 1,
+    "attack": 2,
+    "health": 1,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "FRIENDLY_HERO",
+      "type": "HEAL",
+      "amount": 1
+    }
+  },
+  {
+    "id": 10,
+    "trackId": "",
+    "name": "Magma Fury",
+    "text": "[i]Battlecry:[/i] Deal 2 damage to any target.",
+    "cost": 2,
+    "attack": 3,
+    "health": 2,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "ANY",
+      "type": "DAMAGE",
+      "amount": 2
+    }
+  },
+  {
+    "id": 11,
+    "trackId": "",
+    "name": "Firestorm Elemental",
+    "text": "[i]Battlecry:[/i] Deal 2 damage to a random enemy.",
+    "cost": 3,
+    "attack": 4,
+    "health": 3,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_ENEMY",
+      "type": "DAMAGE",
+      "amount": 2
+    }
+  },
+  {
+    "id": 12,
+    "trackId": "",
+    "name": "Molten Rock",
+    "text": "[i]Battlecry:[/i] Deal 2 damage to a random enemy minion.",
+    "cost": 4,
+    "attack": 2,
+    "health": 5,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 2
+    }
+  },
+  {
+    "id": 13,
+    "trackId": "",
+    "name": "Flame Guardian",
+    "text": "[i]Battlecry:[/i] Deal 2 damage to the enemy hero.",
+    "cost": 5,
+    "attack": 5,
+    "health": 5,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "ENEMY_HERO",
+      "type": "DAMAGE",
+      "amount": 2
+    }
+  },
+  {
+    "id": 14,
+    "trackId": "",
+    "name": "Thunder Fury",
+    "text": "[i]Battlecry:[/i] Deal 3 damage to an enemy.",
+    "cost": 4,
+    "attack": 3,
+    "health": 4,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "ENEMY",
+      "type": "DAMAGE",
+      "amount": 3
+    }
+  },
+  {
+    "id": 15,
+    "trackId": "",
+    "name": "Stormcaller",
+    "text": "[i]Battlecry:[/i] Deal 3 damage to a random enemy.",
+    "cost": 6,
+    "attack": 6,
+    "health": 6,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_ENEMY",
+      "type": "DAMAGE",
+      "amount": 3
+    }
+  },
+  {
+    "id": 16,
+    "trackId": "",
+    "name": "Lightning Elemental",
+    "text": "[i]Battlecry:[/i] Deal 3 damage to a random enemy minion.",
+    "cost": 7,
+    "attack": 7,
+    "health": 7,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "RANDOM_ENEMY_MINION",
+      "type": "DAMAGE",
+      "amount": 3
+    }
+  },
+  {
+    "id": 17,
+    "trackId": "",
+    "name": "Tempest Dragon",
+    "text": "[i]Battlecry:[/i] Deal 3 damage to the enemy hero.",
+    "cost": 8,
+    "attack": 8,
+    "health": 8,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "ENEMY_HERO",
+      "type": "DAMAGE",
+      "amount": 3
+    }
+  },
+  {
+    "id": 18,
+    "trackId": "",
+    "name": "Sacrificial Wisp",
+    "text": "[i]Battlecry:[/i] Deal 3 damage to the friendly hero.",
+    "cost": 1,
+    "attack": 2,
+    "health": 2,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": {
+      "target": "FRIENDLY_HERO",
+      "type": "HEAL",
+      "amount": 3
+    }
+  },
+  {
+    "id": 19,
+    "trackId": "",
+    "name": "Stone Golem",
+    "text": "",
+    "cost": 3,
+    "attack": 3,
+    "health": 3,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 20,
+    "trackId": "",
+    "name": "Mighty Guardian",
+    "text": "",
+    "cost": 5,
+    "attack": 5,
+    "health": 5,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 21,
+    "trackId": "",
+    "name": "Swift Scout",
+    "text": "",
+    "cost": 2,
+    "attack": 2,
+    "health": 2,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 22,
+    "trackId": "",
+    "name": "Mountain Titan",
+    "text": "",
+    "cost": 6,
+    "attack": 6,
+    "health": 6,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 23,
+    "trackId": "",
+    "name": "Forest Defender",
+    "text": "",
+    "cost": 4,
+    "attack": 4,
+    "health": 4,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 24,
+    "trackId": "",
+    "name": "Wisp",
+    "text": "",
+    "cost": 1,
+    "attack": 1,
+    "health": 2,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 25,
+    "trackId": "",
+    "name": "Frost Dragon",
+    "text": "",
+    "cost": 6,
+    "attack": 5,
+    "health": 7,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 26,
+    "trackId": "",
+    "name": "Infernal Knight",
+    "text": "",
+    "cost": 4,
+    "attack": 4,
+    "health": 3,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 27,
+    "trackId": "",
+    "name": "Shadow Demon",
+    "text": "",
+    "cost": 3,
+    "attack": 2,
+    "health": 5,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 28,
+    "trackId": "",
+    "name": "Elemental Warden",
+    "text": "",
+    "cost": 5,
+    "attack": 3,
+    "health": 6,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 29,
+    "trackId": "",
+    "name": "Fire Elemental",
+    "text": "",
+    "cost": 7,
+    "attack": 7,
+    "health": 4,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  },
+  {
+    "id": 30,
+    "trackId": "",
+    "name": "Wind Spirit",
+    "text": "",
+    "cost": 6,
+    "attack": 6,
+    "health": 3,
+    "assetKey": "ALEXSTRAZA",
+    "battlecry": null
+  }
+]

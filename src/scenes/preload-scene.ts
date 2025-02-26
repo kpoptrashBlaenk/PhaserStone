@@ -90,22 +90,13 @@ export class PreloadScene extends BaseScene {
         )
     })
 
-    let loadError = false
-
     // Error
     this.load.on('loaderror', () => {
-      loadError = true
-
-      progressBar.destroy()
-      progressBox.destroy()
-      percentageText.destroy()
-      loadingText.setText('Error Loading Cards').setAlpha(LOADING_SCREEN.ANIMATION.ORIGIN_ALPHA)
+      this.load.json(DATA_ASSET_KEYS.CARDS, 'assets/data/database.local.json')
     })
 
     // Complete
     this.load.on('complete', () => {
-      if (loadError) return
-
       progressBar.destroy()
       progressBox.destroy()
       percentageText.destroy()
