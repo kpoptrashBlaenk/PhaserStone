@@ -16,7 +16,7 @@ const corsOrigin = (process.env.HOST || `http://localhost:${process.env.PORT}`) 
 app.use(
   cors({
     origin: corsOrigin,
-    methods: 'GET,POST,PUT,DELETE',
+    methods: 'GET',
   })
 )
 
