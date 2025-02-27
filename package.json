@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve",
-    "prod": "webpack --mode production && ts-node server.ts",
-    "build": "webpack --mode production",
+    "prod": "webpack && ts-node server.ts",
+    "build": "webpack",
     "start": "ts-node server.ts",
     "db": "db-connection.bat",
     "types": "tsc -p tsconfig.types.json",
