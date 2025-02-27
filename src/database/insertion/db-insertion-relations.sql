@@ -26,13 +26,13 @@ VALUES
     -- Cards with battlecries
     (1, 1, 1, 'Fire Imp', '[i]Battlecry:[/i] Deal 1 damage to any target.', 1, 1, ''),
     (2, 2, 2, 'Flame Elemental', '[i]Battlecry:[/i] Deal 1 damage to an enemy.', 2, 1, ''),
-    (3, 3, 3, 'Healing Spirit', '[i]Battlecry:[/i] Deal 1 damage to a friendly character.', 3, 1, ''),
+    (3, 3, 3, 'Healing Spirit', '[i]Battlecry:[/i] Health 1 health to a friendly character.', 3, 1, ''),
     (2, 3, 3, 'Random Ember', '[i]Battlecry:[/i] Deal 1 damage to a random enemy.', 4, 1, ''),
-    (3, 2, 2, 'Guardian Angel', '[i]Battlecry:[/i] Deal 1 damage to a random friendly character.', 5, 1, ''),
+    (3, 2, 2, 'Guardian Angel', '[i]Battlecry:[/i] Health 1 health to a random friendly character.', 5, 1, ''),
     (4, 4, 4, 'Arcane Wisp', '[i]Battlecry:[/i] Deal 1 damage to a random enemy minion.', 6, 1, ''),
-    (5, 5, 5, 'Divine Protector', '[i]Battlecry:[/i] Deal 1 damage to a random friendly minion.', 7, 1, ''),
+    (5, 5, 5, 'Divine Protector', '[i]Battlecry:[/i] Health 1 health to a random friendly minion.', 7, 1, ''),
     (6, 6, 6, 'Inferno Fiend', '[i]Battlecry:[/i] Deal 1 damage to the enemy hero.', 8, 1, ''),
-    (2, 1, 1, 'Searing Spirit', '[i]Battlecry:[/i] Deal 1 damage to the friendly hero.', 9, 1, ''),
+    (2, 1, 1, 'Searing Spirit', '[i]Battlecry:[/i] Health 1 health to the friendly hero.', 9, 1, ''),
     (3, 2, 2, 'Magma Fury', '[i]Battlecry:[/i] Deal 2 damage to any target.', 10, 1, ''),
     (4, 3, 3, 'Firestorm Elemental', '[i]Battlecry:[/i] Deal 2 damage to a random enemy.', 11, 1, ''),
     (2, 5, 4, 'Molten Rock', '[i]Battlecry:[/i] Deal 2 damage to a random enemy minion.', 12, 1, ''),
@@ -41,7 +41,7 @@ VALUES
     (6, 6, 6, 'Stormcaller', '[i]Battlecry:[/i] Deal 3 damage to a random enemy.', 15, 1, ''),
     (7, 7, 7, 'Lightning Elemental', '[i]Battlecry:[/i] Deal 3 damage to a random enemy minion.', 16, 1, ''),
     (8, 8, 8, 'Tempest Dragon', '[i]Battlecry:[/i] Deal 3 damage to the enemy hero.', 17, 1, ''),
-    (2, 2, 1, 'Sacrificial Wisp', '[i]Battlecry:[/i] Deal 3 damage to the friendly hero.', 18, 1, ''),
+    (2, 2, 1, 'Sacrificial Wisp', '[i]Battlecry:[/i] Health 3 health to the friendly hero.', 18, 1, ''),
 
     -- Cards without battlecries
     (3, 3, 3, 'Stone Golem', '', NULL, 1, ''),
