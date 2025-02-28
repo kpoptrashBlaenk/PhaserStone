@@ -2,7 +2,6 @@ declare module "src/assets/asset-keys" {
     export const CARD_ASSETS_KEYS: Readonly<{
         TEMPLATE: "TEMPLATE";
         CARD_BACK: "CARD_BACK";
-        ALEXSTRAZA: "ALEXSTRAZA";
     }>;
     export type CardAssetKeys = keyof typeof CARD_ASSETS_KEYS;
     export const DATA_ASSET_KEYS: Readonly<{
@@ -96,6 +95,7 @@ declare module "src/utils/visual-configs" {
         SIZE: {
             SCALE: number;
             PORTRAIT_SCALE: number;
+            PORTRAIT_Y_DIVIDER: number;
             HEIGHT: number;
             WIDTH: number;
         };
@@ -657,9 +657,10 @@ declare module "src/objects/card" {
     }
 }
 declare module "src/utils/configs" {
-    export const MAX_HEALTH = 30;
+    export const MAX_HEALTH = 20;
+    export const MAX_DECK = 15;
     export const MAX_MANA = 10;
-    export const MAX_BOARD = 7;
+    export const MAX_BOARD = 5;
     export const HERO_ATTACK = 1;
 }
 declare module "src/objects/hero" {
@@ -1449,7 +1450,7 @@ declare module "src/scenes/library-scene" {
          */
         private $resizeList;
         /**
-         * Update the counter of selected cards and check if 30 cards are selected or not.
+         * Update the counter of selected cards and check if max cards are selected or not.
          */
         private $updateCardCounter;
     }
@@ -1479,17 +1480,3 @@ declare module "src/utils/webfontloader" {
     export function loadFonts(callback: () => void): void;
 }
 declare module "src/main" { }
-declare module "src/database/database.config" {
-    import { Pool } from 'pg';
-    const pool: Pool;
-    export default pool;
-}
-declare module "src/api/cards-api" {
-    import { Router } from 'express';
-    const router: Router;
-    export default router;
-}
-declare module "src/database/insertion/insertion" { }
-declare module "src/database/migration/migration" { }
-declare module "src/database/reset/reset" { }
-declare module "server" { }
