@@ -61,7 +61,8 @@ export const CARD_CONFIG = Object.freeze({
   },
   SIZE: {
     SCALE: 0.36,
-    PORTRAIT_SCALE: 0.13,
+    PORTRAIT_SCALE: 0.25,
+    PORTRAIT_Y_DIVIDER: 2.7,
     HEIGHT: 147.88,
     WIDTH: 97.2,
   },

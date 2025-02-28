@@ -76,7 +76,7 @@ export class BaseCard {
       this._cardBodyText.setAlpha(1)
       this._cardTemplateImage.setAlpha(1)
       this._cardPortraitImage.setScale(CARD_CONFIG.SIZE.PORTRAIT_SCALE)
-      this._cardPortraitImage.setY(this._cardTemplateImage.height / 3)
+      this._cardPortraitImage.setY(this._cardTemplateImage.height / CARD_CONFIG.SIZE.PORTRAIT_Y_DIVIDER)
       this._cardTemplateImage.setInteractive({
         cursor: 'pointer',
       })
@@ -244,7 +244,7 @@ export class BaseCard {
 
     // Container
     const container = this._scene.add.container(0, 0).setSize(template.width, template.height)
-    portrait.setPosition(template.width / 2, template.height / 3)
+    portrait.setPosition(template.width / 2, template.height / CARD_CONFIG.SIZE.PORTRAIT_Y_DIVIDER)
 
     container.add([portrait, template, cost, attack, health, name, cardBodyText])
 
@@ -253,7 +253,7 @@ export class BaseCard {
 
   /**
    * Size card size to deck/hand/board size
-   * 
+   *
    * @param container The card container
    */
   private $resizeCard(container: Phaser.GameObjects.Container): void {
