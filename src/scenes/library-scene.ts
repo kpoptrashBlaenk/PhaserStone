@@ -135,10 +135,13 @@ export class LibraryScene extends BaseScene {
    * @param card Unselected {@link LibraryCard}
    */
   private $cardUnselected(card: LibraryCard): void {
-    card.portrait.setTint(0xffffff)
-    card.template.setTint(0xffffff)
+    // Check if container hasn't been destroyed by page change
+    if (card.container.scene) {
+      card.portrait?.setTint(0xffffff)
+      card.template?.setTint(0xffffff)
 
-    card.template.setInteractive()
+      card.template?.setInteractive()
+    }
   }
 
   /**
