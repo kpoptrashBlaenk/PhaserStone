@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('dotenv').config()
 
 module.exports = {
-  mode: 'production',
+  mode: 'none',
   entry: './src/main.ts',
   output: {
     filename: 'bundle.min.js',
