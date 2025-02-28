@@ -7,7 +7,7 @@
     "cost": 1,
     "attack": 1,
     "health": 1,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "FIRE_IMP",
     "battlecry": {
       "target": "ANY",
       "type": "DAMAGE",
@@ -22,7 +22,7 @@
     "cost": 2,
     "attack": 2,
     "health": 2,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "FLAME_ELEMENTAL",
     "battlecry": {
       "target": "ENEMY",
       "type": "DAMAGE",
@@ -33,11 +33,11 @@
     "id": 3,
     "trackId": "",
     "name": "Healing Spirit",
-    "text": "[i]Battlecry:[/i] Deal 1 damage to a friendly character.",
+    "text": "[i]Battlecry:[/i] Heal 1 health to a friendly character.",
     "cost": 3,
     "attack": 3,
     "health": 3,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "HEALING_SPIRIT",
     "battlecry": {
       "target": "FRIENDLY",
       "type": "HEAL",
@@ -52,7 +52,7 @@
     "cost": 3,
     "attack": 2,
     "health": 3,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "RANDOM_EMBER",
     "battlecry": {
       "target": "RANDOM_ENEMY",
       "type": "DAMAGE",
@@ -63,11 +63,11 @@
     "id": 5,
     "trackId": "",
     "name": "Guardian Angel",
-    "text": "[i]Battlecry:[/i] Deal 1 damage to a random friendly character.",
+    "text": "[i]Battlecry:[/i] Heal 1 health to a random friendly character.",
     "cost": 2,
     "attack": 3,
     "health": 2,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "GUARDIAN_ANGEL",
     "battlecry": {
       "target": "RANDOM_FRIENDLY",
       "type": "HEAL",
@@ -82,7 +82,7 @@
     "cost": 4,
     "attack": 4,
     "health": 4,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "ARCANE_WISP",
     "battlecry": {
       "target": "RANDOM_ENEMY_MINION",
       "type": "DAMAGE",
@@ -93,11 +93,11 @@
     "id": 7,
     "trackId": "",
     "name": "Divine Protector",
-    "text": "[i]Battlecry:[/i] Deal 1 damage to a random friendly minion.",
+    "text": "[i]Battlecry:[/i] Heal 1 health to a random friendly minion.",
     "cost": 5,
     "attack": 5,
     "health": 5,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "DIVINE_PROTECTOR",
     "battlecry": {
       "target": "RANDOM_FRIENDLY_MINION",
       "type": "HEAL",
@@ -112,7 +112,7 @@
     "cost": 6,
     "attack": 6,
     "health": 6,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "INFERNO_FRIEND",
     "battlecry": {
       "target": "ENEMY_HERO",
       "type": "DAMAGE",
@@ -123,11 +123,11 @@
     "id": 9,
     "trackId": "",
     "name": "Searing Spirit",
-    "text": "[i]Battlecry:[/i] Deal 1 damage to the friendly hero.",
+    "text": "[i]Battlecry:[/i] Heal 1 health to the friendly hero.",
     "cost": 1,
     "attack": 2,
     "health": 1,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "SEARING_SPIRIT",
     "battlecry": {
       "target": "FRIENDLY_HERO",
       "type": "HEAL",
@@ -142,7 +142,7 @@
     "cost": 2,
     "attack": 3,
     "health": 2,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "MAGMA_FURY",
     "battlecry": {
       "target": "ANY",
       "type": "DAMAGE",
@@ -157,7 +157,7 @@
     "cost": 3,
     "attack": 4,
     "health": 3,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "FIRESTORM_ELEMENTAL",
     "battlecry": {
       "target": "RANDOM_ENEMY",
       "type": "DAMAGE",
@@ -172,7 +172,7 @@
     "cost": 4,
     "attack": 2,
     "health": 5,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "MOLTEN_ROCK",
     "battlecry": {
       "target": "RANDOM_ENEMY_MINION",
       "type": "DAMAGE",
@@ -187,7 +187,7 @@
     "cost": 5,
     "attack": 5,
     "health": 5,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "FLAME_GUARDIAN",
     "battlecry": {
       "target": "ENEMY_HERO",
       "type": "DAMAGE",
@@ -202,7 +202,7 @@
     "cost": 4,
     "attack": 3,
     "health": 4,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "THUNDER_FURY",
     "battlecry": {
       "target": "ENEMY",
       "type": "DAMAGE",
@@ -217,7 +217,7 @@
     "cost": 6,
     "attack": 6,
     "health": 6,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "STORMCALLER",
     "battlecry": {
       "target": "RANDOM_ENEMY",
       "type": "DAMAGE",
@@ -232,7 +232,7 @@
     "cost": 7,
     "attack": 7,
     "health": 7,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "LIGHTNING_ELEMENTAL",
     "battlecry": {
       "target": "RANDOM_ENEMY_MINION",
       "type": "DAMAGE",
@@ -247,7 +247,7 @@
     "cost": 8,
     "attack": 8,
     "health": 8,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "TEMPEST_DRAGON",
     "battlecry": {
       "target": "ENEMY_HERO",
       "type": "DAMAGE",
@@ -258,11 +258,11 @@
     "id": 18,
     "trackId": "",
     "name": "Sacrificial Wisp",
-    "text": "[i]Battlecry:[/i] Deal 3 damage to the friendly hero.",
+    "text": "[i]Battlecry:[/i] Heal 3 health to the friendly hero.",
     "cost": 1,
     "attack": 2,
     "health": 2,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "SACRIFICIAL_WISP",
     "battlecry": {
       "target": "FRIENDLY_HERO",
       "type": "HEAL",
@@ -277,7 +277,7 @@
     "cost": 3,
     "attack": 3,
     "health": 3,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "STONE_GOLEM",
     "battlecry": null
   },
   {
@@ -288,7 +288,7 @@
     "cost": 5,
     "attack": 5,
     "health": 5,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "MIGHTY_GUARDIAN",
     "battlecry": null
   },
   {
@@ -299,7 +299,7 @@
     "cost": 2,
     "attack": 2,
     "health": 2,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "SWIFT_SCOUT",
     "battlecry": null
   },
   {
@@ -310,7 +310,7 @@
     "cost": 6,
     "attack": 6,
     "health": 6,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "MOUNTAIN_TITAN",
     "battlecry": null
   },
   {
@@ -321,7 +321,7 @@
     "cost": 4,
     "attack": 4,
     "health": 4,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "FOREST_DEFENDER",
     "battlecry": null
   },
   {
@@ -332,7 +332,7 @@
     "cost": 1,
     "attack": 1,
     "health": 2,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "WISP",
     "battlecry": null
   },
   {
@@ -343,7 +343,7 @@
     "cost": 6,
     "attack": 5,
     "health": 7,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "FROST_DRAGON",
     "battlecry": null
   },
   {
@@ -354,7 +354,7 @@
     "cost": 4,
     "attack": 4,
     "health": 3,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "INFERNAL_KNIGHT",
     "battlecry": null
   },
   {
@@ -365,7 +365,7 @@
     "cost": 3,
     "attack": 2,
     "health": 5,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "SHADOW_DEMON",
     "battlecry": null
   },
   {
@@ -376,7 +376,7 @@
     "cost": 5,
     "attack": 3,
     "health": 6,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "ELEMENTAL_WARDEN",
     "battlecry": null
   },
   {
@@ -387,7 +387,7 @@
     "cost": 7,
     "attack": 7,
     "health": 4,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "FIRE_ELEMENTAL",
     "battlecry": null
   },
   {
@@ -398,7 +398,7 @@
     "cost": 6,
     "attack": 6,
     "health": 3,
-    "assetKey": "ALEXSTRAZA",
+    "assetKey": "WIND_SPIRIT",
     "battlecry": null
   }
 ]
