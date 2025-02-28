@@ -32,6 +32,7 @@ module.exports = {
     new Dotenv(),
   ],
   devServer: {
-    port: process.env.PORT
+    port: process.env.PORT,
+    allowedHosts: 'all'
   },
 }
