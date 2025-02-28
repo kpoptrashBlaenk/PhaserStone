@@ -1,9 +1,6 @@
 const path = require('path')
-const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-
-require('dotenv').config()
 
 module.exports = {
   mode: 'none',
@@ -30,7 +27,6 @@ module.exports = {
       template: './public/index.html',
       filename: 'index.html',
     }),
-    new Dotenv(),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -44,6 +40,6 @@ module.exports = {
     }),
   ],
   devServer: {
-    port: process.env.PORT
+    port: 8000,
   },
 }

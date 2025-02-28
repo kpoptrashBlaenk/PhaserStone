@@ -40,8 +40,7 @@ export class PreloadScene extends BaseScene {
     this.load.image(EFFECT_ASSET_KEYS.Z, `${effectAssetsPath}/z.png`)
 
     // JSON Data
-    const apiUrl = (process.env.HOST || `http://localhost:${process.env.PORT}`) + '/api/cards'
-    this.load.json(DATA_ASSET_KEYS.CARDS, apiUrl)
+    this.load.json(DATA_ASSET_KEYS.CARDS, 'assets/data/database.local.json')
 
     // Loading Screen
     this.$createLoading()
@@ -88,11 +87,6 @@ export class PreloadScene extends BaseScene {
           LOADING_SCREEN.BAR.WIDTH * value,
           LOADING_SCREEN.BAR.HEIGHT
         )
-    })
-
-    // Error
-    this.load.on('loaderror', () => {
-      this.load.json(DATA_ASSET_KEYS.CARDS, 'assets/data/database.local.json')
     })
 
     // Complete
