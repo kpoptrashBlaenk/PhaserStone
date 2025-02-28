@@ -1,6 +1,7 @@
 import { DATA_ASSET_KEYS } from '../assets/asset-keys'
 import { LibraryCard } from '../objects/library-card'
 import { CardData } from '../utils/card-keys'
+import { MAX_DECK } from '../utils/configs'
 import { CARD_CONFIG } from '../utils/visual-configs'
 import { BaseScene } from './base-scene'
 import { SCENE_KEYS } from './scene-keys'
@@ -106,15 +107,18 @@ export class LibraryScene extends BaseScene {
    */
   private $cardClick(card: LibraryCard): void {
     card.template.on('pointerdown', () => {
-      this.$addSelectedCard(card)
+      if (this.$selectedCards.length === MAX_DECK) {
+        return
+      }
 
+      this.$addSelectedCard(card)
       this.$cardSelected(card)
     })
   }
 
   /**
    * Tint the card portrait and disable interactivity.
-   * 
+   *
    * @param card Selected {@link LibraryCard}
    */
   private $cardSelected(card: LibraryCard): void {
@@ -127,7 +131,7 @@ export class LibraryScene extends BaseScene {
 
   /**
    * Reset card portrait tint and enable interactivity.
-   * 
+   *
    * @param card Unselected {@link LibraryCard}
    */
   private $cardUnselected(card: LibraryCard): void {
@@ -226,7 +230,7 @@ export class LibraryScene extends BaseScene {
       .text(
         cardCounterBackground.x + cardCounterBackground.width / 2,
         cardCounterBackground.y + cardCounterBackground.height / 2,
-        '0/30',
+        `0/${MAX_DECK}`,
         {
           ...CARD_CONFIG.FONT_STYLE.NUMBER,
           color: '#000000',
@@ -268,7 +272,7 @@ export class LibraryScene extends BaseScene {
    */
   private $addSelectedCard(card: LibraryCard): void {
     const padding = 5
-    const height = (this.$libraryList.height - padding * 29) / 30
+    const height = (this.$libraryList.height - padding * (MAX_DECK - 1)) / MAX_DECK
 
     const rectangle = this.add.rectangle(0, 0, this.$libraryList.width, height, 0xffffff).setOrigin(0)
 
@@ -314,12 +318,12 @@ export class LibraryScene extends BaseScene {
   }
 
   /**
-   * Update the counter of selected cards and check if 30 cards are selected or not.
+   * Update the counter of selected cards and check if max cards are selected or not.
    */
   private $updateCardCounter(): void {
-    this.$cardCounter.setText(`${this.$selectedCards.length}/30`)
+    this.$cardCounter.setText(`${this.$selectedCards.length}/${MAX_DECK}`)
 
-    this.$selectedCards.length === 30
+    this.$selectedCards.length === MAX_DECK
       ? this.$startButton.setInteractive({ cursor: 'pointer' }).setFillStyle(0x00ff00)
       : this.$startButton.disableInteractive().setFillStyle(0xff0000)
   }
