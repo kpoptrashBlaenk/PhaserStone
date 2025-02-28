@@ -5,10 +5,9 @@ _PhaserStone is definitely its own card game in which you use cards to defeat yo
 ## **Table of Contents**
 
 1. [Features](#features)  
-2. [Installation](#installation)  
-3. [Database Schema](#database-schema)  
-4. [Build and Run](#build-and-run)  
-5. [Technologies Used](#technologies-used)  
+2. [Installation](#installation)
+3. [Build and Run](#build-and-run)  
+4. [Technologies Used](#technologies-used)  
 
 ---
 
@@ -33,23 +32,6 @@ _PhaserStone is definitely its own card game in which you use cards to defeat yo
    npm install
    ```
 
-3. Set up environment variables and fill it out.
-
-    ```cmd
-    copy env.template .env
-    ```
-
-4. Set up the database.
-
-    ```cmd
-    npm run migrate
-    npm run insert
-    ```
-
-## **Database Schema**  
-
-![Database Schema](./src/database/database.png)
-
 ## **Build and Run**  
 
 - **Build with Webpack:**  
@@ -58,13 +40,7 @@ _PhaserStone is definitely its own card game in which you use cards to defeat yo
   npm run build
   ```
 
-- **Start the Express server:**  
-
-  ```cmd
-  npm run server
-  ```
-
-- **Development mode:**  
+- **Start the Webpack dev server for development:**  
 
   ```cmd
   npm run dev
@@ -74,7 +50,4 @@ _PhaserStone is definitely its own card game in which you use cards to defeat yo
 
 - **Typescript** – Language
 - **Phaser 3** – Game framework
-- **Express.js** – Backend server
 - **Webpack** – Bundling
-- **TS-Node.js** – Typescript runtime
-- **PostgreSQL** – Database
