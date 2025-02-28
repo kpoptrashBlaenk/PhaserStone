@@ -1,7 +1,6 @@
 export const CARD_ASSETS_KEYS = Object.freeze({
   TEMPLATE: 'TEMPLATE',
   CARD_BACK: 'CARD_BACK',
-  ALEXSTRAZA: 'ALEXSTRAZA',
 })
 export type CardAssetKeys = keyof typeof CARD_ASSETS_KEYS
 

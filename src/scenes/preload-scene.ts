@@ -1,3 +1,4 @@
+import cardData from '../../public/assets/data/database.local.json'
 import { CARD_ASSETS_KEYS, DATA_ASSET_KEYS, EFFECT_ASSET_KEYS, UI_ASSET_KEYS } from '../assets/asset-keys'
 import { LOADING_SCREEN } from '../utils/visual-configs'
 import { BaseScene } from './base-scene'
@@ -33,7 +34,9 @@ export class PreloadScene extends BaseScene {
     this.load.image(CARD_ASSETS_KEYS.TEMPLATE, `${cardAssetsPath}/card-template.png`)
     this.load.image(CARD_ASSETS_KEYS.CARD_BACK, `${cardAssetsPath}/card-back.webp`)
 
-    this.load.image(CARD_ASSETS_KEYS.ALEXSTRAZA, `${cardAssetsPath}/alexstraza.jpg`)
+    cardData.forEach((card) => {
+      this.load.image(card.assetKey, `${cardAssetsPath}/${card.assetKey.toLowerCase()}.jpg`)
+    })
 
     // Effect Assets
     this.load.image(EFFECT_ASSET_KEYS.SPARK, `${effectAssetsPath}/spark.png`)
